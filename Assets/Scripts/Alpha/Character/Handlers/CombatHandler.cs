@@ -185,12 +185,12 @@ public class CombatHandler : MonoBehaviour
         {
             EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
             switch (enemy.GetEnemyType())
-            {                           
+            {
                 case EnemyHandler.EnemyType.MINION:
                     if (shieldState != ShieldState.Shielding)
                         _playerHandler.TakeDamage(enemy.GetDamage());
-                    break; 
-                       
+                    break;
+
                 case EnemyHandler.EnemyType.SPECIAL:
                     if (shieldState != ShieldState.Shielding)
                         _playerHandler.TakeDamage(enemy.GetDamage());
@@ -280,19 +280,19 @@ public class CombatHandler : MonoBehaviour
     private void Cooldown()
     {
         shieldCooldown -= Time.deltaTime;
+        _animator.SetBool("Shield", false);
 
         if (shieldCooldown <= 0)
         {
-            _animator.SetBool("Shield", false);
             shieldCooldown = _tempShieldCDTimer;
             shieldState = ShieldState.Default;
             _canShield = true;
         }
     }
 
-    public bool SetCanShield(bool shieldState)
+    public bool SetCanShield(bool value)
     {
-        return _canShield = shieldState;
+        return _canShield = value;
     }
 
     public bool GetCanShield()
