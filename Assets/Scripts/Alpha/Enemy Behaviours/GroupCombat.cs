@@ -57,7 +57,7 @@ public class GroupCombat : GroupState
                     aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;
 
                     // Move enemy into position around the player according to index
-                    aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPlayer(aiBrain, i), 1.0f);
+                    aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, i), 1.0f);
                 }
             }
         }
@@ -72,7 +72,7 @@ public class GroupCombat : GroupState
 
     public override void OnStateExit() { }
 
-    public Vector3 GetPositionAroundPlayer(AIBrain enemy, int index)
+    public Vector3 GetPositionAroundPoint(AIBrain enemy, int index)
     {
         float degreesPerIndex = 360f / this.enemyGroupHandler.GetEnemies().Count;
         var pos = this.enemyGroupHandler.playerTransform.position;
@@ -102,7 +102,7 @@ public class GroupCombat : GroupState
 
         // Move enemy into position and make them face player
         if (!_unitSlots[_activeIndex].IsParried())
-            _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPlayer(_unitSlots[_activeIndex].GetBrain(), _activeIndex), 1.0f);
+            _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(_unitSlots[_activeIndex].GetBrain(), _activeIndex), 1.0f);
 
         // Wrapping the index count
         if (_activeIndex >= _unitSlots.Count - 1)

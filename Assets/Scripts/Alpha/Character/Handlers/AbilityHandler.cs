@@ -100,9 +100,23 @@ public class AbilityHandler : MonoBehaviour
             EnemyHandler enemy = GetClosestParriedEnemy();
             if (enemy != null)
             {
+                // Setting the absorb flags
                 _isAbosrbing = true;
                 _animator.SetBool("Absorb", true);
+
+                // Activate slowdown
                 _playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
+
+                // If the player is shielding, then deactivate the shield
+                if (_playerHandler.GetCombatHandler().shieldState == CombatHandler.ShieldState.Shielding)
+                {
+                    _playerHandler.GetCombatHandler().shieldState = CombatHandler.ShieldState.Cooldown;
+                    _playerHandler.GetCombatHandler().shieldMeshRenderer.enabled = false;
+                    _playerHandler.GetCombatHandler().shieldSphereCollider.enabled = false;
+                    _playerHandler.GetCombatHandler().SetCanShield(false);
+                }
+
+                // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
                 enemy.GetEnemyGroupHandler()?.Remove(enemy);
                 this.SetAbility(enemy.GetAbilityType());
@@ -138,26 +152,26 @@ public class AbilityHandler : MonoBehaviour
     // Activates the correct ability arm skin mesh renderer; disables if the next state is none
     public void ToggleAbilityArm(AbilityType nextAbility)
     {
-        switch(nextAbility)
+        switch (nextAbility)
         {
             case AbilityType.NONE:
-            abilityArms[_abilityArmIndex].enabled = false;
-            break;
-            
+                abilityArms[_abilityArmIndex].enabled = false;
+                break;
+
             case AbilityType.SICKLE:
-            _abilityArmIndex = 0;
-            abilityArms[_abilityArmIndex].enabled = true;
-            break;
-            
+                _abilityArmIndex = 0;
+                abilityArms[_abilityArmIndex].enabled = true;
+                break;
+
             case AbilityType.HAMMER:
-            _abilityArmIndex = 1;
-            abilityArms[_abilityArmIndex].enabled = true;
-            break;
-            
+                _abilityArmIndex = 1;
+                abilityArms[_abilityArmIndex].enabled = true;
+                break;
+
             case AbilityType.POT:
-            abilityArms[_abilityArmIndex].enabled = true;
-            _abilityArmIndex = 2;
-            break;
+                abilityArms[_abilityArmIndex].enabled = true;
+                _abilityArmIndex = 2;
+                break;
         }
     }
 
