@@ -1163,8 +1163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0765e98c5641ca141a1a3362b5721c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainPlayerCamera: {fileID: 6118541640146823775, guid: 363c664f348ba5c4bbb23a44736c95f5,
-    type: 3}
+  mainPlayerCamera: {fileID: 0}
   acceleration: 100
   maxVelocity: 11
   turnSpeed: 0.25
@@ -1311,8 +1310,7 @@ MonoBehaviour:
   potOrbObject: {fileID: 7815191847338160563}
   waterHit: {fileID: 2520570017445212070}
   playerAnimator: {fileID: 1748722363267855483}
-  mainCamera: {fileID: 8479084729730518947, guid: ad8bb0c9a81b00d488286e5a6bc47d01,
-    type: 3}
+  mainCamera: {fileID: 0}
   sphereCastRadius: 1.5
 --- !u!1 &4094827749505366383
 GameObject:
@@ -1426,7 +1424,8 @@ AudioSource:
   m_GameObject: {fileID: 4094827749505366383}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 9040854011744907762, guid: a866300788c228548b9e48e2c5a1839b,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 535cdb6adb51c364ab05d68078eaf3ad, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -1624,7 +1623,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fbd92f8a647ce994d955fbeeee855b49, type: 2}
+  - {fileID: 2100000, guid: d0d99e2da9bf33e41b756d4bdbcfee58, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
