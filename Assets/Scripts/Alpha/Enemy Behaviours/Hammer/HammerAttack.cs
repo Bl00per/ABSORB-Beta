@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HammerAttack : AIBehaviour
 {
+    // test
     [Header("Properties")]
     public float movementSpeed = 10.0f;
     public float destinationPadding = 3.0f;

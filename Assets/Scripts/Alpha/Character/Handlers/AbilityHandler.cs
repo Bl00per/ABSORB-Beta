@@ -20,6 +20,7 @@ public class AbilityHandler : MonoBehaviour
 
     [Header("Arm Skin Mesh Renderers")]
     public List<SkinnedMeshRenderer> abilityArms = new List<SkinnedMeshRenderer>();
+    private int _abilityArmIndex = 0;
 
     [Header("Debug Options")]
     public AbilityType startingAbility = AbilityType.NONE;
@@ -104,7 +105,6 @@ public class AbilityHandler : MonoBehaviour
                 _playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
                 enemy.GetBrain().SetBehaviour("Absorbed");
                 enemy.GetEnemyGroupHandler()?.Remove(enemy);
-                abilityArms[(int)_currentAbility - 1].enabled = true;
                 this.SetAbility(enemy.GetAbilityType());
             }
         }
@@ -124,13 +124,41 @@ public class AbilityHandler : MonoBehaviour
     {
         if (_currentAbility != AbilityType.NONE)
             _abilities[(int)_currentAbility].OnExit();
-        else
-            abilityArms[(int)_currentAbility - 1].enabled = false;
+
+        ToggleAbilityArm(_currentAbility);
 
         _currentAbility = nextAbility;
 
+        ToggleAbilityArm(_currentAbility);
+
         if (_currentAbility != AbilityType.NONE)
             _abilities[(int)_currentAbility].OnEnter();
+    }
+
+    // Activates the correct ability arm skin mesh renderer; disables if the next state is none
+    public void ToggleAbilityArm(AbilityType nextAbility)
+    {
+        switch(nextAbility)
+        {
+            case AbilityType.NONE:
+            abilityArms[_abilityArmIndex].enabled = false;
+            break;
+            
+            case AbilityType.SICKLE:
+            _abilityArmIndex = 0;
+            abilityArms[_abilityArmIndex].enabled = true;
+            break;
+            
+            case AbilityType.HAMMER:
+            _abilityArmIndex = 1;
+            abilityArms[_abilityArmIndex].enabled = true;
+            break;
+            
+            case AbilityType.POT:
+            abilityArms[_abilityArmIndex].enabled = true;
+            _abilityArmIndex = 2;
+            break;
+        }
     }
 
     // Returns the closest parried enemy to the player
