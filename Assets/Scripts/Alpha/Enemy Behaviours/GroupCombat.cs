@@ -16,7 +16,7 @@ public class GroupCombat : GroupState
     public override void OnStateEnter()
     {
         // Sorting unit slots by closest to player
-        SortUnitList();
+        CreateSortedUnitSlots();
         _activeIndex = 0;
     }
 
@@ -113,17 +113,31 @@ public class GroupCombat : GroupState
         queueFlag = false;
     }
 
-    public void SortUnitList()
+    // Creates a unit list and sorts it by the closest to the player
+    private void CreateSortedUnitSlots()
     {
+        /* Optimization note: 
+                            Find a way to only create this list once.
+                            This currently sorts every time the group enters this state,
+                            this helps because once an enemy dies, we need to resort anyways.
+                            So, we can refine this to only create the list and sort if
+                            any enemies die.
+        */
+
+        // Creating a new list of enemies from the enemies within the group
         _unitSlots = new List<EnemyHandler>(enemyGroupHandler.GetEnemies());
-        _unitSlots.Sort((u1, u2) => u1.GetBrain().GetDistanceToPlayer().CompareTo(u2.GetBrain().GetDistanceToPlayer()));
+
+        // Sorting the list; using a lambda function to compare the distance to the player
+        _unitSlots.Sort((u1, u2) => u1.GetBrain().GetDistanceToPlayer().
+                          CompareTo(u2.GetBrain().GetDistanceToPlayer()));
     }
 
+    // Removes an enemy from the group
     public void RemoveFromUnitSlot(EnemyHandler enemy)
     {
         StopCoroutine(QueueAttack());
         _unitSlots.Remove(enemy);
-        SortUnitList();
+        CreateSortedUnitSlots();
 
         // Wrapping the index count
         if (_activeIndex >= _unitSlots.Count - 1)

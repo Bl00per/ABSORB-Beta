@@ -47,7 +47,7 @@ public class GroupWander : GroupState
         }
     }
 
-    // Moves all enemys to a new position within the radius
+    // Moves one enemy at random
     private void MoveOne()
     {
         EnemyHandler randEnemy = this.enemyGroupHandler.GetEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
