@@ -212,10 +212,22 @@ public class ObjectPooler : MonoBehaviour
         _spawnPointsOffScreen.Clear();
         for (int i = 0; i < spawnerPositions.Length; ++i)
         {
-            Vector3 viewSpacePos = Camera.main.WorldToViewportPoint(spawnerPositions[i].position);
-            if (viewSpacePos.x <= 0 && viewSpacePos.y <= 1 && viewSpacePos.z <= 0)
+            //Vector3 viewSpacePos = Camera.main.WorldToViewportPoint(spawnerPositions[i].position);
+            if (!IsTargetVisible(Camera.main, spawnerPositions[i].gameObject))
                 _spawnPointsOffScreen.Add(spawnerPositions[i]);
         }
+    }
+
+    private bool IsTargetVisible(Camera c, GameObject go)
+    {
+        var planes = GeometryUtility.CalculateFrustumPlanes(c);
+        var point = go.transform.position;
+        foreach (var plane in planes)
+        {
+            if (plane.GetDistanceToPoint(point) < 0)
+                return false;
+        }
+        return true;
     }
 
     public GameObject SpawnFromPool(EnemyHandler enemy, Vector3 position, Quaternion rotation)
