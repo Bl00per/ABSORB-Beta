@@ -187,19 +187,36 @@ public class EnemyHandler : MonoBehaviour
         return _spawner;
     }
 
+    // Disables all functional components of the enemy; better than SetActive()
+    public void SetFunctional(bool value)
+    {
+        // Meshrenderer
+        // Collider
+        // Rigidbody
+        // AIBrain
+        // Remove from enemygroup
+        // Set inactive within object pool
+        if (value)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
     // Kills the enemy
     public void Kill()
-    {
+    { 
+        // Resetting all stats and adding the enemy back into the object pool
+        Reset();
+
         // Playing death VFX
         PlayDeathFX();
 
-        _spawner?.RemoveEnemy(this.gameObject);
-
-        // Removes enemy from group, if within one
+        // Removes enemy from the active list and stores it within the inactive list
         _groupHandler?.Remove(this);
-
-        // Resetting all stats and adding the enemy back into the object pool
-        ResetAndAddToQueue();
     }
 
     private void PlayDeathFX()
@@ -214,23 +231,11 @@ public class EnemyHandler : MonoBehaviour
         cam.StartCoroutine(ReparentVFX());
     }
 
-    public void ResetAndAddToQueue()
+    public void Reset()
     {
-
+        _aiBrain.SetBehaviour("Idle");
         _currentHealth = maxHealth;
         _isAlive = true;
-
-        deathParticleEffect.transform.SetParent(this.gameObject.transform);
-        deathParticleEffect.Stop();
-        deathSound.Stop();
-
-        gameObject.SetActive(false);
-        _isAlive = true;
-        _aiBrain.SetBehaviour("Idle");
-
-
-        //ObjectPooler.Instance.poolDictionary[gameObject.tag].Enqueue(gameObject);
-        gameObject.transform.SetParent(null); //quick error fix
     }
 
     private IEnumerator ReparentVFX()

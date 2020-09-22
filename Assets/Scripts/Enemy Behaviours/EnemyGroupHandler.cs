@@ -34,10 +34,13 @@ public class EnemyGroupHandler : MonoBehaviour
     private E_GroupState _currentState;
 
     // List of enemies within group
-    protected List<EnemyHandler> enemies = new List<EnemyHandler>();
+    protected List<EnemyHandler> enemies;
 
     // Reference to the group combat state
     private GroupCombat _groupCombat;
+
+    // Reference to the object pool component
+    private ObjectPooler _objectPool;
 
     // The end destination of the group 
     protected Vector3 _targetDestination = Vector3.zero;
@@ -54,26 +57,21 @@ public class EnemyGroupHandler : MonoBehaviour
         _groupStates[(int)E_GroupState.CHASE] = this.GetComponent<GroupChase>();
         _groupStates[(int)E_GroupState.COMBAT] = this.GetComponent<GroupCombat>();
         _groupStates[(int)E_GroupState.RETREAT] = this.GetComponent<GroupRetreat>();
+
+        // Getting references
         _groupCombat = this.GetComponent<GroupCombat>();
+        _objectPool = this.GetComponent<ObjectPooler>();
 
         // Initialise the parent child connection in all the group states
         foreach (GroupState s in _groupStates)
             s?.Initialise(this);
-
-        // Populate list of enemies with the children of this gameobject
-        foreach (Transform child in transform)
-        {
-            foreach (Transform grandchild in child)
-            {
-                EnemyHandler enemy = grandchild.GetComponent<EnemyHandler>();
-                enemy.SetEnemyGroupHandler(this);
-                enemies.Add(enemy);
-            }
-        }
     }
 
     private void Start()
     {
+        // Getting the enemies for the active list within the object pool
+        enemies = new List<EnemyHandler>(_objectPool.GetActiveEnemyList());
+
         // Setting the enemies into their idle state
         SetState(E_GroupState.WANDER);
     }
@@ -98,13 +96,10 @@ public class EnemyGroupHandler : MonoBehaviour
         _groupStates[(int)_currentState].OnStateEnter();
     }
 
-    // Adds an enemy to the group
-    public void Add(EnemyHandler enemy) => enemies.Add(enemy);
-
     // Removes an enemy from the group
     public void Remove(EnemyHandler enemy)
     {
-        enemies.Remove(enemy);
+        _objectPool.SwapList(enemy);
         _groupCombat.RemoveFromUnitSlot(enemy);
     }
 
