@@ -253,7 +253,7 @@ MonoBehaviour:
   typeOfEnemy: 1
   typeOfAbility: 2
   maxHealth: 125
-  baseDamage: 4
+  baseDamage: 5
   printHealthStats: 0
   weaponCollider: {fileID: 6968428015675753766}
 --- !u!114 &6809976860378941603
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewConeAngle: 90
-  totalDistance: 20
+  totalDistance: 25
   minY: 3
   maxY: 3
   autoDetectionRadius: 15
@@ -533,6 +533,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5176194812890469483}
     m_Modifications:
+    - target: {fileID: 2804856660571517934, guid: b5dca9063a0d67f4abe1ad1890f330ba,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 9040854011744907762, guid: a866300788c228548b9e48e2c5a1839b,
+        type: 2}
     - target: {fileID: 3002624353877125538, guid: b5dca9063a0d67f4abe1ad1890f330ba,
         type: 3}
       propertyPath: m_Name
@@ -597,6 +603,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Special_Weapon_001_Mesh
+      objectReference: {fileID: 0}
+    - target: {fileID: 8066200203845619860, guid: b5dca9063a0d67f4abe1ad1890f330ba,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5dca9063a0d67f4abe1ad1890f330ba, type: 3}
