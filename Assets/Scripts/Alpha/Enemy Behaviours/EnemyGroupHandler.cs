@@ -34,10 +34,13 @@ public class EnemyGroupHandler : MonoBehaviour
     private E_GroupState _currentState;
 
     // List of enemies within group
-    protected List<EnemyHandler> enemies = new List<EnemyHandler>();
+    protected List<EnemyHandler> enemies;
 
     // Reference to the group combat state
     private GroupCombat _groupCombat;
+
+    // Reference to the object pooler
+    private ObjectPooler _objectPooler;
 
     // The end destination of the group 
     protected Vector3 _targetDestination = Vector3.zero;
@@ -54,26 +57,21 @@ public class EnemyGroupHandler : MonoBehaviour
         _groupStates[(int)E_GroupState.CHASE] = this.GetComponent<GroupChase>();
         _groupStates[(int)E_GroupState.COMBAT] = this.GetComponent<GroupCombat>();
         _groupStates[(int)E_GroupState.RETREAT] = this.GetComponent<GroupRetreat>();
+
+        // Getting the references
         _groupCombat = this.GetComponent<GroupCombat>();
+        _objectPooler = this.GetComponent<ObjectPooler>();
 
         // Initialise the parent child connection in all the group states
         foreach (GroupState s in _groupStates)
             s?.Initialise(this);
-
-        // Populate list of enemies with the children of this gameobject
-        foreach (Transform child in transform)
-        {
-            foreach (Transform grandchild in child)
-            {
-                EnemyHandler enemy = grandchild.GetComponent<EnemyHandler>();
-                enemy.SetEnemyGroupHandler(this);
-                enemies.Add(enemy);
-            }
-        }
     }
 
     private void Start()
     {
+        // Getting the object pools inactive list
+        enemies = new List<EnemyHandler>(_objectPooler.GetActiveEnemyList());
+
         // Setting the group state to WANDER on entry
         SetState(E_GroupState.WANDER);
     }
@@ -104,8 +102,12 @@ public class EnemyGroupHandler : MonoBehaviour
     // Removes an enemy from the group
     public void Remove(EnemyHandler enemy)
     {
-        enemies.Remove(enemy);
+        _objectPooler.SwapList(enemy);
         _groupCombat.RemoveFromUnitSlot(enemy);
+        enemies.Clear();
+
+        // Getting the object pools inactive list
+        enemies = new List<EnemyHandler>(_objectPooler.GetActiveEnemyList());
     }
 
     // Update the target destination of the group

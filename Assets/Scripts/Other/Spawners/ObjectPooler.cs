@@ -122,7 +122,7 @@ public class ObjectPooler : MonoBehaviour
     }
 
     // Returns the list of unactive enemies
-    public List<EnemyHandler> GetUnactiveEnemyList()
+    public List<EnemyHandler> GetInactiveEnemyList()
     {
         return _inactiveEnemies;
     }
@@ -213,7 +213,7 @@ public class ObjectPooler : MonoBehaviour
         for (int i = 0; i < spawnerPositions.Length; ++i)
         {
             Vector3 viewSpacePos = Camera.main.WorldToViewportPoint(spawnerPositions[i].position);
-            if (viewSpacePos.x < 0 && viewSpacePos.y < 0 && viewSpacePos.z < 0)
+            if (viewSpacePos.x <= 0 && viewSpacePos.y <= 1 && viewSpacePos.z <= 0)
                 _spawnPointsOffScreen.Add(spawnerPositions[i]);
         }
     }
