@@ -96,8 +96,8 @@ public class ObjectPooler : MonoBehaviour
         else
         {
             enemyHandler.gameObject.SetActive(true);
+            _inactiveEnemies.Remove(enemyHandler);
             _activeEnemies.Add(enemyHandler);
-            _inactiveEnemies.Add(enemyHandler);
         }
     }
 
@@ -166,6 +166,7 @@ public class ObjectPooler : MonoBehaviour
                 {
                     if (enemy.GetEnemyType() == enemyType)
                     {
+                        // Spawning the enemy
                         StartCoroutine(RespawnEnemy(enemy));
                         break;
                     }
@@ -179,6 +180,9 @@ public class ObjectPooler : MonoBehaviour
     {
         // Setting the spawning flag to true
         _isSpawning = true;
+
+        // Swap the into the active list
+        SwapList(enemy); // THIS CAUSES ERRORS
 
         // Wait until for # amount of seconds before spawning the enemy
         yield return new WaitForSeconds(spawnTime);
@@ -201,7 +205,10 @@ public class ObjectPooler : MonoBehaviour
         int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
 
         // Setting to the active list and enabling functionality
-        SpawnFromPool(enemy, _spawnPointsOffScreen[spawnNumber].position, Quaternion.identity);
+        //SpawnFromPool(enemy, _spawnPointsOffScreen[spawnNumber].position, Quaternion.identity);
+        // Basically activate the enemy
+        enemy.transform.position = _spawnPointsOffScreen[spawnNumber].position;
+        enemy.transform.rotation = _spawnPointsOffScreen[spawnNumber].rotation;
 
         // Setting the spawning flag to false
         _isSpawning = false;
@@ -212,7 +219,6 @@ public class ObjectPooler : MonoBehaviour
         _spawnPointsOffScreen.Clear();
         for (int i = 0; i < spawnerPositions.Length; ++i)
         {
-            //Vector3 viewSpacePos = Camera.main.WorldToViewportPoint(spawnerPositions[i].position);
             if (!IsTargetVisible(Camera.main, spawnerPositions[i].gameObject))
                 _spawnPointsOffScreen.Add(spawnerPositions[i]);
         }
