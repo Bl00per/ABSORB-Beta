@@ -74,7 +74,7 @@ public class EnemyGroupHandler : MonoBehaviour
 
     private void Start()
     {
-        // Setting the enemies into their idle state
+        // Setting the group state to WANDER on entry
         SetState(E_GroupState.WANDER);
     }
 

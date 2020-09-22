@@ -21,7 +21,7 @@ public class PauseMenu : MonoBehaviour
     private bool Paused;
     private MainMenu _mainMenu;
     [SerializeField]
-    private Image volumeFill;
+    private Image volumeFill = null;
 
     // Start is called before the first frame update
     void Start()

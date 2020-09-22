@@ -13,7 +13,6 @@ public class MinionAttack : AIBehaviour
     public GameObject weaponToEnable;
     private Animator _animator;
     private CombatHandler _combatHandler;
-    private Health _playerHealth;
 
     [Header("Timers")]
     public float transitionTime = 2.0f;
@@ -33,7 +32,6 @@ public class MinionAttack : AIBehaviour
     private void Start()
     {
         _combatHandler = this.brain.PlayerTransform.GetComponent<CombatHandler>();
-        _playerHealth = this.brain.PlayerTransform.GetComponent<Health>();
     }
 
     public override void OnStateEnter()
