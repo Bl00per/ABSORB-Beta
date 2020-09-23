@@ -45,4 +45,16 @@ public class AbilitySickle : Ability
         sickleGameObject.SetActive(false);
         abilityHandler.SetAbility(AbilityHandler.AbilityType.NONE);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && other.transform.gameObject.CompareTag("Vines"))
+        {
+            //Debug.Log("Hit interactable");
+            other.transform.gameObject.SetActive(false);
+        }
+    }
+    
+        
 }
+

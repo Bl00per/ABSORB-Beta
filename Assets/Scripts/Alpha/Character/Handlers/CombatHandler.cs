@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Cinemachine;
 public class CombatHandler : MonoBehaviour
 {
     /*
@@ -31,6 +31,7 @@ public class CombatHandler : MonoBehaviour
     private Transform _transform;
     private Animator _animator;
 
+
     // Start is called before first frame
     private void Start()
     {
@@ -50,6 +51,9 @@ public class CombatHandler : MonoBehaviour
         _tempShieldCDTimer = shieldCooldown;
 
         currentTimeScale = Time.timeScale;
+
+        enemy = null;
+        
     }
 
     // Update is called once per frame
@@ -66,12 +70,18 @@ public class CombatHandler : MonoBehaviour
     [Header("Attack Attributes")]
     public float minTimeBetweenAttack = 0.05f;
     public float maxTimeBetweenAttack = 1.0f;
+    public float attackRotSpeed;
     private float _attackTimer = 0.0f;
     private bool _runAttackTimer = false;
     private bool _comboStart = true;
-
+    private Transform enemy;
+    public Rigidbody rb;
+    public CinemachineTargetGroup cmTarget;
+    
     private void UpdateAttack()
     {
+        EnemyDetector();  
+        
         if (_comboStart)
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
@@ -81,18 +91,40 @@ public class CombatHandler : MonoBehaviour
                 _comboStart = false;
                 _runAttackTimer = true;
                 ResetAttackTimer();
-
+               
             }
         }
 
         if (_runAttackTimer)
-        {
+        {                
             _attackTimer += Time.deltaTime;
         }
 
         if (_attackTimer >= maxTimeBetweenAttack)
             AttackComboFinish();
 
+    }
+
+    public void EnemyDetector()
+    {
+        enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
+
+        if (_runAttackTimer)
+        {
+            if (enemy != null)
+            {
+                cmTarget.m_Targets[1].target = enemy;
+
+                Vector3 direction = enemy.transform.position - rb.transform.position;
+                direction.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(direction);
+                rb.transform.rotation = Quaternion.Lerp(rb.transform.rotation, rotation, attackRotSpeed * Time.deltaTime);
+            }
+            else
+            {
+                cmTarget.m_Targets[1].target = null;
+            }
+        }
     }
 
 
@@ -155,6 +187,7 @@ public class CombatHandler : MonoBehaviour
     public void Key_PlayWeaponSound()
     {
         if (weaponSwingAudio != null)
+            weaponSwingAudio.pitch = Random.Range(0.9f, 1.2f);
             weaponSwingAudio.Play();
     }
 

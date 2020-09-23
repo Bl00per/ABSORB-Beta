@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerShield : StateMachineBehaviour
 {
     PlayerHandler _playerHandler;
+    GameObject shield;
+    Vector3 shieldMax;
     void Awake()
     {
         _playerHandler = FindObjectOfType<PlayerHandler>();
@@ -15,12 +17,15 @@ public class PlayerShield : StateMachineBehaviour
     {
         // Setting the current state within the player handler
         _playerHandler.SetState(PlayerHandler.PlayerAnimatorState.SHIELD);
-
+        shield = _playerHandler.GetCombatHandler().shieldSphereCollider.gameObject;
         // Setting the animator bool false so this state duration equals the animation time
         animator.SetBool("Shield", false);
-
+        shieldMax = new Vector3(3, 3, 3);
         if (_playerHandler != null)
         {
+            
+            shield.transform.localScale = new Vector3(1, 1, 1);
+           
             _playerHandler.GetCombatHandler().shieldMeshRenderer.enabled = true;
             _playerHandler.GetCombatHandler().shieldSphereCollider.enabled = true;
         }
@@ -29,9 +34,13 @@ public class PlayerShield : StateMachineBehaviour
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    // override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    // {
-    // }
+     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+     {
+        if(shield.transform.localScale.x <= shieldMax.x)
+            shield.transform.localScale += shield.transform.localScale * Time.deltaTime * 10;
+
+
+     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
