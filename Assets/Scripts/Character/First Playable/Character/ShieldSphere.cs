@@ -16,6 +16,7 @@ public class ShieldSphere : MonoBehaviour
                 enemy.GetBrain().SetBehaviour("Parried");
                 return;
             }
+            enemy.PlayHitParryEffect();
         }
     }
 }

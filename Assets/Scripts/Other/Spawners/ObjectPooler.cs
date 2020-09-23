@@ -16,22 +16,9 @@ public class ObjectPooler : MonoBehaviour
                 - Special(1)
             - Elites
                 - Elite(1)
-
-        - Spawner:
-            - Has multiple property flags, eg; spawnerActive = false; spawnTime = 1.0f, etc.
-            - Has a flag to only spawn when not rendered by camera
-                - Has an array of transforms which will be picked at random and based on if the camera can see them or not
-            - Has a queue that the enemies will get stored in once they are "killed".
-            - Spawns the enemy by activating and resetting the enemy.
-
-        - Object Pool:
-            - Hold the enemies within an array, all on standby.
-            - Has a GetDeactivated() function that returns an array of all unactive enemies
-            - Has a GetActivated() function that returns an array of all active enemies
-
-            // enemies[0] // The first enemy which is deactivated
     */
     private List<EnemyHandler> _activeEnemies;
+    private List<EnemyHandler> _respawnQueue;
     private List<EnemyHandler> _inactiveEnemies;
     private EnemyGroupHandler _enemyGroupHandler;
 
@@ -43,7 +30,7 @@ public class ObjectPooler : MonoBehaviour
     public bool spawnerActive = true;
     public float spawnTime = 1.0f;
 
-    [Header("Enemy that will turn off the spawner on death")]
+    [Header("The death of this enemy will result in the spawner deactivating.")]
     public GameObject finalEnemy;
 
     [Space]
@@ -57,7 +44,9 @@ public class ObjectPooler : MonoBehaviour
     {
         // Initialising the enemy lists
         _activeEnemies = new List<EnemyHandler>();
+        _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
+
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
 
@@ -70,9 +59,9 @@ public class ObjectPooler : MonoBehaviour
                 enemy = grandchild.GetComponent<EnemyHandler>();
                 enemy.SetEnemyGroupHandler(_enemyGroupHandler);
                 _activeEnemies.Add(enemy);
-                //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
             }
         }
+        //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
     }
 
     // Called every frame
@@ -82,20 +71,20 @@ public class ObjectPooler : MonoBehaviour
         CheckForEnemyTypeSpawn();
     }
 
-    // Swaps the list which the specifed enemy is on
-    public void SwapList(EnemyHandler enemyHandler)
+    // Ignores the queue
+    public void SwapActiveLists(EnemyHandler enemyHandler)
     {
         // If the enemy is in the active list
         if (this.GetListStatus(enemyHandler))
         {
-            enemyHandler.gameObject.SetActive(false);
+            enemyHandler.SetFunctional(false);
             _activeEnemies.Remove(enemyHandler);
             _inactiveEnemies.Add(enemyHandler);
         }
         // If the enemy is in the inactive list
         else
         {
-            enemyHandler.gameObject.SetActive(true);
+            enemyHandler.SetFunctional(true);
             _inactiveEnemies.Remove(enemyHandler);
             _activeEnemies.Add(enemyHandler);
         }
@@ -155,22 +144,95 @@ public class ObjectPooler : MonoBehaviour
         return null;
     }
 
+    // Finds and returns an inactive enemy based on the enemy type
+    public EnemyHandler FindEnemyTypeWithinQueue(EnemyHandler.EnemyType enemyType)
+    {
+        // Linear search for enemy type
+        foreach (EnemyHandler enemy in _respawnQueue)
+        {
+            if (enemy.GetEnemyType() == enemyType)
+                return enemy;
+        }
+
+        // No enemy found
+        return null;
+    }
+
+    // Removes enemies from the queue
+    public void RemoveFromQueue(EnemyHandler handler)
+    {
+        if (_respawnQueue.Contains(handler))
+        {
+            _respawnQueue.Remove(handler);
+            _activeEnemies.Add(handler);
+            handler.SetFunctional(true);
+        }
+    }
+
+    // Removes enemy from the inactive list and adds it to the queue
+    public void AddToQueue(EnemyHandler handler)
+    {
+        if (!_respawnQueue.Contains(handler))
+        {
+            _inactiveEnemies.Remove(handler);
+            _respawnQueue.Add(handler);
+        }
+    }
+
+    // Returns true if the enemy is eligable for the queue
+    public bool GetCanAddToQueue(EnemyHandler handler)
+    {
+        foreach (EnemyHandler.EnemyType enemyType in enemyRespawnList)
+        {
+            if (handler.GetEnemyType() == enemyType)
+                return true;
+        }
+        return false;
+    }
+
+    public bool AddToInactiveList(EnemyHandler handler)
+    {
+        // Swaps the enemy from the active to the inactive list
+        SwapActiveLists(handler);
+
+        // Add to queue if we can
+        if (GetCanAddToQueue(handler) && (finalEnemy == null || !finalEnemy.activeInHierarchy))
+        {
+            AddToQueue(handler);
+            return true;
+        }
+
+        // If not, just leave on the inactive list
+        return false;
+    }
+
     public void CheckForEnemyTypeSpawn()
     {
         // Check if the target enemy is still alive and count of inactive is > 0
-        if ((finalEnemy == null || !finalEnemy.activeInHierarchy) && _inactiveEnemies.Count > 0 && !_isSpawning)
+        if ((finalEnemy == null || !finalEnemy.activeInHierarchy) && _respawnQueue.Count > 0 && !_isSpawning && spawnerActive)
         {
-            foreach (EnemyHandler enemy in _inactiveEnemies)
+            // // Iterating through the inactive enemies list
+            // foreach (EnemyHandler enemy in _inactiveEnemies)
+            // {
+            //     // Iterating through the enemy respawn list
+            //     foreach (EnemyHandler.EnemyType enemyType in enemyRespawnList)
+            //     {
+            //         // Comparing the enemy type to the index within enemy respawn list
+            //         if (enemy.GetEnemyType() == enemyType)
+            //         {
+            //             // If the types are a match, respawn the enemy
+            //             StartCoroutine(RespawnEnemy(enemy));
+            //             break;
+            //         }
+            //     }
+            // }
+
+            // Iterating through the inactive enemies list
+            foreach (EnemyHandler enemy in _respawnQueue)
             {
-                foreach (EnemyHandler.EnemyType enemyType in enemyRespawnList)
-                {
-                    if (enemy.GetEnemyType() == enemyType)
-                    {
-                        // Spawning the enemy
-                        StartCoroutine(RespawnEnemy(enemy));
-                        break;
-                    }
-                }
+                // If the types are a match, respawn the enemy
+                StartCoroutine(RespawnEnemy(enemy));
+                break;
             }
         }
     }
@@ -180,9 +242,6 @@ public class ObjectPooler : MonoBehaviour
     {
         // Setting the spawning flag to true
         _isSpawning = true;
-
-        // Swap the into the active list
-        SwapList(enemy); // THIS CAUSES ERRORS
 
         // Wait until for # amount of seconds before spawning the enemy
         yield return new WaitForSeconds(spawnTime);
@@ -197,18 +256,25 @@ public class ObjectPooler : MonoBehaviour
             _isSpawning = false;
 
             // Printing a debug message
-            Debug.LogWarning("Object Pool: Couldn't find spawner off screen.");
+            Debug.LogWarning("Object Pool - Couldn't find spawner off screen.");
             yield break;
         }
+
+        // Removing enemy from the queue
+        RemoveFromQueue(enemy);
+
+        // Refreshing the enemy list within the group handler
+        _enemyGroupHandler.RefreshEnemyList();
 
         // Get a random number between 0 and the spawn point max
         int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
 
-        // Setting to the active list and enabling functionality
-        //SpawnFromPool(enemy, _spawnPointsOffScreen[spawnNumber].position, Quaternion.identity);
-        // Basically activate the enemy
+        // Setting the enemy position and rotation to the spawn point
         enemy.transform.position = _spawnPointsOffScreen[spawnNumber].position;
         enemy.transform.rotation = _spawnPointsOffScreen[spawnNumber].rotation;
+
+        // Resetting the enemies properties
+        enemy.Reset();
 
         // Setting the spawning flag to false
         _isSpawning = false;
@@ -234,19 +300,6 @@ public class ObjectPooler : MonoBehaviour
                 return false;
         }
         return true;
-    }
-
-    public GameObject SpawnFromPool(EnemyHandler enemy, Vector3 position, Quaternion rotation)
-    {
-        // Remove the object from the inactive list
-        SwapList(enemy);
-        GameObject objectToSpawn = enemy.gameObject;
-
-        // Basically activate the enemy
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-
-        return objectToSpawn;
     }
 
     // [System.Serializable]

@@ -6,12 +6,14 @@ public class GroupCombat : GroupState
 {
     [Header("Properties")]
     public float beginHuddleDistance = 20.0f;
-    public float huddleDistance = 10.0f;
+    public float stopHuddleDistance = 7.0f;
+    public float stoppingDistanceIncrease = 5.0f;
     public float queueTime = 1.5f;
     private bool queueFlag = false;
     private Vector3 _positionFix;
     private List<EnemyHandler> _unitSlots;
     private int _activeIndex = 0;
+    private Vector3 _attackerLastPosition = Vector3.zero;
 
     public override void OnStateEnter()
     {
@@ -49,15 +51,18 @@ public class GroupCombat : GroupState
                 AIBrain aiBrain = enemyGroupHandler.GetEnemy(i).GetBrain();
 
                 // Checking if the enemy isn't attacking the player
-                if (!aiBrain.GetAIBehaviour("Movement").IsLockedOntoPlayer() && !aiBrain.GetHandler().IsParried())
+                if (!aiBrain.GetAIBehaviour("Movement").IsLockedOntoPlayer() && !aiBrain.GetHandler().IsParried() && _unitSlots[_activeIndex].GetFunctional())
                 {
                     // Forcing the enemy to face the player
                     _positionFix = aiBrain.PlayerTransform.position;
                     _positionFix.y = aiBrain.transform.position.y;
                     aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;
 
-                    // Move enemy into position around the player according to index
-                    aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, i), 1.0f);
+                    if (aiBrain.GetDistanceToPlayer() >= stopHuddleDistance)
+                    {
+                        // Move enemy into position around the player according to index
+                        aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, aiBrain.PlayerTransform.position, i), 1.0f);
+                    }
                 }
             }
         }
@@ -72,12 +77,11 @@ public class GroupCombat : GroupState
 
     public override void OnStateExit() { }
 
-    public Vector3 GetPositionAroundPoint(AIBrain enemy, int index)
+    public Vector3 GetPositionAroundPoint(AIBrain enemy, Vector3 position, int index)
     {
         float degreesPerIndex = 360f / this.enemyGroupHandler.GetEnemies().Count;
-        var pos = this.enemyGroupHandler.playerTransform.position;
-        var offset = new Vector3(0f, 0f, huddleDistance + enemy.GetNavMeshAgent().stoppingDistance);
-        return pos + (Quaternion.Euler(new Vector3(0f, degreesPerIndex * index, 0f)) * offset);
+        var offset = new Vector3(0f, 0f, enemy.GetNavMeshAgent().stoppingDistance + stoppingDistanceIncrease);
+        return position + (Quaternion.Euler(new Vector3(0f, degreesPerIndex * index, 0f)) * offset);
     }
 
     private IEnumerator QueueAttack()
@@ -85,9 +89,12 @@ public class GroupCombat : GroupState
         if (_unitSlots[_activeIndex].GetBrain().GetHandler().IsParried())
             yield break;
 
+        AIBrain aiBrain = _unitSlots[_activeIndex].GetBrain();
+        Vector3 lastPosition = aiBrain.transform.position;
+
         // Attacking the player 
         queueFlag = true;
-        _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+        aiBrain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
 
         // Waiting a certain amount of time
         yield return new WaitForSeconds(queueTime);
@@ -100,9 +107,9 @@ public class GroupCombat : GroupState
             yield break;
         }
 
-        // Move enemy into position and make them face player
-        if (!_unitSlots[_activeIndex].IsParried())
-            _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(_unitSlots[_activeIndex].GetBrain(), _activeIndex), 1.0f);
+        // Move back into position
+        if (!aiBrain.GetHandler().IsParried() && aiBrain.GetHandler().GetFunctional())
+            aiBrain.GetAIBehaviour("Movement").OverrideDestination(lastPosition, 1.0f);
 
         // Wrapping the index count
         if (_activeIndex >= _unitSlots.Count - 1)

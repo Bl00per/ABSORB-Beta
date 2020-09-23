@@ -132,7 +132,9 @@ public class AIBrain : MonoBehaviour
     {
         yield return new WaitForSeconds(pathUpdateCooldownTime);
         _targetDestination = targetDestination;
-        _navMeshAgent.SetDestination(_targetDestination);
+
+        if(_handler.GetFunctional() && _handler.IsAlive())
+            _navMeshAgent.SetDestination(_targetDestination);
     }
 
     // Returns the distance from this enemy and the player

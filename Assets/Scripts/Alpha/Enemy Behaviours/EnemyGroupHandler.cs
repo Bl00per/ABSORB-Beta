@@ -102,11 +102,16 @@ public class EnemyGroupHandler : MonoBehaviour
     // Removes an enemy from the group
     public void Remove(EnemyHandler enemy)
     {
-        _objectPooler.SwapList(enemy);
+        _objectPooler.AddToInactiveList(enemy);
         _groupCombat.RemoveFromUnitSlot(enemy);
-        enemies.Clear();
+        RefreshEnemyList();
+    }
 
+    // Refills the current enemy list with the active enemy list within the object pool
+    public void RefreshEnemyList()
+    {
         // Getting the object pools inactive list
+        enemies.Clear();
         enemies = new List<EnemyHandler>(_objectPooler.GetActiveEnemyList());
     }
 
@@ -203,4 +208,7 @@ public class EnemyGroupHandler : MonoBehaviour
 
     // Returns the distance from the center of the group and the player
     public float GetCOMDistanceFromPlayer() => Vector3.Distance(CalculateCenterOfMass(), playerTransform.position);
+
+    // Returns the object pool attached to the same object as this component
+    public ObjectPooler GetObjectPooler() => _objectPooler;
 }

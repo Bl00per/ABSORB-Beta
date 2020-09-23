@@ -21,8 +21,8 @@ public class MinionAttack : AIBehaviour
     [Header("Attack Properties")]
     public float attackForce = 10.0f;
 
-    private bool _hasAttacked = false;
-    private bool _canAttack = false;
+    // private bool _hasAttacked = false;
+    // private bool _canAttack = false;
 
     private void Awake()
     {
@@ -38,15 +38,15 @@ public class MinionAttack : AIBehaviour
     {
         weaponToEnable.SetActive(true);
         _animator.SetBool("Attacking", true);
-        _hasAttacked = false;
+        //_hasAttacked = false;
     }
 
     public override void OnStateExit()
     {
         weaponToEnable.SetActive(false);
         _animator.SetBool("Attacking", false);
-        _hasAttacked = false;
-        _canAttack = false;
+       // _hasAttacked = false;
+        //_canAttack = false;
     }
 
     public override void OnStateFixedUpdate() {}
@@ -60,29 +60,26 @@ public class MinionAttack : AIBehaviour
         if(lookAtPlayer)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
 
-        if (weaponTrigger.Enabled && weaponTrigger.Collider != null && _canAttack)
-        {
-            if (weaponTrigger.Collider.gameObject.CompareTag("Player") && !_hasAttacked)
-            {
-                if(_combatHandler.shieldState == CombatHandler.ShieldState.Shielding)
-                    enemyHandler.PlayHitParryEffect();
-
-                _hasAttacked = true;
-                _canAttack = false;
-            }
-        }
+        // if (weaponTrigger.Enabled && weaponTrigger.Collider != null && _canAttack)
+        // {
+        //     if (weaponTrigger.Collider.gameObject.CompareTag("Player") && !_hasAttacked)
+        //     {
+        //         _hasAttacked = true;
+        //         _canAttack = false;
+        //     }
+        // }
     }
 
     // Activates the collision check on the enemy's weapon
     public void Key_ActivateMinionAttackCheck()
     {
-        _canAttack = true;
+        //_canAttack = true;
     }
 
     // Deactivates the collision check on the enemy's weapon
     public void Key_DeactivateMinionAttackCheck()
     {
-        _canAttack = false;
+        //_canAttack = false;
         brain.SetBehaviour("Movement");
     }
 }
