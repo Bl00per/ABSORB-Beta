@@ -49,6 +49,7 @@ public class LocomotionHandler : MonoBehaviour
         _animator = _playerHandler.GetAnimator();
         _inputManager = _playerHandler.GetInputManager();
         _collider = this.GetComponent<CapsuleCollider>();
+       
     }
 
     // Update is called once per frame
@@ -294,6 +295,8 @@ public class LocomotionHandler : MonoBehaviour
     public float distance = 20.0f;
     public float smoothTime = 0.5f;
     public bool lerp = false;
+    public AudioSource _dashAudio;
+    public ParticleSystem _dashPE;
     [Header("Debug Optionals")]
     public bool disableVelocityReset = false;
     public bool smoothDamp = false;
@@ -309,6 +312,8 @@ public class LocomotionHandler : MonoBehaviour
             _initialVelocity = _rigidbody.velocity;
             _initialPosition = transform.position;
             _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
+            _dashPE.Play();
+            _dashAudio.Play();
             _animator.SetBool("Dash", true);
             _canDash = false;
             StartCoroutine(CoolDownSequence());

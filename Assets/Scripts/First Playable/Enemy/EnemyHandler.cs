@@ -84,6 +84,8 @@ public class EnemyHandler : MonoBehaviour
 
     private void Update()
     {
+        UpdateSlowMo();
+
         // Checking if the enemy is still alive
         if (!_isAlive)
             _aiBrain.SetBehaviour("Death");
@@ -125,6 +127,7 @@ public class EnemyHandler : MonoBehaviour
             parryEffect.transform.SetParent(null);
             parryEffect.Play();
             parryAudio.Play();
+            StartCoroutine(Slow());
             StartCoroutine(ReparentHitEffect());
         }
     }
@@ -152,6 +155,7 @@ public class EnemyHandler : MonoBehaviour
     {
         // Safety check to make sure we only get the correct status
         if (typeOfEnemy == EnemyType.SPECIAL)
+            
             return _specialParried.GetAbsorbable();
         else
             return false;
@@ -270,4 +274,43 @@ public class EnemyHandler : MonoBehaviour
     {
         return _playerHandler;
     }
+
+    #region SlowMotion
+
+    [Header("Slow Motion Attributes")]
+    [Range(1, 100)]
+    public int slowMotionPercentage = 50;
+    public AnimationCurve tweenEase;
+    private float tempSlowMoPercentage = 0.0f;
+    private float currentTimeScale;
+    private float defaultTimeScale = 1.0f;
+    public float slowMoTime;
+    private bool activateSlowmo = false;
+
+    private void UpdateSlowMo()
+    {
+        tempSlowMoPercentage = slowMotionPercentage / 100.0f;
+
+        if (activateSlowmo)
+        {
+            currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, tweenEase.Evaluate(Time.time));
+            Time.timeScale = currentTimeScale;
+        }
+        else if (!activateSlowmo && currentTimeScale < defaultTimeScale)
+        {
+            currentTimeScale = Mathf.Lerp(currentTimeScale, defaultTimeScale, 0.2f);
+            Time.timeScale = currentTimeScale;
+        }
+    }
+    
+    private IEnumerator Slow()
+    {
+        activateSlowmo = true;
+
+        yield return new WaitForSeconds(slowMoTime);
+
+        activateSlowmo = false;
+    }
+
+    #endregion
 }

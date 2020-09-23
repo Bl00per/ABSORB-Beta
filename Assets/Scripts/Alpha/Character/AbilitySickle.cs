@@ -6,7 +6,7 @@ public class AbilitySickle : Ability
 {
     [Header("Refereneces")]
     public GameObject sickleGameObject;
-
+    private Collider sickleCollider;
     private PlayerHandler _playerHandler;
     private Animator _animator;
 
@@ -18,6 +18,7 @@ public class AbilitySickle : Ability
     public void Start()
     {
         _animator = _playerHandler.GetAnimator();
+        sickleCollider = sickleGameObject.GetComponent<Collider>();
     }
 
     public override void OnEnter() { }
@@ -29,6 +30,14 @@ public class AbilitySickle : Ability
         _animator.SetBool("Sickle", true);
         sickleGameObject.SetActive(true);
     }
+    public void Key_ActivateSickleCollider()
+    {
+        sickleCollider.enabled = true;
+    }
+    public void Key_DeactivateSickleCollider()
+    {
+        sickleCollider.enabled = false;
+    }
 
     public void Key_DeactivateSickleAbility()
     {
@@ -36,4 +45,16 @@ public class AbilitySickle : Ability
         sickleGameObject.SetActive(false);
         abilityHandler.SetAbility(AbilityHandler.AbilityType.NONE);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && other.transform.gameObject.CompareTag("Vines"))
+        {
+            //Debug.Log("Hit interactable");
+            other.transform.gameObject.SetActive(false);
+        }
+    }
+    
+        
 }
+
