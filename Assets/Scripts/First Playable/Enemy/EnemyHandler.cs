@@ -196,6 +196,9 @@ public class EnemyHandler : MonoBehaviour
     {
         // Playing death VFX
         PlayDeathFX();
+        
+        //clear the enemy dection list of all targets
+        EnemyDetection.enemies.Clear();
 
         _spawner?.RemoveEnemy(this.gameObject);
 
