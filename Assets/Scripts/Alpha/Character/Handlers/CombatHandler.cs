@@ -74,9 +74,12 @@ public class CombatHandler : MonoBehaviour
     private float _attackTimer = 0.0f;
     private bool _runAttackTimer = false;
     private bool _comboStart = true;
+    private bool _attacking;
     private Transform enemy;
     public Rigidbody rb;
-    public CinemachineTargetGroup cmTarget;
+    public CinemachineTargetGroup lockOnTarget;
+    public CinemachineFreeLook lockOnCam;
+    public GameObject lockOnGO;
     
     private void UpdateAttack()
     {
@@ -86,6 +89,7 @@ public class CombatHandler : MonoBehaviour
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
             {
+                _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
                 _comboStart = false;
@@ -109,21 +113,33 @@ public class CombatHandler : MonoBehaviour
     {
         enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
 
-        if (_runAttackTimer)
+        if (_attacking) //if the player is attacking
         {
-            if (enemy != null)
+            if (enemy != null) //if an enemy is within range
             {
-                cmTarget.m_Targets[1].target = enemy;
+                lockOnGO.transform.position = enemy.position;
+                lockOnGO.SetActive(true);
+                lockOnTarget.m_Targets[1].target = enemy;
+                lockOnCam.gameObject.SetActive(true);
 
                 Vector3 direction = enemy.transform.position - rb.transform.position;
                 direction.y = 0;
                 Quaternion rotation = Quaternion.LookRotation(direction);
                 rb.transform.rotation = Quaternion.Lerp(rb.transform.rotation, rotation, attackRotSpeed * Time.deltaTime);
             }
-            else
+            else // if an enemy is not in range
             {
-                cmTarget.m_Targets[1].target = null;
+                lockOnGO.SetActive(false);
+                lockOnTarget.m_Targets[1].target = null;
+                lockOnCam.gameObject.SetActive(false);
             }
+        }
+        else // if the player is not attacking
+        {
+            lockOnGO.SetActive(false);
+            //lockOnTarget.m_Targets[1].target = null;
+            //lockOnCam.gameObject.SetActive(false);
+
         }
     }
 
@@ -140,6 +156,7 @@ public class CombatHandler : MonoBehaviour
 
     public void AttackComboFinish()
     {
+        _attacking = false;
         _comboStart = true;
         _animator.SetInteger("ComboNo.", 0);
         _animator.SetBool("Attack1", false);
