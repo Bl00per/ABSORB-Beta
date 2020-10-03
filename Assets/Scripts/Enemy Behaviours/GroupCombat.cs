@@ -86,7 +86,7 @@ public class GroupCombat : GroupState
 
     private IEnumerator QueueAttack()
     {
-        if (_unitSlots[_activeIndex].GetBrain().GetHandler().IsParried())
+        if (_unitSlots[_activeIndex].GetBrain().GetHandler().IsParried() || !_unitSlots[_activeIndex].GetBrain().GetHandler().GetFunctional())
             yield break;
 
         AIBrain aiBrain = _unitSlots[_activeIndex].GetBrain();

@@ -80,7 +80,8 @@ public class EnemyHandler : MonoBehaviour
             _specialParried = this.GetComponent<SpecialParried>();
 
         // Get the particle parent
-        _parryParticleParent = parryEffect.transform.parent;
+        if(hasParryEffect)
+            _parryParticleParent = parryEffect.transform.parent;
     }
 
     private void Start()

@@ -13,14 +13,6 @@ public class EnemyGroupHandler : MonoBehaviour
         COUNT,      // Count of all states
     }
 
-    public enum GroupType
-    {
-        NONE,       // 0 enemies within the group
-        MINION,     // Minion heavy
-        SPECIAL,    // Special heavy
-        ELITE,      // Elite heavy
-    }
-
     [Header("References")]
     public Transform playerTransform;
 
