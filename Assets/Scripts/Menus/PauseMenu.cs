@@ -52,12 +52,6 @@ public class PauseMenu : MonoBehaviour
 
         if (Paused)
         {
-            if (_inputManager.GetControllerConnected())
-            {
-                _inputManager._xciInputDirection.x = XboxCtrlrInput.XCI.GetAxisRaw(XboxCtrlrInput.XboxAxis.LeftStickX);
-                _inputManager._xciInputDirection.y = XboxCtrlrInput.XCI.GetAxisRaw(XboxCtrlrInput.XboxAxis.LeftStickY);
-            }
-            
             if (EventSystem.current.currentSelectedGameObject == volumeSlider.gameObject)
             {
                 volumeFill.color = new Vector4(213f, 0, 217f, 255f);
