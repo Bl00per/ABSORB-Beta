@@ -11,14 +11,14 @@ public class GroupCombat : GroupState
     public float queueTime = 1.5f;
     private bool queueFlag = false;
     private Vector3 _positionFix;
-    private List<EnemyHandler> _unitSlots;
+    private List<EnemyHandler> _unitSlots = new List<EnemyHandler>();
     private int _activeIndex = 0;
     private Vector3 _attackerLastPosition = Vector3.zero;
 
     public override void OnStateEnter()
     {
         // Sorting unit slots by closest to player
-        CreateSortedUnitSlots();
+        UpdateUnitSlots();
         _activeIndex = 0;
     }
 
@@ -86,7 +86,7 @@ public class GroupCombat : GroupState
 
     private IEnumerator QueueAttack()
     {
-        if (_unitSlots[_activeIndex].GetBrain().GetHandler().IsParried())
+        if (_unitSlots[_activeIndex].GetBrain().GetHandler().IsParried() || !_unitSlots[_activeIndex].GetBrain().GetHandler().GetFunctional())
             yield break;
 
         AIBrain aiBrain = _unitSlots[_activeIndex].GetBrain();
@@ -120,8 +120,8 @@ public class GroupCombat : GroupState
         queueFlag = false;
     }
 
-    // Creates a unit list and sorts it by the closest to the player
-    private void CreateSortedUnitSlots()
+    // Adds the active group of enemies into the unit slots
+    private void UpdateUnitSlots()
     {
         /* Optimization note: 
                             Find a way to only create this list once.
@@ -132,7 +132,10 @@ public class GroupCombat : GroupState
         */
 
         // Creating a new list of enemies from the enemies within the group
-        _unitSlots = new List<EnemyHandler>(enemyGroupHandler.GetEnemies());
+        //_unitSlots = new List<EnemyHandler>(enemyGroupHandler.GetEnemies());
+
+        _unitSlots.Clear();
+        _unitSlots.AddRange(enemyGroupHandler.GetObjectPooler().GetActiveEnemyList());
 
         // Sorting the list; using a lambda function to compare the distance to the player
         _unitSlots.Sort((u1, u2) => u1.GetBrain().GetDistanceToPlayer().
@@ -143,8 +146,7 @@ public class GroupCombat : GroupState
     public void RemoveFromUnitSlot(EnemyHandler enemy)
     {
         StopCoroutine(QueueAttack());
-        _unitSlots.Remove(enemy);
-        CreateSortedUnitSlots();
+        UpdateUnitSlots();
 
         // Wrapping the index count
         if (_activeIndex >= _unitSlots.Count - 1)

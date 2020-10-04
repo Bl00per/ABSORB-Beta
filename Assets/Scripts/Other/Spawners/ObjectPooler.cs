@@ -264,7 +264,7 @@ public class ObjectPooler : MonoBehaviour
         RemoveFromQueue(enemy);
 
         // Refreshing the enemy list within the group handler
-        _enemyGroupHandler.RefreshEnemyList();
+        _enemyGroupHandler.UpdateEnemyList();
 
         // Get a random number between 0 and the spawn point max
         int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);

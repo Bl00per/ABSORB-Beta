@@ -120,7 +120,7 @@ public class AIBrain : MonoBehaviour
     // Updates the current destination to the players, if distance is over padding; does instantly
     internal void SetDestination(Vector3 targetDestination, float padding)
     {
-        if (Vector3.Distance(_targetDestination, targetDestination) > padding)
+        if (Vector3.Distance(_targetDestination, targetDestination) > padding && _handler.GetFunctional())
         {
             _targetDestination = targetDestination;
             _navMeshAgent.SetDestination(_targetDestination);
@@ -131,10 +131,12 @@ public class AIBrain : MonoBehaviour
     public IEnumerator SetDestination(Vector3 targetDestination)
     {
         yield return new WaitForSeconds(pathUpdateCooldownTime);
-        _targetDestination = targetDestination;
 
-        if(_handler.GetFunctional() && _handler.IsAlive())
+        if(_handler.GetFunctional())
+        {
             _navMeshAgent.SetDestination(_targetDestination);
+            _targetDestination = targetDestination;
+        }
     }
 
     // Returns the distance from this enemy and the player

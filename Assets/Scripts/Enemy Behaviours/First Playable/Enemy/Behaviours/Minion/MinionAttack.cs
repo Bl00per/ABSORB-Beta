@@ -59,15 +59,6 @@ public class MinionAttack : AIBehaviour
         // Rotate to face direction
         if(lookAtPlayer)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
-
-        // if (weaponTrigger.Enabled && weaponTrigger.Collider != null && _canAttack)
-        // {
-        //     if (weaponTrigger.Collider.gameObject.CompareTag("Player") && !_hasAttacked)
-        //     {
-        //         _hasAttacked = true;
-        //         _canAttack = false;
-        //     }
-        // }
     }
 
     // Activates the collision check on the enemy's weapon
