@@ -49,6 +49,7 @@ public class AbilityPot : Ability
 
     public void Key_ActivateOrbHitVFX()
     {
+        _orbAnimator.enabled = false;
         waterHit.Play();
         _waterHitAudio.Play();
         potOrbObject.SetActive(false);
@@ -57,6 +58,7 @@ public class AbilityPot : Ability
 
     public void Key_DeactivatePotAbility()
     {
+        _orbAnimator.enabled = true;
         playerAnimator.SetBool("Pot", false);
         _orbAnimator.SetBool("Attack", false);
         abilityHandler.SetAbility(AbilityHandler.AbilityType.NONE);
@@ -67,20 +69,14 @@ public class AbilityPot : Ability
         if (_aimActive)
         {
             RaycastHit hit;
-            //if (Physics.Raycast(mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f)), out hit, 1000.0f))
-            if (Physics.SphereCast(mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f)), sphereCastRadius, out hit, 1000.0f))
+            if (Physics.SphereCast(mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f)), sphereCastRadius, out hit, 1000.0f, LayerMask.GetMask("Ground")))
             {
-                if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
-                {
-                    potAim.transform.position = hit.point;
-                    potAim.transform.up = hit.normal;
-                    _lastValidPosition = hit.point; 
-                }
-                else
-                {
-                    potAim.transform.position = _lastValidPosition;
-                }
+                potAim.transform.position = hit.point;
+                potAim.transform.up = hit.normal;
+                _lastValidPosition = hit.point;
             }
+            else
+                potAim.transform.position = _lastValidPosition;
         }
     }
 

@@ -193,6 +193,7 @@ public class EnemyHandler : MonoBehaviour
         if (value)
         {
             // Enabling all functional components
+            _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
             bodyMeshRenderer.enabled = true;
@@ -205,6 +206,7 @@ public class EnemyHandler : MonoBehaviour
         else
         {
             // Disabling all functional components
+            _isAlive = false;
             _aiBrain.enabled = false;
             _rigidbody.isKinematic = true;
             bodyMeshRenderer.enabled = false;
@@ -219,6 +221,9 @@ public class EnemyHandler : MonoBehaviour
     // Kills the enemy
     public void Kill()
     {
+        // Disabling functional components of enemy
+        SetFunctional(false);
+
         // Playing death VFX
         PlayDeathFX();
 

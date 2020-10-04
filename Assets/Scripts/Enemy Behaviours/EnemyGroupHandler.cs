@@ -22,11 +22,12 @@ public class EnemyGroupHandler : MonoBehaviour
     [Header("Debug")]
     public bool debugCurrentState = false;
 
+    // FSM variables
     private GroupState[] _groupStates;
     private E_GroupState _currentState;
 
     // List of enemies within group
-    protected List<EnemyHandler> enemies;
+    private List<EnemyHandler> _activeEnemies = new List<EnemyHandler>();
 
     // Reference to the group combat state
     private GroupCombat _groupCombat;
@@ -62,7 +63,7 @@ public class EnemyGroupHandler : MonoBehaviour
     private void Start()
     {
         // Getting the object pools inactive list
-        enemies = new List<EnemyHandler>(_objectPooler.GetActiveEnemyList());
+        UpdateEnemyList();
 
         // Setting the group state to WANDER on entry
         SetState(E_GroupState.WANDER);
@@ -89,22 +90,22 @@ public class EnemyGroupHandler : MonoBehaviour
     }
 
     // Adds an enemy to the group
-    public void Add(EnemyHandler enemy) => enemies.Add(enemy);
+    public void Add(EnemyHandler enemy) => _activeEnemies.Add(enemy);
 
     // Removes an enemy from the group
     public void Remove(EnemyHandler enemy)
     {
         _objectPooler.AddToInactiveList(enemy);
         _groupCombat.RemoveFromUnitSlot(enemy);
-        RefreshEnemyList();
+        UpdateEnemyList();
     }
 
     // Refills the current enemy list with the active enemy list within the object pool
-    public void RefreshEnemyList()
+    public void UpdateEnemyList()
     {
         // Getting the object pools inactive list
-        enemies.Clear();
-        enemies = new List<EnemyHandler>(_objectPooler.GetActiveEnemyList());
+        _activeEnemies.Clear();
+        _activeEnemies.AddRange(_objectPooler.GetActiveEnemyList());
     }
 
     // Update the target destination of the group
@@ -123,16 +124,16 @@ public class EnemyGroupHandler : MonoBehaviour
     public void UpdateAllFlockDestinations()
     {
         // If there are enemies within the list
-        if (enemies.Count > 1)
+        if (_activeEnemies.Count > 1)
         {
             // Going to update this every frame for now, but might have to delay it on a coroutine if there are perfomace issues!
             CoM = CalculateCenterOfMass();
-            foreach (EnemyHandler enemy in enemies)
+            foreach (EnemyHandler enemy in _activeEnemies)
                 enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetFlockDestination(enemy), 1.0f);
         }
-        else if (enemies.Count > 0)
+        else if (_activeEnemies.Count > 0)
         {
-            enemies[0].GetBrain().GetAIBehaviour("Movement").OverrideDestination(_targetDestination, 1.0f);
+            _activeEnemies[0].GetBrain().GetAIBehaviour("Movement").OverrideDestination(_targetDestination, 1.0f);
         }
     }
 
@@ -147,7 +148,7 @@ public class EnemyGroupHandler : MonoBehaviour
     {
         // Iterating over the enemies
         Vector3 result = Vector3.zero;
-        foreach (EnemyHandler e in enemies)
+        foreach (EnemyHandler e in _activeEnemies)
         {
             // Making sure not the check the enemy with itself
             if (e == enemy)
@@ -175,7 +176,7 @@ public class EnemyGroupHandler : MonoBehaviour
         Vector3 result = Vector3.zero;
         float sumOfAllWeights = 0.0f;
         Rigidbody enemyRigidbody;
-        foreach (EnemyHandler enemy in enemies)
+        foreach (EnemyHandler enemy in _activeEnemies)
         {
             enemyRigidbody = enemy.GetRigidbody();
             result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
@@ -190,10 +191,10 @@ public class EnemyGroupHandler : MonoBehaviour
     public Vector3 GetCenterOfMass() => CoM;
 
     // Returns the array list of enemies
-    public List<EnemyHandler> GetEnemies() => enemies;
+    public List<EnemyHandler> GetEnemies() => _activeEnemies;
 
     // Returns a specified enemy
-    public EnemyHandler GetEnemy(int index) => enemies[index];
+    public EnemyHandler GetEnemy(int index) => _activeEnemies[index];
 
     // Returns the amount of enemies within group
     public int GetEnemyCount() => _groupStates.Length;
