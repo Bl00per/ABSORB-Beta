@@ -25,7 +25,7 @@ public class PlayerHandler : MonoBehaviour
 
     // References
     [Header("References")]
-    public MeshRenderer abidaroMesh;
+    public SkinnedMeshRenderer abidaroMesh;
     public GameObject respawnParticle;
     public ParticleSystem hitParticleSystem;
     private Animator _animator;
