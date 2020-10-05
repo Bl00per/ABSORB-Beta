@@ -19217,20 +19217,14 @@ MonoBehaviour:
   deathSoundLength: 2
   deathParticleEffect: {fileID: 3391721248243392130}
   overallFXTime: 1
+  bodyMeshRenderer: {fileID: 167646331832479598}
+  weaponMeshRenderer: {fileID: 3862423504091585032}
+  weaponCollider: {fileID: 3862423504091585035}
   typeOfEnemy: 0
   typeOfAbility: 0
   maxHealth: 75
   baseDamage: 2
   printHealthStats: 0
-  weaponCollider: {fileID: 3862423504091585035}
-  slowMotionPercentage: 50
-  tweenEase:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  slowMoTime: 0
 --- !u!114 &4165402235293637483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19457,7 +19451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4165402237276571249}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.325, z: 0.026281}
+  m_LocalPosition: {x: 0, y: 2, z: 0.026281}
   m_LocalScale: {x: 1.6032327, y: 1.6032327, z: 1.6032327}
   m_Children:
   - {fileID: 1303991859455611905}

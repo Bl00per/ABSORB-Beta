@@ -345,38 +345,14 @@ MonoBehaviour:
   deathSoundLength: 2
   deathParticleEffect: {fileID: 8531688337467283591}
   overallFXTime: 1
+  bodyMeshRenderer: {fileID: 6313665273112145668}
+  weaponMeshRenderer: {fileID: 8835140878136493118}
+  weaponCollider: {fileID: 6968428015675753766}
   typeOfEnemy: 1
   typeOfAbility: 2
   maxHealth: 125
   baseDamage: 5
   printHealthStats: 0
-  weaponCollider: {fileID: 6968428015675753766}
-  slowMotionPercentage: 10
-  tweenEase:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  slowMoTime: 1
 --- !u!114 &6809976860378941603
 MonoBehaviour:
   m_ObjectHideFlags: 0
