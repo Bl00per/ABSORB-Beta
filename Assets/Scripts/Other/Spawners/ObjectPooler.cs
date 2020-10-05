@@ -29,8 +29,10 @@ public class ObjectPooler : MonoBehaviour
     public List<EnemyHandler.EnemyType> enemyRespawnList;
     public bool spawnerActive = true;
     public float spawnTime = 1.0f;
+    public bool findOffScreenSpawnPoint = true;
+    public Transform onScreenSpawnPoint;
 
-    [Header("The death of this enemy will result in the spawner deactivating.")]
+    [Header("The death of this enemy will end the combat sequence.")]
     public GameObject finalEnemy;
 
     [Space]
@@ -51,7 +53,7 @@ public class ObjectPooler : MonoBehaviour
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
 
         // Populate list of enemies with the children of this gameobject
-        foreach (Transform child in transform)
+        foreach (Transform child in transform.GetChild(0))
         {
             foreach (Transform grandchild in child)
             {
@@ -246,18 +248,21 @@ public class ObjectPooler : MonoBehaviour
         // Wait until for # amount of seconds before spawning the enemy
         yield return new WaitForSeconds(spawnTime);
 
-        // Updating the spawn points which are off-screen
-        UpdateSpawnPointsOffScreen();
-
-        // Exiting this function if there are no points on-screen
-        if (_spawnPointsOffScreen.Count <= 0)
+        if (findOffScreenSpawnPoint)
         {
-            // Setting the spawning flag to false
-            _isSpawning = false;
+            // Updating the spawn points which are off-screen
+            UpdateSpawnPointsOffScreen();
 
-            // Printing a debug message
-            Debug.LogWarning("Object Pool - Couldn't find spawner off screen.");
-            yield break;
+            // Exiting this function if there are no points on-screen
+            if (_spawnPointsOffScreen.Count <= 0)
+            {
+                // Setting the spawning flag to false
+                _isSpawning = false;
+
+                // Printing a debug message
+                Debug.LogWarning("Object Pool - Couldn't find spawner off screen.");
+                yield break;
+            }
         }
 
         // Removing enemy from the queue
@@ -266,12 +271,21 @@ public class ObjectPooler : MonoBehaviour
         // Refreshing the enemy list within the group handler
         _enemyGroupHandler.UpdateEnemyList();
 
-        // Get a random number between 0 and the spawn point max
-        int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
+        if (findOffScreenSpawnPoint)
+        {
+            // Get a random number between 0 and the spawn point max
+            int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
 
-        // Setting the enemy position and rotation to the spawn point
-        enemy.transform.position = _spawnPointsOffScreen[spawnNumber].position;
-        enemy.transform.rotation = _spawnPointsOffScreen[spawnNumber].rotation;
+            // Setting the enemy position and rotation to the spawn point
+            enemy.transform.position = _spawnPointsOffScreen[spawnNumber].position;
+            enemy.transform.rotation = _spawnPointsOffScreen[spawnNumber].rotation;
+        }
+        else
+        {
+            // Setting the enemy position and rotation to the spawn point
+            enemy.transform.position = onScreenSpawnPoint.position;
+            enemy.transform.rotation = onScreenSpawnPoint.rotation;
+        }
 
         // Resetting the enemies properties
         enemy.Reset();
