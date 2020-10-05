@@ -179,42 +179,23 @@ public class CombatHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Terrible, needs rework
-
-        if (other.gameObject.CompareTag("EnemyWeapon"))
+        if(other.gameObject.CompareTag("EnemyWeapon"))
         {
             EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
-            switch (enemy.GetEnemyType())
+            if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
-                case EnemyHandler.EnemyType.MINION:
-                    if (shieldState != ShieldState.Shielding)
-                        _playerHandler.TakeDamage(enemy.GetDamage());
-                    break;
-
-                case EnemyHandler.EnemyType.SPECIAL:
-                    if (shieldState != ShieldState.Shielding)
-                        _playerHandler.TakeDamage(enemy.GetDamage());
-                    break;
-
-                case EnemyHandler.EnemyType.ELITE:
-                    _playerHandler.TakeDamage(enemy.GetDamage());
-                    break;
+                _playerHandler.TakeDamage(enemy.GetDamage());
+                enemy.weaponCollider.enabled = false;
             }
         }
-
-        else if (other.gameObject.CompareTag("EnemyProjectile"))
+        
+        else if(other.gameObject.CompareTag("EnemyProjectile"))
         {
             EnemyHandler enemy = other.gameObject.GetComponent<EliteProjectile>().GetHandler();
-            switch (enemy.GetEnemyType())
+            if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
-                case EnemyHandler.EnemyType.SPECIAL:
-                    if (shieldState != ShieldState.Shielding)
-                        _playerHandler.TakeDamage(enemy.GetDamage());
-                    break;
-
-                case EnemyHandler.EnemyType.ELITE:
-                    _playerHandler.TakeDamage(enemy.GetDamage());
-                    break;
+                _playerHandler.TakeDamage(enemy.GetDamage());
+                enemy.weaponCollider.enabled = false;
             }
         }
     }

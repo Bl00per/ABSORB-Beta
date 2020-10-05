@@ -43,8 +43,10 @@ public class EnemyHandler : MonoBehaviour
     [SerializeField] AbilityHandler.AbilityType typeOfAbility = AbilityHandler.AbilityType.NONE;
     public float maxHealth = 100.0f;
     public int baseDamage = 10;
+    public float attackCooldown = 1.0f;
     private float _currentHealth = 0.0f;
     private bool _isAlive = true;
+
 
     [Header("Debug Options")]
     public bool printHealthStats = false;
@@ -252,10 +254,16 @@ public class EnemyHandler : MonoBehaviour
 
     private IEnumerator ReparentVFX()
     {
-        yield return new WaitForSecondsRealtime(overallFXTime);
+        yield return new WaitForSeconds(overallFXTime);
         deathParticleEffect.transform.SetParent(this.gameObject.transform);
         deathParticleEffect.Stop();
         deathSound.Stop();
+    }
+
+    public IEnumerator Coroutine_JustAttacked()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        _justAttacked = false;
     }
 
     public EnemyType GetEnemyType() => typeOfEnemy;

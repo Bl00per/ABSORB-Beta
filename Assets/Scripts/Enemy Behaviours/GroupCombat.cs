@@ -34,7 +34,8 @@ public class GroupCombat : GroupState
             _positionFix.y = aiBrain.transform.position.y;
             aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;
 
-            aiBrain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+            if(!aiBrain.GetHandler().GetJustAttacked())
+                aiBrain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
             return;
         }
 
