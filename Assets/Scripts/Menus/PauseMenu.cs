@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Audio;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PauseMenu : MonoBehaviour
     private CameraManager _cameraManager;
     private bool Paused;
     private MainMenu _mainMenu;
+    private float _masterVolume = 0f;
+    public AudioMixer _audioMixer; // Master, Music, SFX
     [SerializeField]
     private Image volumeFill = null;
 
@@ -59,6 +62,14 @@ public class PauseMenu : MonoBehaviour
             else
             {
                 volumeFill.color = Color.white;
+            }
+
+            if (volumeSlider.value == volumeSlider.minValue)
+                _audioMixer.SetFloat("Master", -80f); // Mute the volume
+            else
+            {
+                _masterVolume = volumeSlider.value;
+                _audioMixer.SetFloat("Master", _masterVolume); // Set the volume of the master
             }
         }
 
