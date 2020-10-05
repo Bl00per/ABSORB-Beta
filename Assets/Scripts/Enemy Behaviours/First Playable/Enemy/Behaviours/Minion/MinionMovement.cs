@@ -169,7 +169,7 @@ public class MinionMovement : AIBehaviour
                 // Currently just locking back onto the player after avoiding;
                 if (_isAvoiding)
                 {
-                    LockDestinationToPlayer(destinationPadding);
+                    //LockDestinationToPlayer(destinationPadding);
                     _isAvoiding = false;
                 }
                 else
@@ -195,6 +195,9 @@ public class MinionMovement : AIBehaviour
     // The "Avoid" state update
     private void UpdateCombatTransition()
     {
+        if(enemyHandler.GetJustAttacked())
+            return;
+
         // Check if the enemy should avoid or attack
         // For now, just finding a random position around the player and moving to there
         // Once I have implemented groups, the enemy will avoid according to the groups position.       else
