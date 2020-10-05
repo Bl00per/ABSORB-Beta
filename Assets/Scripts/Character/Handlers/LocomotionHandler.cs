@@ -58,10 +58,10 @@ public class LocomotionHandler : MonoBehaviour
         UpdateSlowdownFSM();
 
         // Checks if the player is moving, and sets the animator accordingly
-        if (_rigidbody.velocity.magnitude > 0.1F)
-            _animator.SetBool("Movement", true);
-        else if (_animator.GetBool("Movement"))
-            _animator.SetBool("Movement", false);
+        // if (_rigidbody.velocity.magnitude > 3.5F)
+        //     _animator.SetBool("Movement", true);
+        // else if (_animator.GetBool("Movement"))
+        //     _animator.SetBool("Movement", false);
     }
 
     // Fixed update is called every physics
@@ -83,7 +83,12 @@ public class LocomotionHandler : MonoBehaviour
 
         // Rotate player to face direction
         if (calculatedDirection.magnitude > 0.1F)
+        {
             _transform.rotation = Quaternion.Slerp(_transform.rotation, Quaternion.LookRotation(calculatedDirection), turnSpeed);
+            _animator.SetBool("Movement", true);
+        }
+        else
+            _animator.SetBool("Movement", false);
 
 
         // Check if player is in the air, apply gravity if they are
