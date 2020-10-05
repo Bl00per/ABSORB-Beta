@@ -53,22 +53,18 @@ public class MainMenu : MonoBehaviour
             Cursor.visible = true;
         }
         else
-        {
-            if (!_inputManager.GetControllerConnected())
-                InitialiseMouse();
-            else
-                InitialiseController();
-        }
+            Initialise();
     }
 
     // Plays the game
     public void Play()
     {
-        // If the controller isnt connected use the mouse camera
-        if (!_inputManager.GetControllerConnected())
-            InitialiseMouse();
-        else
-            InitialiseController();
+        Initialise();
+        // // If the controller isnt connected use the mouse camera
+        // if (!_inputManager.GetControllerConnected())
+        //     InitialiseMouse();
+        // else
+        //     InitialiseController();
     }
 
     // Exits the game
@@ -78,9 +74,8 @@ public class MainMenu : MonoBehaviour
     }
 
     // Initialise all the variables that have to be set for the mouse controls
-    private void InitialiseMouse()
+    private void Initialise()
     {
-        _cameraManager.SetMouseCamera();
         cutsceneCamera.Priority = 0;
         _playerHandler.enabled = true;
         _combatHandler.enabled = true;
@@ -91,17 +86,31 @@ public class MainMenu : MonoBehaviour
         inMainMenu = false;
     }
 
-    // Initialise all the variables that have to be set for the controller controls
-    private void InitialiseController()
-    {
-        _cameraManager.SetControllerCamera();
-        cutsceneCamera.Priority = 0;
-        _playerHandler.enabled = true;
-        _combatHandler.enabled = true;
-        _locomotionHandler.enabled = true;
-        mainMenu.SetActive(false);
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
-        inMainMenu = false;
-    }
+    // // Initialise all the variables that have to be set for the mouse controls
+    // private void InitialiseMouse()
+    // {
+    //     _cameraManager.SetMouseCamera();
+    //     cutsceneCamera.Priority = 0;
+    //     _playerHandler.enabled = true;
+    //     _combatHandler.enabled = true;
+    //     _locomotionHandler.enabled = true;
+    //     mainMenu.SetActive(false);
+    //     Cursor.lockState = CursorLockMode.Confined;
+    //     Cursor.visible = false;
+    //     inMainMenu = false;
+    // }
+
+    // // Initialise all the variables that have to be set for the controller controls
+    // private void InitialiseController()
+    // {
+    //     _cameraManager.SetControllerCamera();
+    //     cutsceneCamera.Priority = 0;
+    //     _playerHandler.enabled = true;
+    //     _combatHandler.enabled = true;
+    //     _locomotionHandler.enabled = true;
+    //     mainMenu.SetActive(false);
+    //     Cursor.lockState = CursorLockMode.Confined;
+    //     Cursor.visible = false;
+    //     inMainMenu = false;
+    // }
 }
