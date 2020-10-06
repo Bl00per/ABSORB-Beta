@@ -8,17 +8,42 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Environment_LiquidFloor
-  m_Shader: {fileID: 4800000, guid: 972a05a1fafc1c54d8287892f2a939b6, type: 3}
-  m_ShaderKeywords: USE_FRESNEL USE_HEIGHT USE_MAINTEX USE_REFRACTIVE
-  m_LightmapFlags: 5
+  m_Shader: {fileID: 210, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: USE_FRESNEL USE_HEIGHT USE_MAINTEX USE_REFRACTIVE _NORMALMAP
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3005
+  m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - ALWAYS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_4AB6674D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_53AF82C8:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_6A622F43:
+        m_Texture: {fileID: 2800000, guid: dc7a239154c12c44da23d17d61581bda, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8D1A249D:
+        m_Texture: {fileID: 2800000, guid: 01d6f4ef0f008f9418c66986c6d3bfaa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_AF5B7F5:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_E143E628:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 2800000, guid: fd1e47788d217004b8b7325ef23ad5d0, type: 3}
         m_Scale: {x: 1, y: 3}
@@ -76,24 +101,45 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_5366ED1E: 30
+    - Vector1_55E1AAC5: 0.1
+    - Vector1_66EE129B: 0
+    - Vector1_69696367: -1
+    - Vector1_91601A85: 1
+    - Vector1_B751587C: 1
+    - Vector1_DFF332DD: 0
     - _AlphaClip: 100
+    - _BlendOp: 0
     - _BumpAmt: 3
     - _BumpScale: 1
+    - _CameraFadingEnabled: 0
+    - _CameraFarFadeDistance: 2
+    - _CameraNearFadeDistance: 1
     - _ColorStrength: 0.5
+    - _Cull: 2
     - _CullMode: 2
     - _Cutoff: 1
     - _Cutout: 1.2
     - _CutoutThreshold: 0.562
     - _DetailNormalMapScale: 1
     - _Distortion: 200
+    - _DistortionBlend: 0.5
+    - _DistortionEnabled: 0
+    - _DistortionStrength: 1
+    - _DistortionStrengthScaled: 0
     - _DstBlend: 0
+    - _EmissionEnabled: 0
     - _FPOW: 0.3
+    - _FlipbookMode: 0
     - _FresnelDistort: 0
     - _FresnelPow: 1.44
     - _FresnelR0: 0.25
+    - _GlossMapScale: 1
     - _Glossiness: 0.5
+    - _GlossyReflections: 1
     - _Height: -0.1
     - _InvFade: 3
+    - _LightingEnabled: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -102,6 +148,11 @@ Material:
     - _Parallax: 0.02
     - _R0: 0.05
     - _RefractiveStrength: 1
+    - _SmoothnessTextureChannel: 0
+    - _SoftParticlesEnabled: 0
+    - _SoftParticlesFarFadeDistance: 1
+    - _SoftParticlesNearFadeDistance: 0
+    - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseAlphaCliping: 0
@@ -115,6 +166,14 @@ Material:
     - _ZWrite: 1
     - _ZWriteMode: 0
     m_Colors:
+    - Color_422BD823: {r: 1, g: 1, b: 1, a: 0}
+    - Color_D3C3D892: {r: 1.011765, g: 0.07058824, b: 1.301961, a: 0}
+    - Vector2_20000B39: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_6C1BB96E: {r: 0, g: 0, b: 0, a: 0}
+    - Vector3_401C1A08: {r: 1, g: 1, b: 1, a: 0}
+    - Vector4_493F7CC7: {r: 0, g: 0.1, b: 0, a: 0}
+    - Vector4_F1E72406: {r: 0, g: 0, b: 0, a: 0}
+    - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 0.7381596, g: 0.7806653, b: 0.8161765, a: 1}
     - _CutoutColor: {r: 1, g: 0, b: 0, a: 1}
     - _DropWavesScale: {r: 1, g: 0.5, b: 0, a: 0}
@@ -125,5 +184,6 @@ Material:
     - _NoiseScale: {r: 0, g: 0, b: 0, a: 0}
     - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _RimColor: {r: 0.057093438, g: 0.06710122, b: 0.08088237, a: 1}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _Speed: {r: 2, g: 15, b: 0, a: 8}
     - _TintColor: {r: 0.6774625, g: 0, b: 0.7169812, a: 1}
