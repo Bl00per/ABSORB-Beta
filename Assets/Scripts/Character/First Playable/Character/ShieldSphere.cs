@@ -11,12 +11,12 @@ public class ShieldSphere : MonoBehaviour
         if (other.gameObject.CompareTag("EnemyWeapon"))
         {
             EnemyHandler enemy = other.GetComponentInParent<EnemyHandler>();
+            enemy.PlayHitParryEffect();
             if (enemy.GetEnemyType() == EnemyHandler.EnemyType.SPECIAL)
             {
                 enemy.GetBrain().SetBehaviour("Parried");
                 return;
             }
-            enemy.PlayHitParryEffect();
         }
     }
 }

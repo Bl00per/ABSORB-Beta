@@ -93,9 +93,9 @@ public class EnemyGroupHandler : MonoBehaviour
     public void Add(EnemyHandler enemy) => _activeEnemies.Add(enemy);
 
     // Removes an enemy from the group
-    public void Remove(EnemyHandler enemy)
+    public void Remove(EnemyHandler enemy, bool addToQueue = true)
     {
-        _objectPooler.AddToInactiveList(enemy);
+        _objectPooler.AddToInactiveList(enemy, addToQueue);
         _groupCombat.RemoveFromUnitSlot(enemy);
         UpdateEnemyList();
     }

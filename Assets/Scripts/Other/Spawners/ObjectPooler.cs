@@ -192,13 +192,13 @@ public class ObjectPooler : MonoBehaviour
         return false;
     }
 
-    public bool AddToInactiveList(EnemyHandler handler)
+    public bool AddToInactiveList(EnemyHandler handler, bool addToQueue = true)
     {
         // Swaps the enemy from the active to the inactive list
         SwapActiveLists(handler);
 
         // Add to queue if we can
-        if (GetCanAddToQueue(handler) && (finalEnemy == null || !finalEnemy.activeInHierarchy))
+        if (addToQueue && GetCanAddToQueue(handler) && (finalEnemy == null || !finalEnemy.activeInHierarchy))
         {
             AddToQueue(handler);
             return true;
