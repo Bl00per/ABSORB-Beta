@@ -37,10 +37,8 @@ public class InputManager : MonoBehaviour
     private static bool isControllerConnected;
 
     private CameraManager _cameraManager;
-    [HideInInspector]
-    public Vector2 _unityInputDirection = Vector2.zero;
-    [HideInInspector]
-    public Vector2 _xciInputDirection = Vector2.zero;
+    private Vector2 _unityInputDirection = Vector2.zero;
+    private Vector2 _xciInputDirection = Vector2.zero;
     private int _queriedNumberOfCtrlrs;
     private bool _disableInput = false;  // Allow input as long as input isnt disabled
 
