@@ -352,6 +352,7 @@ MonoBehaviour:
   typeOfAbility: 2
   maxHealth: 125
   baseDamage: 5
+  attackCooldown: 1
   printHealthStats: 0
 --- !u!114 &6809976860378941603
 MonoBehaviour:
@@ -544,6 +545,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy_Blocked_PE
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002624353877125538, guid: b5dca9063a0d67f4abe1ad1890f330ba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7319377475054152419, guid: b5dca9063a0d67f4abe1ad1890f330ba,
         type: 3}
