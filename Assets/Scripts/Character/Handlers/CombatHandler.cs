@@ -23,6 +23,7 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage2 = 50;
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
+    public ParticleSystem weaponPE;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
@@ -156,6 +157,11 @@ public class CombatHandler : MonoBehaviour
     {
         if (weaponSwingAudio != null)
             weaponSwingAudio.Play();
+    }
+    public void Key_PlayWeaponPE()
+    {
+        if (weaponPE != null)
+            weaponPE.Play();
     }
 
     public void Key_SetAttack1Bool()
