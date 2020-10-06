@@ -339,7 +339,7 @@ MonoBehaviour:
   damageEffectAudio: {fileID: 7919153658987865857}
   hasParryEffect: 1
   parryEffect: {fileID: 2606463521910431360}
-  parryAudio: {fileID: 0}
+  parryAudio: {fileID: 7473176873561013200}
   parryReparentTime: 1
   deathSound: {fileID: 7919153658987865857}
   deathSoundLength: 2
@@ -817,6 +817,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8942580832608052521}
     m_Modifications:
+    - target: {fileID: 641729591, guid: aecc222313ba5394db83900e4a7187cb, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8798653982653574370, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: m_LocalPosition.x
