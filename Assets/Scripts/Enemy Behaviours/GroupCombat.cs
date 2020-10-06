@@ -34,10 +34,15 @@ public class GroupCombat : GroupState
             _positionFix.y = aiBrain.transform.position.y;
             aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;
 
+            // If this enemy hasn't attacked recently 
             if (!aiBrain.GetHandler().GetJustAttacked())
+            {
                 aiBrain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+            }
             else
-                aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, aiBrain.PlayerTransform.position, Random.Range(1, 5)), 1.0f);
+            {
+
+            }
 
             return;
         }
