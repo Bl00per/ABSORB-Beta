@@ -339,7 +339,7 @@ MonoBehaviour:
   damageEffectAudio: {fileID: 7919153658987865857}
   hasParryEffect: 1
   parryEffect: {fileID: 2606463521910431360}
-  parryAudio: {fileID: 0}
+  parryAudio: {fileID: 7473176873561013200}
   parryReparentTime: 1
   deathSound: {fileID: 7919153658987865857}
   deathSoundLength: 2
@@ -352,6 +352,7 @@ MonoBehaviour:
   typeOfAbility: 2
   maxHealth: 125
   baseDamage: 5
+  attackCooldown: 1
   printHealthStats: 0
 --- !u!114 &6809976860378941603
 MonoBehaviour:
@@ -544,6 +545,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Enemy_Blocked_PE
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002624353877125538, guid: b5dca9063a0d67f4abe1ad1890f330ba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7319377475054152419, guid: b5dca9063a0d67f4abe1ad1890f330ba,
         type: 3}
@@ -811,6 +817,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8942580832608052521}
     m_Modifications:
+    - target: {fileID: 641729591, guid: aecc222313ba5394db83900e4a7187cb, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8798653982653574370, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: m_LocalPosition.x
