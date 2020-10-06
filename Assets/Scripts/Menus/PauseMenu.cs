@@ -9,6 +9,8 @@ public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingsMenu;
+    public GameObject quitPopup;
+    public GameObject controllerDisconnectedPopup;
     [Header("Settings Menu References")]
     public AudioMixer audioMixer; // Master, Music, SFX
     public Slider masterVolumeSlider;
@@ -19,6 +21,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseFirstSelectedButton;
     public GameObject settingFirstSelectedButton;
     public GameObject settingsClosedButton;
+    public GameObject quitGameButton;
+
+    [HideInInspector]
+    public bool mouseControllerConfirmed;
 
     private ReadWriteText readWrite;
     private InputManager _inputManager;
@@ -26,18 +32,29 @@ public class PauseMenu : MonoBehaviour
     private bool Paused;
     private MainMenu _mainMenu;
     private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null;
+    private GameObject quitPopupFirstSelectedButton;
+
+    // Get file stuff on Awake
+    void Awake()
+    {
+        readWrite = GetComponent<ReadWriteText>();
+        SetSettingsOnStart();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(false);
-        readWrite = GetComponent<ReadWriteText>();
+        quitPopup.SetActive(false);
+        controllerDisconnectedPopup.SetActive(false);
         _inputManager = FindObjectOfType<InputManager>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _mainMenu = GetComponent<MainMenu>();
+        quitPopupFirstSelectedButton = quitPopup.transform.GetChild(2).gameObject;
 
-        SetSettingsOnStart();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         // This is so I don't have to assign every single fill
         // The fact you can't even change the highlight to be the fill instead of the handle is the bane of my existence
@@ -62,7 +79,6 @@ public class PauseMenu : MonoBehaviour
 
         if (Paused)
         {
-            
             if (settingsMenu.activeInHierarchy)
             {
                 GameObject temp = EventSystem.current.currentSelectedGameObject;
@@ -83,7 +99,13 @@ public class PauseMenu : MonoBehaviour
                     _sfxSliderFill.color = Color.white;
             }
         }
+        else if (controllerDisconnectedPopup.activeInHierarchy && _inputManager.GetControllerConnected())
+        {
+            ControllerReconnected();
+        }
     }
+
+    #region Pause Menu Functions
 
     public void Pause()
     {
@@ -105,8 +127,12 @@ public class PauseMenu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
             // Set the play button as the first selected object
             EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            // If the controller is connected dont display the cursor, it breaks things
+            if (!_inputManager.GetControllerConnected() || _inputManager.GetOverrideController())
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
             _cameraManager.DisableCameraMovement();
         }
     }
@@ -118,9 +144,28 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        // ADD A "ARE YOU SURE?" FIRST
-        Application.Quit();
+        // Enables "Are you sure?" popup
+        quitPopup.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(quitPopupFirstSelectedButton);
     }
+
+    public void QuitConfirm()
+    {
+        Application.Quit();
+        UnityEditor.EditorApplication.ExitPlaymode();
+    }
+
+    public void QuitDeny()
+    {
+        quitPopup.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(quitGameButton);
+    }
+
+    #endregion
+
+    #region Settings Menu Functions
 
     public void OpenSettingsMenu()
     {
@@ -143,6 +188,20 @@ public class PauseMenu : MonoBehaviour
     public void ToggleOverrideControls()
     {
         _inputManager.SetOverrideController(!_inputManager.GetOverrideController());
+
+        // If a controller isn't connected or override is toggled on
+        if (!_inputManager.GetControllerConnected() || _inputManager.GetOverrideController())
+        {
+            _cameraManager.DisableCameraMovement();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            _cameraManager.DisableCameraMovement();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     // Set all the settings for the game on start from the read data file (if it exists)
@@ -199,4 +258,39 @@ public class PauseMenu : MonoBehaviour
         else
             audioMixer.SetFloat("SFX", level);
     }
+
+    #endregion
+
+    #region Controller Disconnected
+
+    public void ControllerContinued()
+    {
+        _inputManager.EnableInput();
+        _cameraManager.EnableCameraMovement();
+        mouseControllerConfirmed = true;
+        controllerDisconnectedPopup.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void ShowControllerPopup()
+    {
+        _inputManager.DisableInput();
+        _cameraManager.DisableCameraMovement();
+        controllerDisconnectedPopup.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
+    private void ControllerReconnected()
+    {
+        _inputManager.EnableInput();
+        _cameraManager.EnableCameraMovement();
+        controllerDisconnectedPopup.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    #endregion
 }
