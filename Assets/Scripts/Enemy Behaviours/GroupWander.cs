@@ -50,10 +50,13 @@ public class GroupWander : GroupState
     // Moves one enemy at random
     private void MoveOne()
     {
-        EnemyHandler randEnemy = this.enemyGroupHandler.GetEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
-        randEnemy.GetBrain().SetBehaviour("Idle");
-        AIBehaviour movement = randEnemy.GetBrain().GetAIBehaviour("Movement");
-        movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius), 1.0f);
+        if (enemyGroupHandler.GetEnemies().Count > 0)
+        {
+            EnemyHandler randEnemy = this.enemyGroupHandler.GetEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
+            randEnemy.GetBrain().SetBehaviour("Idle");
+            AIBehaviour movement = randEnemy.GetBrain().GetAIBehaviour("Movement");
+            movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius), 1.0f);
+        }
     }
 
     // Returns a randomized position from the radius around the center of an object

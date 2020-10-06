@@ -31,6 +31,7 @@ public class AbilityHandler : MonoBehaviour
     private PlayerHandler _playerHandler;
     private InputManager _inputManager;
     private LocomotionHandler _locomotionHanlder;
+    private CombatHandler _combatHandler;
     private Animator _animator;
     private bool _isAbosrbing = false;
 
@@ -61,6 +62,7 @@ public class AbilityHandler : MonoBehaviour
         // Getting the references out of the player handler
         _inputManager = _playerHandler.GetInputManager();
         _locomotionHanlder = _playerHandler.GetLocomotionHandler();
+        _combatHandler = _playerHandler.GetCombatHandler();
         _animator = _playerHandler.GetAnimator();
 
         // Setting the starting ability
@@ -105,21 +107,21 @@ public class AbilityHandler : MonoBehaviour
                 _animator.SetBool("Absorb", true);
 
                 // Activate slowdown
-                _playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
+                _locomotionHanlder.Key_ActivateSlowdown();
 
                 // If the player is shielding, then deactivate the shield
-                if (_playerHandler.GetCombatHandler().shieldState == CombatHandler.ShieldState.Shielding)
+                if (_combatHandler.shieldState == CombatHandler.ShieldState.Shielding)
                 {
-                    _playerHandler.GetCombatHandler().shieldState = CombatHandler.ShieldState.Cooldown;
-                    _playerHandler.GetCombatHandler().shieldMeshRenderer.enabled = false;
-                    _playerHandler.GetCombatHandler().shieldSphereCollider.enabled = false;
-                    _playerHandler.GetCombatHandler().SetCanShield(false);
+                    _combatHandler.shieldState = CombatHandler.ShieldState.Cooldown;
+                    _combatHandler.shieldMeshRenderer.enabled = false;
+                    _combatHandler.shieldSphereCollider.enabled = false;
+                    _combatHandler.SetCanShield(false);
                 }
 
                 // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
-                enemy.GetEnemyGroupHandler()?.Remove(enemy, false);
-                this.SetAbility(enemy.GetAbilityType());
+                enemy.GetEnemyGroupHandler()?.Remove(enemy);
+                SetAbility(enemy.GetAbilityType());
             }
         }
     }
@@ -127,9 +129,8 @@ public class AbilityHandler : MonoBehaviour
     // Key Event: Deactivates abosrb once activated; only to be called through animation
     public void Key_DeactivateAbsorb()
     {
-        //Debug.Log("Deactivating absorb");
         _animator.SetBool("Absorb", false);
-        _playerHandler.GetLocomotionHandler().Key_DeactivateSlowdown();
+        _locomotionHanlder.Key_DeactivateSlowdown();
         _isAbosrbing = false;
     }
 

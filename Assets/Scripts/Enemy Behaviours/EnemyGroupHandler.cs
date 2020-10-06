@@ -72,6 +72,10 @@ public class EnemyGroupHandler : MonoBehaviour
     // Called every frame
     private void Update()
     {
+        // Check if there are any active enemies, if not then enter the idle state
+        if(_activeEnemies.Count <= 0)
+            return;
+        
         // Updating the current state
         _groupStates[(int)_currentState].OnStateUpdate();
 
