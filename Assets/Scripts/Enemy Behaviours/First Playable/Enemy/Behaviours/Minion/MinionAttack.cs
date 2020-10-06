@@ -46,7 +46,6 @@ public class MinionAttack : AIBehaviour
     {
         weaponToEnable.SetActive(false);
         _animator.SetBool("Attacking", false);
-        StartCoroutine(enemyHandler.Coroutine_JustAttacked());
        // _hasAttacked = false;
         //_canAttack = false;
     }

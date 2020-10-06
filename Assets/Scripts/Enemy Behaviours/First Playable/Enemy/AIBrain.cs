@@ -98,6 +98,14 @@ public class AIBrain : MonoBehaviour
         if (/*_currentBehaviourID == "Absorbed" || */_currentBehaviourID == behaviour)
             return;
 
+        // Checking if the current state we are about to leave is the attack state
+        if(behaviour == "Attack")
+        {
+            // Setting the just attacked bool to true, and setting it false on a coroutine 
+            _handler.SetJustAttacked(true);
+            StartCoroutine(_handler.Coroutine_JustAttacked());
+        }
+
         // Setting the last state to be the current state before changing
         _lastStateID = _currentBehaviourID;
 
