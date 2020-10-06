@@ -95,7 +95,7 @@ public class AIBrain : MonoBehaviour
     internal void SetBehaviour(string behaviour)
     {
         // Absorb quick fix: if in end state of machine, do NOT change state.
-        if (_currentBehaviourID == "Absorbed" || _currentBehaviourID == behaviour)
+        if (/*_currentBehaviourID == "Absorbed" || */_currentBehaviourID == behaviour)
             return;
 
         // Setting the last state to be the current state before changing
