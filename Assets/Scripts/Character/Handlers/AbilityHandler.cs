@@ -118,7 +118,7 @@ public class AbilityHandler : MonoBehaviour
 
                 // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
-                enemy.GetEnemyGroupHandler()?.Remove(enemy);
+                enemy.GetEnemyGroupHandler()?.Remove(enemy, false);
                 this.SetAbility(enemy.GetAbilityType());
             }
         }
