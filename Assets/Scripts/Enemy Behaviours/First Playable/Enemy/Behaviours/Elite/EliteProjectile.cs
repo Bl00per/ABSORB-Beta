@@ -8,7 +8,9 @@ public class EliteProjectile : MonoBehaviour
     [Header("VFX References")]
     public GameObject waterHitEffectGO;
     public ParticleSystem waterHitEffect;
+    public ParticleSystem waterParryEffect;
     public AudioSource waterHitAudio;
+    public AudioSource waterParryAudio;
 
     [Header("Properties")]
     public Vector3 directionOffset = Vector3.zero;
@@ -74,12 +76,16 @@ public class EliteProjectile : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         if (_enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.SPECIAL && collision.CompareTag("PlayerShield"))
+        {
             _enemyHandler.GetBrain().SetBehaviour("Parried");
+            waterParryEffect.Play();
+            waterParryAudio.Play();
+            waterHitEffectGO.transform.SetParent(null);
+        }
 
         _isActive = false;
         waterHitEffect.Play();
-        waterHitAudio.Play();
-        waterHitEffectGO.transform.SetParent(null);
+        waterParryEffect.gameObject.transform.SetParent(null);
         StartCoroutine(Cleanup());
     }
 
@@ -98,6 +104,7 @@ public class EliteProjectile : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         Destroy(waterHitEffectGO, effectTime);
+        Destroy(waterParryEffect.gameObject, effectTime);
         Destroy(this.gameObject);
     }
 }

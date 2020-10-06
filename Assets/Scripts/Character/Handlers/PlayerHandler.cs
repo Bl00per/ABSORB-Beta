@@ -28,6 +28,7 @@ public class PlayerHandler : MonoBehaviour
     public SkinnedMeshRenderer abidaroMesh;
     public GameObject respawnParticle;
     public ParticleSystem hitParticleSystem;
+    public AudioSource hitSFX;
     private Animator _animator;
     private Rigidbody _rigidbody;
     private Transform _transform;
@@ -193,7 +194,7 @@ public class PlayerHandler : MonoBehaviour
     public float TakeDamage(int damageAmount)
     {
         hitParticleSystem.Play();
-        // hitSoundEffect.Play();
+        hitSFX.Play();
         //collidedObject = null;
         // if (debug)
         //     Debug.Log("Player damage taken: " + damageAmount);

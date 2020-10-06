@@ -293,6 +293,8 @@ public class LocomotionHandler : MonoBehaviour
 
     #region Dash
 
+    public AudioSource dashSFX;
+    public ParticleSystem dashPE;
     [Header("Dash Attributes")]
     public float force = 50.0f;
     public float cooldownTime = 5.0f;
@@ -315,6 +317,8 @@ public class LocomotionHandler : MonoBehaviour
             _initialPosition = transform.position;
             _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
             _animator.SetBool("Dash", true);
+            dashPE.Play();
+            dashSFX.Play();
             _canDash = false;
             StartCoroutine(CoolDownSequence());
         }

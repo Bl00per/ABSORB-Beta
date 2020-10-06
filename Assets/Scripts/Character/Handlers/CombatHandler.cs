@@ -12,6 +12,7 @@ public class CombatHandler : MonoBehaviour
     [Header("Shield")]
     public MeshRenderer shieldMeshRenderer;
     public Collider shieldSphereCollider;
+    public AudioSource shieldSFX;
     [Header("Weapon")]
     public SkinnedMeshRenderer playerWeapon;
     public SkinnedMeshRenderer playerWeapon2;
@@ -23,6 +24,7 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage2 = 50;
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
+    public ParticleSystem weaponPE;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
@@ -157,6 +159,11 @@ public class CombatHandler : MonoBehaviour
         if (weaponSwingAudio != null)
             weaponSwingAudio.Play();
     }
+    public void Key_PlayWeaponPE()
+    {
+        if (weaponPE != null)
+            weaponPE.Play();
+    }
 
     public void Key_SetAttack1Bool()
     {
@@ -171,6 +178,11 @@ public class CombatHandler : MonoBehaviour
     public void Key_SetAttack3Bool()
     {
         _animator.SetBool("Attack3", false);
+    }
+
+    public void key_ShieldFX()
+    {
+        shieldSFX.Play();
     }
 
     #endregion
