@@ -8,9 +8,23 @@ public class ReadWriteText : MonoBehaviour
 {
     [Header("Default Parameters")]
     [HideInInspector]
-    public float volume = 100f;
+    public float masterVolume = 10f, musicVolume = 10f, sfxVolume = 10f;
     [HideInInspector]
     public bool overrideControls = false;
+
+    void Awake()
+    {
+        if (!File.Exists(Application.dataPath + "/gameData.dat"))
+        {
+            masterVolume = 10f;
+            musicVolume = 10f;
+            sfxVolume = 10f;
+            overrideControls = false;
+            CreateFile();
+        }
+        else
+            ReadFile();
+    }
 
     void CreateFile()
     {
@@ -19,8 +33,10 @@ public class ReadWriteText : MonoBehaviour
 
         GameData data = new GameData
         {
-            mVolume = volume,
-            mOverrideControls = overrideControls
+            m_masterVolume = masterVolume,
+            m_musicVolume = musicVolume,
+            m_sfxVolume = sfxVolume,
+            m_OverrideControls = overrideControls
         };
 
         bf.Serialize(file, data);
@@ -41,8 +57,10 @@ public class ReadWriteText : MonoBehaviour
             FileStream file = File.Open(Application.dataPath + "/gameData.dat", FileMode.Open);
             GameData data = (GameData)bf.Deserialize(file);
 
-            volume = data.mVolume;
-            overrideControls = data.mOverrideControls;
+            masterVolume = data.m_masterVolume;
+            musicVolume = data.m_musicVolume;
+            sfxVolume = data.m_sfxVolume;
+            overrideControls = data.m_OverrideControls;
             //Debug.Log("File Read");
             file.Close();
         }
@@ -55,32 +73,21 @@ public class ReadWriteText : MonoBehaviour
         FileStream file = File.Create(Application.dataPath + "/gameData.dat");
         GameData data = new GameData
         {
-            mVolume = volume,
-            mOverrideControls = overrideControls
+            m_masterVolume = masterVolume,
+            m_musicVolume = musicVolume,
+            m_sfxVolume = sfxVolume,
+            m_OverrideControls = overrideControls
         };
 
         bf.Serialize(file, data);
-        Debug.Log("File Overwrite with volume = " + volume + " & override controls = " + overrideControls);
+        //Debug.Log("File Overwrite with volume = " + masterVolume + " & override controls = " + overrideControls);
         file.Close();
-    }
-
-    // Start is called before the first frame update
-    void Awake()
-    {
-        if (!File.Exists(Application.dataPath + "/gameData.dat"))
-        {
-            volume = 100;
-            overrideControls = false;
-            CreateFile();
-        }
-        else
-            ReadFile();
     }
 
     [System.Serializable]
     public class GameData
     {
-        public float mVolume = 100;
-        public bool mOverrideControls = false;
+        public float m_masterVolume = 10f, m_musicVolume = 10f, m_sfxVolume = 10f;
+        public bool m_OverrideControls = false;
     }
 }
