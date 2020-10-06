@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
 
     private bool _controllerUpdated = false;
     private bool _overrideUpdated = false;
+    private PauseMenu _pauseMenu;
 
     // Speed shit, please ignore
     private float _tempMouseSpeedY;
@@ -26,7 +27,8 @@ public class CameraManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        inputManager = FindObjectOfType<InputManager>();
+        //inputManager = FindObjectOfType<InputManager>();
+        _pauseMenu = FindObjectOfType<PauseMenu>();
 
         // If controller is connected and not overridden
         if (inputManager.GetControllerConnected() && !overrideController)
@@ -55,21 +57,36 @@ public class CameraManager : MonoBehaviour
         {
             if (inputManager.GetControllerConnected() && !overrideController)
             {
-                //controllerCamera.transform.position = mouseCamera.transform.position;
                 controllerCamera.m_YAxis.Value = mouseCamera.m_YAxis.Value;
                 controllerCamera.m_XAxis.Value = mouseCamera.m_XAxis.Value;
+                _controllerUpdated = inputManager.GetControllerConnected();
                 SetControllerCamera();
             }
-            else if (!inputManager.GetControllerConnected() || overrideController)
+            else if (overrideController)
             {
-                //mouseCamera.transform.position = controllerCamera.transform.position;
-                mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
-                mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+                // Only set the position if the controller is connected
+                if (inputManager.GetControllerConnected())
+                {
+                    mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+                    mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+                }
+                _controllerUpdated = inputManager.GetControllerConnected();
                 SetMouseCamera();
+            }
+            else if (!inputManager.GetControllerConnected() && overrideController == _overrideUpdated)
+            {
+                _pauseMenu.ShowControllerPopup();
+                if (_pauseMenu.mouseControllerConfirmed)
+                {
+                    mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+                    mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+                    _pauseMenu.mouseControllerConfirmed = false;
+                    _controllerUpdated = inputManager.GetControllerConnected();
+                    SetMouseCamera();
+                }
             }
 
             _overrideUpdated = overrideController;
-            _controllerUpdated = inputManager.GetControllerConnected();
             Debug.LogWarning("Controller changed");
         }
     }
