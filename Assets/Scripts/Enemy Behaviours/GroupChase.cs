@@ -6,11 +6,19 @@ public class GroupChase : GroupState
 {
     [Header("Combat Transition Properties")]
     public float CoMDistanceFromPlayer = 10.0f;
+    public float returnToWanderDistance = 12.0f;
 
     public override void OnStateEnter() { }
 
     public override void OnStateUpdate()
     {
+        // If the group is too far from the player, enter back into chase state
+        if(enemyGroupHandler.GetCOMDistanceFromPlayer() >= returnToWanderDistance)
+        {
+            enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
+            return;
+        }
+
         // Move all enemies towards the player
         this.enemyGroupHandler.SetTargetDestination(enemyGroupHandler.playerTransform.position);
         this.enemyGroupHandler.UpdateAllFlockDestinations();

@@ -259,7 +259,7 @@ public class EnemyHandler : MonoBehaviour
         cam.StartCoroutine(ReparentVFX());
     }
 
-    public void Reset()
+public void Reset()
     {
         _aiBrain.SetBehaviour("Idle");
         _currentHealth = maxHealth;

@@ -31,7 +31,7 @@ public class HammerAttack : AIBehaviour
         brain.GetNavMeshAgent().speed = movementSpeed;
 
         // Setting the target destination
-        this.OverrideDestination(brain.PlayerTransform.position, destinationPadding);
+        this.LockDestinationToPlayer(destinationPadding);
 
         // Starting the swing
         _animator.SetBool(swingAnimationName, true);

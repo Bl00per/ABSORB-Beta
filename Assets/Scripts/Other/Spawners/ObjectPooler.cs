@@ -229,9 +229,9 @@ public class ObjectPooler : MonoBehaviour
             //     }
             // }
 
-            // Iterating through the inactive enemies list
-            foreach (EnemyHandler enemy in _respawnQueue)
-            {
+        // Iterating through the inactive enemies list
+        foreach (EnemyHandler enemy in _respawnQueue)
+        {
                 // If the types are a match, respawn the enemy
                 StartCoroutine(RespawnEnemy(enemy));
                 break;
