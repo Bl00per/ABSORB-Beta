@@ -11,6 +11,7 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook mouseCamera;
     public CinemachineVirtualCamera deathCamera;
     [Header("Only allow Keyboard input")]
+    [HideInInspector]
     public bool overrideController = false;
 
     private bool _controllerUpdated = false;
