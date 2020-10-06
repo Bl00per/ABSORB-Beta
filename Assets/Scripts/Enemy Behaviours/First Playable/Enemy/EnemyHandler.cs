@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+using Random = UnityEngine.Random;
 public class EnemyHandler : MonoBehaviour
 {
     // Enemy type
@@ -17,6 +17,7 @@ public class EnemyHandler : MonoBehaviour
     [Header("Damage FX")]
     public ParticleSystem damageEffect;
     public AudioSource damageEffectAudio;
+    
 
     [Header("Parry FX")]
     public bool hasParryEffect = false;
@@ -34,9 +35,11 @@ public class EnemyHandler : MonoBehaviour
     public float overallFXTime = 1.0f;
 
     [Header("References")]
-    public MeshRenderer bodyMeshRenderer;
-    public MeshRenderer weaponMeshRenderer;
+    public SkinnedMeshRenderer bodyMeshRenderer;
+    public SkinnedMeshRenderer weaponMeshRenderer;
     public Collider weaponCollider;
+    public AudioSource attackSFX;
+    public ParticleSystem attackPE;
 
     [Header("Properties")]
     [SerializeField] EnemyType typeOfEnemy = EnemyType.MINION;
@@ -181,6 +184,17 @@ public class EnemyHandler : MonoBehaviour
     public void DeactiveWeaponCollider()
     {
         weaponCollider.enabled = false;
+    }
+
+    public void key_PlayAttackVFX()
+    {
+        attackPE.Play();
+    }
+    public void key_PlayAttackSFX()
+    {
+        attackSFX.pitch = Random.Range(0.9f, 1.1f);
+        attackSFX.PlayOneShot(attackSFX.clip);
+
     }
 
     // Returns the brain of this enemy

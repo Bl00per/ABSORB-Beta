@@ -14,8 +14,10 @@ public class PotAttack : AIBehaviour
 
     [Header("References")]
     public GameObject projectilePrefab;
+    public GameObject fakePrefab;
     public Transform projectileStartPoint;
     public ParticleSystem waterFireEffect;
+    public ParticleSystem chargingEffect;
 
     private Animator _animator;
 
@@ -27,10 +29,10 @@ public class PotAttack : AIBehaviour
     public override void OnStateEnter()
     {
         _animator.SetBool("Attacking", true);
-        waterFireEffect.Play();
+/*        waterFireEffect.Play();
         EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
         eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
-        StartCoroutine(JustFiredTimer());
+        StartCoroutine(JustFiredTimer());*/
     }
 
     public override void OnStateExit() { }
@@ -48,6 +50,7 @@ public class PotAttack : AIBehaviour
 
         // Rotate to face direction
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), turnSpeed);
+        
     }
 
     public IEnumerator JustFiredTimer()
@@ -58,5 +61,26 @@ public class PotAttack : AIBehaviour
             _animator.SetBool("Attacking", false);
             brain.SetBehaviour("Movement");
         }
+    }
+
+    public void key_FireProjectile()
+    {
+        //waterFireEffect.Play();
+        EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
+        eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
+        StartCoroutine(JustFiredTimer());
+    }
+    public void key_ProjectileCharge()
+    {
+        chargingEffect.Play();
+        fakePrefab.SetActive(true);
+        StartCoroutine(Charging());
+    }
+
+    public IEnumerator Charging()
+    {
+        yield return new WaitForSecondsRealtime (1f);
+        fakePrefab.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        fakePrefab.SetActive(false);
     }
 }

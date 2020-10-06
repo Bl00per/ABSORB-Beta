@@ -12,6 +12,7 @@ public class CombatHandler : MonoBehaviour
     [Header("Shield")]
     public MeshRenderer shieldMeshRenderer;
     public Collider shieldSphereCollider;
+    public AudioSource shieldSFX;
     [Header("Weapon")]
     public SkinnedMeshRenderer playerWeapon;
     public SkinnedMeshRenderer playerWeapon2;
@@ -177,6 +178,11 @@ public class CombatHandler : MonoBehaviour
     public void Key_SetAttack3Bool()
     {
         _animator.SetBool("Attack3", false);
+    }
+
+    public void key_ShieldFX()
+    {
+        shieldSFX.Play();
     }
 
     #endregion

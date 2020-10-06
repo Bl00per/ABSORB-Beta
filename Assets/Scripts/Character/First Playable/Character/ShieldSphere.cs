@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShieldSphere : MonoBehaviour
 {
     public CombatHandler player;
+ 
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,4 +20,6 @@ public class ShieldSphere : MonoBehaviour
             }
         }
     }
+
+
 }
