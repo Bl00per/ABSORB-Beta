@@ -20,6 +20,7 @@ public class DefaultIdle : AIBehaviour
 
     public override void OnStateUpdate()
     {
+        // A bunch of checks to see if we should start targeting the player or not
         if (brain.GetDistanceToPlayer() < totalDistance && // Is the player within distance?
         CheckValue(brain.transform.position.y, minY, maxY) && // Is the player around the same Y level?
         Vector3.Angle(brain.GetDirectionToPlayer(), brain.transform.forward) < viewConeAngle || // Is the player within the view cone?

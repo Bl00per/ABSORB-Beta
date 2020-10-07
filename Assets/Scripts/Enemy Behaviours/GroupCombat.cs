@@ -28,15 +28,15 @@ public class GroupCombat : GroupState
     public override void OnStateUpdate()
     {
         // If the group is too far from the player, enter back into chase state
-        if (enemyGroupHandler.GetCOMDistanceFromPlayer() >= returnToChaseDistance)
+        if (GetFirstDistanceToPlayer() >= returnToChaseDistance)
         {
             enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.CHASE);
             return;
         }
 
-        // Setting up an enemy for an attack
-        if (!queueFlag && _unitSlots.Count > 0)
-            StartCoroutine(QueueAttack());
+        // // Setting up an enemy for an attack
+        // if (!queueFlag && _unitSlots.Count > 0)
+        //     StartCoroutine(QueueAttack());
 
 
         // if (enemyGroupHandler.GetEnemies().Count == 1)
@@ -112,6 +112,8 @@ public class GroupCombat : GroupState
         // Waiting a certain amount of time
         yield return new WaitForSeconds(queueTime);
 
+       // Debug.Log(_activeIndex);
+
         // Wrapping the index count
         if (_activeIndex >= _unitSlots.Count - 1)
             _activeIndex = 0;
@@ -154,6 +156,21 @@ public class GroupCombat : GroupState
         // Sorting the list; using a lambda function to compare the distance to the player
         _unitSlots.Sort((u1, u2) => u1.GetBrain().GetDistanceToPlayer().
                           CompareTo(u2.GetBrain().GetDistanceToPlayer()));
+    }
+
+
+    // Returns the distance from the closest enemy to the player
+    public float GetFirstDistanceToPlayer()
+    {
+        if(_unitSlots.Count > 0)
+        {
+            return (_unitSlots[0].transform.position - enemyGroupHandler.playerTransform.position).magnitude;
+        }
+        else
+        {
+            //Debug.LogError("Group Compbat: Unit slots are empty!");
+            return -1.0f;
+        }
     }
 
     // Removes an enemy from the group

@@ -34,7 +34,6 @@ public class EliteProjectile : MonoBehaviour
     // Sets up the direction for the projectile
     public void InitialiseProjectile(EnemyHandler enemyHandler, Transform playerTransform, Transform projectileStartPoint, float speed, float lifeTime, float damage)
     {
-
         transform.position = projectileStartPoint.position;
         transform.rotation = projectileStartPoint.rotation;
         _enemyHandler = enemyHandler;
