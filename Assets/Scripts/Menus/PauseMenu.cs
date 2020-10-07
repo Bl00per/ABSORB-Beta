@@ -7,6 +7,7 @@ using UnityEngine.Audio;
 
 public class PauseMenu : MonoBehaviour
 {
+    [Header("Menu References")]
     public GameObject pauseMenu;
     public GameObject settingsMenu;
     public GameObject quitPopup;
@@ -16,7 +17,6 @@ public class PauseMenu : MonoBehaviour
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
-    public Toggle toggleButton;
     [Header("BUTTONS")]
     public GameObject pauseFirstSelectedButton;
     public GameObject settingFirstSelectedButton;
@@ -99,10 +99,10 @@ public class PauseMenu : MonoBehaviour
                     _sfxSliderFill.color = Color.white;
             }
         }
-        else if (controllerDisconnectedPopup.activeInHierarchy && _inputManager.GetControllerConnected())
-        {
-            ControllerReconnected();
-        }
+        // else if (controllerDisconnectedPopup.activeInHierarchy && _inputManager.GetControllerConnected())
+        // {
+        //     ControllerReconnected();
+        // }
     }
 
     #region Pause Menu Functions
@@ -128,7 +128,7 @@ public class PauseMenu : MonoBehaviour
             // Set the play button as the first selected object
             EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
             // If the controller is connected dont display the cursor, it breaks things
-            if (!_inputManager.GetControllerConnected() || _inputManager.GetOverrideController())
+            if (!_inputManager.GetIsUsingController())
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -185,25 +185,6 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(settingsClosedButton);
     }
 
-    public void ToggleOverrideControls()
-    {
-        _inputManager.SetOverrideController(!_inputManager.GetOverrideController());
-
-        // If a controller isn't connected or override is toggled on
-        if (!_inputManager.GetControllerConnected() || _inputManager.GetOverrideController())
-        {
-            _cameraManager.DisableCameraMovement();
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            _cameraManager.DisableCameraMovement();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
     // Set all the settings for the game on start from the read data file (if it exists)
     private void SetSettingsOnStart()
     {
@@ -216,8 +197,6 @@ public class PauseMenu : MonoBehaviour
 
         sfxVolumeSlider.value = readWrite.sfxVolume;        // SFX
         audioMixer.SetFloat("SFX", sfxVolumeSlider.value);
-
-        toggleButton.isOn = readWrite.overrideControls;     // Toggle override button
     }
 
     // Save all the settings values upon exiting the settings menu
@@ -226,7 +205,6 @@ public class PauseMenu : MonoBehaviour
         readWrite.masterVolume = masterVolumeSlider.value;
         readWrite.musicVolume = musicVolumeSlider.value;
         readWrite.sfxVolume = sfxVolumeSlider.value;
-        readWrite.overrideControls = toggleButton.isOn;
         readWrite.OverwriteData();
     }
 
@@ -263,34 +241,40 @@ public class PauseMenu : MonoBehaviour
 
     #region Controller Disconnected
 
-    public void ControllerContinued()
-    {
-        _inputManager.EnableInput();
-        _cameraManager.EnableCameraMovement();
-        mouseControllerConfirmed = true;
-        controllerDisconnectedPopup.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
+    // public void ControllerContinued()
+    // {
+    //     _inputManager.EnableInput();
+    //     _cameraManager.EnableCameraMovement();
+    //     mouseControllerConfirmed = true;
+    //     controllerDisconnectedPopup.SetActive(false);
+    //     Cursor.lockState = CursorLockMode.Locked;
+    //     Cursor.visible = false;
+    // }
 
     public void ShowControllerPopup()
     {
-        _inputManager.DisableInput();
-        _cameraManager.DisableCameraMovement();
         controllerDisconnectedPopup.SetActive(true);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        // _inputManager.DisableInput();
+        // _cameraManager.DisableCameraMovement();
+        // Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.None;
+        // Cursor.visible = true;
     }
 
-    private void ControllerReconnected()
+    private IEnumerator ShowPopupForTime()
     {
-        _inputManager.EnableInput();
-        _cameraManager.EnableCameraMovement();
+        yield return new WaitForSeconds(3.0f);
         controllerDisconnectedPopup.SetActive(false);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
+
+    // private void ControllerReconnected()
+    // {
+    //     _inputManager.EnableInput();
+    //     _cameraManager.EnableCameraMovement();
+    //     controllerDisconnectedPopup.SetActive(false);
+    //     Cursor.lockState = CursorLockMode.Locked;
+    //     Cursor.visible = false;
+    // }
 
     #endregion
 }
