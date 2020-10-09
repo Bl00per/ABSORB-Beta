@@ -156,6 +156,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void EnableReferences()
     {
+        _animator.SetBool("Death", false);
         abidaroMesh.enabled = true;
         respawnParticle.SetActive(false);
         _locomotionHandler.enabled = true;
@@ -281,4 +282,14 @@ public class PlayerHandler : MonoBehaviour
     }
 
     #endregion
+
+    public bool shieldGrowing;
+    public void Key_ShieldGrow()
+    {
+        shieldGrowing = true;
+    }
+    public void Key_ShieldShrink()
+    {
+        shieldGrowing = false;
+    }
 }

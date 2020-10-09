@@ -36,7 +36,7 @@ public class MinionAttack : AIBehaviour
 
     public override void OnStateEnter()
     {
-        weaponToEnable.SetActive(true);
+        
         _animator.SetBool("Attacking", true);
         enemyHandler.SetJustAttacked(true);
         //_hasAttacked = false;
@@ -44,7 +44,7 @@ public class MinionAttack : AIBehaviour
 
     public override void OnStateExit()
     {
-        weaponToEnable.SetActive(false);
+        
         _animator.SetBool("Attacking", false);
         StartCoroutine(enemyHandler.Coroutine_JustAttacked());
        // _hasAttacked = false;
@@ -62,10 +62,16 @@ public class MinionAttack : AIBehaviour
         if(lookAtPlayer)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
     }
+   
+    public void Key_ActivateMinionAttack()
+    {
 
+        weaponToEnable.SetActive(true);
+    }
     // Deactivates the collision check on the enemy's weapon
     public void Key_DeactivateMinionAttack()
     {
+        weaponToEnable.SetActive(false);
         //_canAttack = false;
         brain.SetBehaviour("Movement");
     }

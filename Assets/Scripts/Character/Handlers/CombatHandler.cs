@@ -341,6 +341,8 @@ public class CombatHandler : MonoBehaviour
 
     #region Death
     [Header("Death Attributes")]
+    public AudioSource deathSFX1;
+    public AudioSource deathSFX2;
     public float timeTillRespawn = 3.0f;
     private bool _respawning = false;
 
@@ -352,6 +354,7 @@ public class CombatHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
             // Debug.Log("Player dead");
         }
 
@@ -359,6 +362,7 @@ public class CombatHandler : MonoBehaviour
         if (_playerHandler.GetCurrentHealth() <= 0)
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
         }
 
         // Is the player is dead
@@ -379,6 +383,15 @@ public class CombatHandler : MonoBehaviour
         _respawning = false;
         // Go to main menu
         //UnityEngine.SceneManagement.SceneManager.LoadScene("Main_Menu");
+    }
+
+    public void key_deathSFX1()
+    {
+        deathSFX1.Play();
+    }
+    public void key_deathSFX2()
+    {
+        deathSFX2.Play();
     }
 
     #endregion

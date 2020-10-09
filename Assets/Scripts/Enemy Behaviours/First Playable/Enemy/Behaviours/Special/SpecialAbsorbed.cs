@@ -13,6 +13,8 @@ public class SpecialAbsorbed : AIBehaviour
     [Header("VFX Refereneces")]
     public GameObject absorbGameObject;
     public ParticleSystem absorbParticleEffect;
+    public AudioSource absorbSoundEffect;
+    public AudioSource absorbEnemySoundEffect;
     private SpecialParried _specialParried;
     private Animator _animator;
 
@@ -51,7 +53,8 @@ public class SpecialAbsorbed : AIBehaviour
         _enabled = true;
         //_playerAbilityManager.playerForceField.SetActive(true);
 
-
+        absorbEnemySoundEffect.Play();
+        absorbSoundEffect.Play();
         absorbParticleEffect.Play();
         absorbGameObject.SetActive(true);
         absorbGameObject.transform.SetParent(null);

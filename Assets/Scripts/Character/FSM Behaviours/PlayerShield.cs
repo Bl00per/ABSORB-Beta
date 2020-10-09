@@ -8,7 +8,7 @@ public class PlayerShield : StateMachineBehaviour
     GameObject shield;
     Vector3 shieldMax;
     Vector3 shieldMin;
-    bool growing;
+    
     void Awake()
     {
         _playerHandler = FindObjectOfType<PlayerHandler>();
@@ -25,37 +25,41 @@ public class PlayerShield : StateMachineBehaviour
         
         shieldMin = new Vector3(1, 1, 1);
         shieldMax = new Vector3(3, 3, 3);
-        growing = true;
+        shield.transform.localScale = shieldMin;
+        
 
-        if (_playerHandler != null)
-        {
-            shield.transform.localScale = shieldMin;
 
-            _playerHandler.GetCombatHandler().shieldMeshRenderer.enabled = true;
-            _playerHandler.GetCombatHandler().shieldSphereCollider.enabled = true;
-        }
-        else
-            Debug.LogWarning("Player Handler not found.");
     }
 
     //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(growing)
-            shield.transform.localScale += shield.transform.localScale * Time.deltaTime * 5;
+        if (_playerHandler.shieldGrowing)
+        {
+            if (_playerHandler != null)
+            {
+                _playerHandler.GetCombatHandler().shieldMeshRenderer.enabled = true;
+                _playerHandler.GetCombatHandler().shieldSphereCollider.enabled = true;
+                shield.transform.localScale += shield.transform.localScale * Time.deltaTime * 10;
+
+            }
+            else
+                Debug.LogWarning("Player Handler not found.");
+
+        }
         else
-            shield.transform.localScale -= shield.transform.localScale * Time.deltaTime;
+            shield.transform.localScale -= shield.transform.localScale * Time.deltaTime*5;
 
         if (shield.transform.localScale.x >= shieldMax.x)
         {
-            growing = false;
+            shield.transform.localScale = shieldMax;
         }
     }
 
     //OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        growing = true;
+        
         //         _animator.SetBool("Defence", false);
         if (_playerHandler != null)
         {
