@@ -5,144 +5,203 @@ using UnityEngine;
 public class HammerMovement : AIBehaviour
 {
     [Header("Properties")]
-    public float destinationPadding = 1.0f;
-    public float avoidDistance = 30.0f;
-    public float startSwingDistance = 5.0f;
-    public float attackCooldown = 2.0f;
+    public float enterAttackStateDistance = 10.0f;
 
-    // To check if the enemy is on a cooldown after attacking
-    private bool _isOnCooldown = false;
+    [Header("Timers")]
+    public float returnToAttackPosition = 1.0f;
+    public float returnToInitalAngularSpeed = 1.0f;
 
-    // A flag to determine if the enemy should avoid the player or not
-    private bool _isAvoiding = false;
+    private Vector3 _attackPosition = Vector3.zero;
+    private float _initialAngularSpeed = 0.0f;
+    private bool _startedRetreat = false;
 
-    // The inital speed; set from within the nav mesh component
-    private float _initialSpeed = 0.0f;
-
-    // The attack transition range; set from "stopping distance" within the nav mesh component
-    private float _attackRange = 0.0f;
-
-    // Can the hammer enter back into attack?
-    private bool _canAttack = true;
-
-    // Called before first frame
     private void Start()
     {
-        // Getting the initial speed from the nav mesh component
-        _initialSpeed = brain.GetNavMeshAgent().speed;
-
-        // Getting the attack range from the nav mesh component
-        _attackRange = brain.GetNavMeshAgent().stoppingDistance;
+        // Storing the initial angular speed of the agent
+        _initialAngularSpeed = brain.GetNavMeshAgent().angularSpeed;
     }
 
     public override void OnStateEnter()
     {
-        // Only executing the following code if within group
-        if(brain.GetLastStateID() == "Attack" && 
-           brain.GetHandler().GetEnemyGroupHandler() && 
-           brain.GetDistanceToPlayer() < _attackRange)
-        {
-            _canAttack = false;
-            return;
-        }
-
-        // Checking if the state we came from was the attack behaviour
-        if (brain.GetLastStateID() == "Attack")
-        {
-            switch (brain.GetHandler().GetEnemyType())
-            {
-                case EnemyHandler.EnemyType.SPECIAL:
-                    Vector3 avoidDirection = (brain.PlayerTransform.position - transform.position).normalized;
-                    Vector3 avoidDestination = transform.position - (avoidDirection * avoidDistance);
-                    this.OverrideDestination(avoidDestination, 1.0f);
-                    _isAvoiding = true;
-                    break;
-
-                case EnemyHandler.EnemyType.ELITE:
-                    StartCoroutine(AttackCooldown());
-                    break;
-            }
-        }
-        else
-        {
-            // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
-            this.LockDestinationToPlayer(destinationPadding);
-        }
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
     }
 
     public override void OnStateUpdate()
     {
-        // Exiting function so the enemy remains still on cooldown
-        if(_isOnCooldown)
-            return;
+        // Storing the distance to preform multiple checks on
+        float distance = brain.GetDistanceToPlayer();
 
-        // Checking if we can attack again
-        if(!_canAttack)
+        // Check if the enemy has just attacked, if they have then return to their previous position
+        if (enemyHandler.GetJustAttacked())
         {
-            if(brain.GetDistanceToPlayer() >= _attackRange)
-                _canAttack = true;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+            if(!_startedRetreat)
+                StartCoroutine(Retreat());
+            return;
         }
 
-        // Checking if we should be locked onto the player or not...
-        if (this.destinationLockedToPlayer)
-            this.currentDestination = brain.PlayerTransform.position;
-
-        // Updating the target destination every frame
-        brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
-
-        // If player is within attack range;
-        if (brain.GetNavMeshAgent().remainingDistance <= _attackRange + startSwingDistance && _canAttack)
+        // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
+        if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
         {
-            // Enemy will enter attack phase if locked onto player:
-            if (this.destinationLockedToPlayer)
-            {
-                brain.SetBehaviour("Attack");
-                return;
-            }
-            else
-            {
-                if (_isAvoiding && !brain.GetHandler().GetEnemyGroupHandler())
-                {
-                    this.LockDestinationToPlayer(destinationPadding);
-                    _isAvoiding = false;
-                }
-                else
-                {
-                    
-                }
-
-                // Here is what they'll do when they aren't locked on
-                // so general movement, stuff will go here when
-                // the group system has been worked out
-            }
-
+            _attackPosition = transform.position;
+            brain.SetBehaviour("Attack");
         }
     }
-
-    public override void OnStateFixedUpdate() { }
 
     public override void OnStateExit() { }
 
-    // Returns a randomized position from the radius around the center of an object
-    // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
-    private Vector3 GetRandomizedPositionAroundCenter(Vector3 center, float radius)
+    public override void OnStateFixedUpdate() { }
+
+    private IEnumerator Retreat()
     {
-        // create random angle between 0 to 360 degrees 
-        float ang = Random.value * 360;
-        Vector3 pos = Vector3.zero;
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.y = center.y;
-        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        return pos;
+        _startedRetreat = true;
+        brain.GetNavMeshAgent().angularSpeed = 0.0f;
+        yield return new WaitForSeconds(returnToAttackPosition);
+        OverrideDestination(_attackPosition, 1.0f); ;
+        yield return new WaitForSeconds(returnToInitalAngularSpeed);
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+        _startedRetreat = false;
     }
 
-    private IEnumerator AttackCooldown()
-    {
-        _isOnCooldown = true;
-        yield return new WaitForSecondsRealtime(attackCooldown);
-        _isOnCooldown = false;
-        this.LockDestinationToPlayer(destinationPadding);
-    }
+    // [Header("Properties")]
+    // public float destinationPadding = 1.0f;
+    // public float avoidDistance = 30.0f;
+    // public float startSwingDistance = 5.0f;
+    // public float attackCooldown = 2.0f;
+
+    // // To check if the enemy is on a cooldown after attacking
+    // private bool _isOnCooldown = false;
+
+    // // A flag to determine if the enemy should avoid the player or not
+    // private bool _isAvoiding = false;
+
+    // // The inital speed; set from within the nav mesh component
+    // private float _initialSpeed = 0.0f;
+
+    // // The attack transition range; set from "stopping distance" within the nav mesh component
+    // private float _attackRange = 0.0f;
+
+    // // Can the hammer enter back into attack?
+    // private bool _canAttack = true;
+
+    // // Called before first frame
+    // private void Start()
+    // {
+    //     // Getting the initial speed from the nav mesh component
+    //     _initialSpeed = brain.GetNavMeshAgent().speed;
+
+    //     // Getting the attack range from the nav mesh component
+    //     _attackRange = brain.GetNavMeshAgent().stoppingDistance;
+    // }
+
+    // public override void OnStateEnter()
+    // {
+    //     // Only executing the following code if within group
+    //     if(brain.GetLastStateID() == "Attack" && 
+    //        brain.GetHandler().GetEnemyGroupHandler() && 
+    //        brain.GetDistanceToPlayer() < _attackRange)
+    //     {
+    //         _canAttack = false;
+    //         return;
+    //     }
+
+    //     // Checking if the state we came from was the attack behaviour
+    //     if (brain.GetLastStateID() == "Attack")
+    //     {
+    //         switch (brain.GetHandler().GetEnemyType())
+    //         {
+    //             case EnemyHandler.EnemyType.SPECIAL:
+    //                 Vector3 avoidDirection = (brain.PlayerTransform.position - transform.position).normalized;
+    //                 Vector3 avoidDestination = transform.position - (avoidDirection * avoidDistance);
+    //                 this.OverrideDestination(avoidDestination, 1.0f);
+    //                 _isAvoiding = true;
+    //                 break;
+
+    //             case EnemyHandler.EnemyType.ELITE:
+    //                 StartCoroutine(AttackCooldown());
+    //                 break;
+    //         }
+    //     }
+    //     else
+    //     {
+    //         // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
+    //         this.LockDestinationToPlayer(destinationPadding);
+    //     }
+    // }
+
+    // public override void OnStateUpdate()
+    // {
+    //     // Exiting function so the enemy remains still on cooldown
+    //     if(_isOnCooldown)
+    //         return;
+
+    //     // Checking if we can attack again
+    //     if(!_canAttack)
+    //     {
+    //         if(brain.GetDistanceToPlayer() >= _attackRange)
+    //             _canAttack = true;
+    //     }
+
+    //     // Checking if we should be locked onto the player or not...
+    //     if (this.destinationLockedToPlayer)
+    //         this.currentDestination = brain.PlayerTransform.position;
+
+    //     // Updating the target destination every frame
+    //     brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
+
+    //     // If player is within attack range;
+    //     if (brain.GetNavMeshAgent().remainingDistance <= _attackRange + startSwingDistance && _canAttack)
+    //     {
+    //         // Enemy will enter attack phase if locked onto player:
+    //         if (this.destinationLockedToPlayer)
+    //         {
+    //             brain.SetBehaviour("Attack");
+    //             return;
+    //         }
+    //         else
+    //         {
+    //             if (_isAvoiding && !brain.GetHandler().GetEnemyGroupHandler())
+    //             {
+    //                 this.LockDestinationToPlayer(destinationPadding);
+    //                 _isAvoiding = false;
+    //             }
+    //             else
+    //             {
+
+    //             }
+
+    //             // Here is what they'll do when they aren't locked on
+    //             // so general movement, stuff will go here when
+    //             // the group system has been worked out
+    //         }
+
+    //     }
+    // }
+
+    // public override void OnStateFixedUpdate() { }
+
+    // public override void OnStateExit() { }
+
+    // // Returns a randomized position from the radius around the center of an object
+    // // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
+    // private Vector3 GetRandomizedPositionAroundCenter(Vector3 center, float radius)
+    // {
+    //     // create random angle between 0 to 360 degrees 
+    //     float ang = Random.value * 360;
+    //     Vector3 pos = Vector3.zero;
+    //     pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+    //     pos.y = center.y;
+    //     pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+    //     return pos;
+    // }
+
+    // private IEnumerator AttackCooldown()
+    // {
+    //     _isOnCooldown = true;
+    //     yield return new WaitForSecondsRealtime(attackCooldown);
+    //     _isOnCooldown = false;
+    //     this.LockDestinationToPlayer(destinationPadding);
+    // }
 
     /*
         General Movement: 

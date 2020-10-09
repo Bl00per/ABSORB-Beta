@@ -10,12 +10,8 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook controllerCamera;
     public CinemachineFreeLook mouseCamera;
     public CinemachineVirtualCamera deathCamera;
-    [Header("Only allow Keyboard input")]
-    [HideInInspector]
-    public bool overrideController = false;
 
     private bool _controllerUpdated = false;
-    private bool _overrideUpdated = false;
     private PauseMenu _pauseMenu;
 
     // Speed shit, please ignore
@@ -31,14 +27,13 @@ public class CameraManager : MonoBehaviour
         _pauseMenu = FindObjectOfType<PauseMenu>();
 
         // If controller is connected and not overridden
-        if (inputManager.GetControllerConnected() && !overrideController)
+        if (inputManager.GetIsUsingController())
             SetControllerCamera();
         // If no controller is connected or player has selected to use keyboard controls
-        else if (!inputManager.GetControllerConnected() || overrideController)
+        else if (!inputManager.GetIsUsingController())
             SetMouseCamera();
 
-        _controllerUpdated = inputManager.GetControllerConnected();
-        _overrideUpdated = overrideController;
+        _controllerUpdated = inputManager.GetIsUsingController();
         deathCamera.Priority = 0;
 
         _tempMouseSpeedY = mouseCamera.m_YAxis.m_MaxSpeed;
@@ -51,44 +46,46 @@ public class CameraManager : MonoBehaviour
     void Update()
     {
         // Run when the inputManager and controllerUpdated dont match
-        // (Basically this should on run once when a controller is connected/disconnected)
-        // Also run if overrideController has been turned on/off
-        if (inputManager.GetControllerConnected() != _controllerUpdated || overrideController != _overrideUpdated)
+        // (Basically if the user switches to controller from keyboard, the camera should change to accommodate for that)
+        if (inputManager.GetIsUsingController() != _controllerUpdated)
         {
-            if (inputManager.GetControllerConnected() && !overrideController)
+            // Check what input they are using now
+            if (inputManager.GetIsUsingController())
             {
                 controllerCamera.m_YAxis.Value = mouseCamera.m_YAxis.Value;
                 controllerCamera.m_XAxis.Value = mouseCamera.m_XAxis.Value;
-                _controllerUpdated = inputManager.GetControllerConnected();
                 SetControllerCamera();
             }
-            else if (overrideController)
+            else if (!inputManager.GetIsUsingController())
             {
-                // Only set the position if the controller is connected
-                if (inputManager.GetControllerConnected())
-                {
-                    mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
-                    mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
-                }
-                _controllerUpdated = inputManager.GetControllerConnected();
+                mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+                mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
                 SetMouseCamera();
-            }
-            else if (!inputManager.GetControllerConnected() && overrideController == _overrideUpdated)
+            }   // If it detects that the controller was disconnected
+            else if (inputManager.GetIsUsingController() && !inputManager.GetControllerConnected())
             {
                 _pauseMenu.ShowControllerPopup();
-                if (_pauseMenu.mouseControllerConfirmed)
-                {
-                    mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
-                    mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
-                    _pauseMenu.mouseControllerConfirmed = false;
-                    _controllerUpdated = inputManager.GetControllerConnected();
-                    SetMouseCamera();
-                }
+                mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+                mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+                SetMouseCamera();
             }
-
-            _overrideUpdated = overrideController;
-            Debug.LogWarning("Controller changed");
+            // Update this so this can be run once the input changes again
+            _controllerUpdated = inputManager.GetIsUsingController();
         }
+
+
+        //         else if (!inputManager.GetControllerConnected() && overrideController == _overrideUpdated)
+        // {
+        //     _pauseMenu.ShowControllerPopup();
+        //     if (_pauseMenu.mouseControllerConfirmed)
+        //     {
+        //         mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+        //         mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+        //         _pauseMenu.mouseControllerConfirmed = false;
+        //         _controllerUpdated = inputManager.GetControllerConnected();
+        //         SetMouseCamera();
+        //     }
+        // }
     }
 
     public void SetControllerCamera()
@@ -114,7 +111,7 @@ public class CameraManager : MonoBehaviour
     public void DisableCameraMovement()
     {
         // Set the speed of the cameras to 0 so you can't move them
-        if (inputManager.GetControllerConnected())
+        if (inputManager.GetIsUsingController())
         {
             controllerCamera.m_YAxis.m_MaxSpeed = 0f;
             controllerCamera.m_XAxis.m_MaxSpeed = 0f;

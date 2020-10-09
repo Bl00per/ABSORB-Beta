@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using XboxCtrlrInput;
 using Cinemachine;
 
@@ -10,6 +11,7 @@ public class InputManager : MonoBehaviour
     */
 
     public XboxController controller;
+    public float checkForInputTime = 0.1f;
     [HideInInspector]
     public CinemachineFreeLook cinemachine;
 
@@ -41,12 +43,16 @@ public class InputManager : MonoBehaviour
     private Vector2 _xciInputDirection = Vector2.zero;
     private int _queriedNumberOfCtrlrs;
     private bool _disableInput = false;  // Allow input as long as input isnt disabled
+    private bool _isUsingController;
+    private bool _inputCheck = true;
 
 
     // Start is called before the first frame update
     void Awake()
     {
         controller = XboxController.First;
+        _isUsingController = false; // Expecting player to use keyboard and mouse at start
+        _inputCheck = true;
         _cameraManager = FindObjectOfType<CameraManager>();
 
         // Check if there is a xbox controller connected on awake
@@ -78,13 +84,86 @@ public class InputManager : MonoBehaviour
             isControllerConnected = true;
         else
             isControllerConnected = false;
+
+        if (_inputCheck)
+            StartCoroutine(CheckForInputType());
+    }
+
+    void OnGUI()
+    {
+        Event e = Event.current;
+
+        if (e.keyCode != 0 && _isUsingController)
+        {
+            _isUsingController = false;
+            Debug.LogWarning("Input changed to keyboard");
+        }
+    }
+
+    private IEnumerator CheckForInputType()
+    {
+        _inputCheck = false;
+        yield return new WaitForSeconds(checkForInputTime);
+        // Check for input on controller and if the input isnt already on controller
+        if ((PollControllerButtons() || PollControllerLJoystick() || PollControllerRJoystick()) && !_isUsingController)
+        {
+            _isUsingController = true;
+            Debug.LogWarning("Input changed to controller");
+        }   // Check for any keyboard key pressed and if the input isn't already on keyboard
+        else if ((Input.GetAxis("Mouse X") > 0 || Input.GetAxis("Mouse X") < 0) && _isUsingController)
+        {
+            _isUsingController = false;
+            Debug.LogWarning("Input changed to keyboard");
+        }
+        _inputCheck = true;
+    }
+
+    private bool PollControllerButtons()
+    {
+        if (isControllerConnected)
+        {
+            for (int i = 0; i < (int)XboxButton.DPadRight + 1; ++i)
+            {
+                if (XCI.GetButtonDown((XboxButton)i, XboxController.First))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool PollControllerLJoystick()
+    {
+        _xciInputDirection.x = XCI.GetAxisRaw(XboxAxis.LeftStickX);
+        _xciInputDirection.y = XCI.GetAxisRaw(XboxAxis.LeftStickY);
+
+        if (_xciInputDirection.magnitude > 0.1F)
+            return true;
+        else
+            return false;
+    }
+
+    private bool PollControllerRJoystick()
+    {
+        _xciInputDirection.x = XCI.GetAxisRaw(XboxAxis.RightStickX);
+        _xciInputDirection.y = XCI.GetAxisRaw(XboxAxis.RightStickY);
+
+        if (_xciInputDirection.magnitude > 0.1F)
+            return true;
+        else
+            return false;
+    }
+
+    public bool GetIsUsingController()
+    {
+        return _isUsingController;
     }
 
     public Vector2 GetMovementDirectionFromInput()
     {
         if (!GetInputDisabled())
         {
-            if (isControllerConnected && !_cameraManager.overrideController)
+            if (_isUsingController)
                 return UpdateXCIInputDirection();
             else
                 return UpdateUnityInputDirection();
@@ -112,10 +191,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            if (_cameraManager.overrideController)
-                return Input.GetKeyDown(attackKey);
-            else
-                return (isControllerConnected) ? XCI.GetButtonDown(attackXboxKey, XboxController.First) : Input.GetKeyDown(attackKey);
+            return (_isUsingController) ? XCI.GetButtonDown(attackXboxKey, XboxController.First) : Input.GetKeyDown(attackKey);
         }
         else
             return false;
@@ -126,10 +202,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            if (_cameraManager.overrideController)
-                return Input.GetKeyDown(splAttackKey);
-            else
-                return (isControllerConnected) ? XCI.GetButtonDown(splAttackXboxKey, XboxController.First) : Input.GetKeyDown(splAttackKey);
+            return (_isUsingController) ? XCI.GetButtonDown(splAttackXboxKey, XboxController.First) : Input.GetKeyDown(splAttackKey);
         }
         else
             return false;
@@ -140,10 +213,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            if (_cameraManager.overrideController)
-                return Input.GetKeyDown(shieldKey);
-            else
-                return (isControllerConnected) ? XCI.GetButtonDown(shieldXboxKey, XboxController.First) : Input.GetKeyDown(shieldKey);
+            return (_isUsingController) ? XCI.GetButtonDown(shieldXboxKey, XboxController.First) : Input.GetKeyDown(shieldKey);
         }
         else
             return false;
@@ -154,10 +224,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            if (_cameraManager.overrideController)
-                return Input.GetKeyDown(dashKey);
-            else
-                return (isControllerConnected) ? XCI.GetButtonDown(dashXboxKey, XboxController.First) : Input.GetKeyDown(dashKey);
+            return (_isUsingController) ? XCI.GetButtonDown(dashXboxKey, XboxController.First) : Input.GetKeyDown(dashKey);
         }
         else
             return false;
@@ -166,26 +233,13 @@ public class InputManager : MonoBehaviour
     // Check for Pause button press
     public bool GetPauseButtonPress()
     {
-        if (_cameraManager.overrideController)
-            return Input.GetKeyDown(pauseKey);
-        else
-            return (isControllerConnected) ? XCI.GetButtonDown(pauseXboxKey, XboxController.First) : Input.GetKeyDown(pauseKey);
+        return (_isUsingController) ? XCI.GetButtonDown(pauseXboxKey, XboxController.First) : Input.GetKeyDown(pauseKey);
     }
 
     // Check for controller connected
     public bool GetControllerConnected()
     {
         return isControllerConnected;
-    }
-
-    public bool GetOverrideController()
-    {
-        return _cameraManager.overrideController;
-    }
-
-    public bool SetOverrideController(bool @override)
-    {
-        return _cameraManager.overrideController = @override;
     }
 
     // Gets the current state of disableInput boolean

@@ -25,7 +25,7 @@ public class PlayerHandler : MonoBehaviour
 
     // References
     [Header("References")]
-    public SkinnedMeshRenderer abidaroMesh;
+    public SkinnedMeshRenderer[] abidaroMesh;
     public GameObject respawnParticle;
     public ParticleSystem hitParticleSystem;
     public AudioSource hitSFX;
@@ -73,7 +73,10 @@ public class PlayerHandler : MonoBehaviour
     {
         // Set the player position as a respawn point
         SetRespawnPosition(this._transform.position);
-        abidaroMesh.enabled = true;
+        foreach (SkinnedMeshRenderer mesh in abidaroMesh)
+        {
+            mesh.enabled = true;
+        }
         respawnParticle.SetActive(false);
     }
 
@@ -106,7 +109,7 @@ public class PlayerHandler : MonoBehaviour
 
         while (elapsedTime < seconds)
         {
-            objectToMove.transform.position = MathParabola.Parabola(startingPos, end, 
+            objectToMove.transform.position = MathParabola.Parabola(startingPos, end,
             (dynamicRespawnHeight < 0) ? -dynamicRespawnHeight : dynamicRespawnHeight, (elapsedTime / seconds));    // This is just so we don't have an inverted parabola
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
@@ -146,7 +149,10 @@ public class PlayerHandler : MonoBehaviour
 
     private void DisableReferences()
     {
-        abidaroMesh.enabled = false;
+        foreach (SkinnedMeshRenderer mesh in abidaroMesh)
+        {
+            mesh.enabled = false;
+        }
         respawnParticle.SetActive(true);
         _capsule.enabled = false;
         _locomotionHandler.enabled = false;
@@ -156,8 +162,10 @@ public class PlayerHandler : MonoBehaviour
 
     private void EnableReferences()
     {
-        _animator.SetBool("Death", false);
-        abidaroMesh.enabled = true;
+        foreach (SkinnedMeshRenderer mesh in abidaroMesh)
+        {
+            mesh.enabled = true;
+        }
         respawnParticle.SetActive(false);
         _locomotionHandler.enabled = true;
         _cameraManager.deathCamera.Priority = 0;

@@ -27,7 +27,7 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour {
         shakeDuration = values[0];
         shakeAmplitude = values[1];
         shakeFrequency = values[2];
-        Debug.Log(values[0]);
+        //Debug.Log(values[0]);
 
         StartCoroutine(Shake());
         

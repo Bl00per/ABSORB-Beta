@@ -41,7 +41,7 @@ public class PotMovement : AIBehaviour
         brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
 
         // If player is within attack range;
-        if (brain.GetNavMeshAgent().remainingDistance <= _attackRange + 1.0f)
+        if (brain.GetNavMeshAgent().remainingDistance <= _attackRange + 0.1F)
         {
             // Enemy will enter attack phase if locked onto player:
             if (this.destinationLockedToPlayer)

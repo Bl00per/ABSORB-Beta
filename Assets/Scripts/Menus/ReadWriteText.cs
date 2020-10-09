@@ -9,8 +9,6 @@ public class ReadWriteText : MonoBehaviour
     [Header("Default Parameters")]
     [HideInInspector]
     public float masterVolume = 10f, musicVolume = 10f, sfxVolume = 10f;
-    [HideInInspector]
-    public bool overrideControls = false;
 
     void Awake()
     {
@@ -19,7 +17,6 @@ public class ReadWriteText : MonoBehaviour
             masterVolume = 10f;
             musicVolume = 10f;
             sfxVolume = 10f;
-            overrideControls = false;
             CreateFile();
         }
         else
@@ -35,8 +32,7 @@ public class ReadWriteText : MonoBehaviour
         {
             m_masterVolume = masterVolume,
             m_musicVolume = musicVolume,
-            m_sfxVolume = sfxVolume,
-            m_OverrideControls = overrideControls
+            m_sfxVolume = sfxVolume
         };
 
         bf.Serialize(file, data);
@@ -60,7 +56,6 @@ public class ReadWriteText : MonoBehaviour
             masterVolume = data.m_masterVolume;
             musicVolume = data.m_musicVolume;
             sfxVolume = data.m_sfxVolume;
-            overrideControls = data.m_OverrideControls;
             //Debug.Log("File Read");
             file.Close();
         }
@@ -75,8 +70,7 @@ public class ReadWriteText : MonoBehaviour
         {
             m_masterVolume = masterVolume,
             m_musicVolume = musicVolume,
-            m_sfxVolume = sfxVolume,
-            m_OverrideControls = overrideControls
+            m_sfxVolume = sfxVolume
         };
 
         bf.Serialize(file, data);
@@ -88,6 +82,5 @@ public class ReadWriteText : MonoBehaviour
     public class GameData
     {
         public float m_masterVolume = 10f, m_musicVolume = 10f, m_sfxVolume = 10f;
-        public bool m_OverrideControls = false;
     }
 }

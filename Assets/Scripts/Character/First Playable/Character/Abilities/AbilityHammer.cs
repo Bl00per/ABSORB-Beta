@@ -89,27 +89,26 @@ public class AbilityHammer : Ability
         {
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                float damage = 0.0f;
-
-                switch (hit.transform.gameObject.tag)
+                EnemyHandler enemyHit = hit.transform.gameObject.GetComponent<EnemyHandler>();
+                float damageToTake = 0.0f;
+                switch (enemyHit.GetEnemyType())
                 {
-                    case "EnemyMinion":
-                        damage = damageToMinion;
+                    case EnemyHandler.EnemyType.MINION:
+                        damageToTake = damageToMinion;
                         break;
 
-                    case "EnemySpecial":
-                        damage = damageToSpecial;
+                    case EnemyHandler.EnemyType.SPECIAL:
+                        damageToTake = damageToMinion;
                         break;
 
-                    case "EnemyElite":
-                        damage = damageToElite;
+                    case EnemyHandler.EnemyType.ELITE:
+                        damageToTake = damageToMinion;
                         break;
                 }
-                hit.transform.gameObject.GetComponent<EnemyHandler>().TakeDamage(damage, AbilityHandler.AbilityType.HAMMER);
+                enemyHit.TakeDamage(damageToTake, AbilityHandler.AbilityType.HAMMER);
             }
             else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.transform.gameObject.CompareTag("Rock"))
             {
-                //Debug.Log("Hit interactable");
                 hit.transform.gameObject.SetActive(false);
             }
         }
