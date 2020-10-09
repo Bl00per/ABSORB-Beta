@@ -153,7 +153,7 @@ public class PauseMenu : MonoBehaviour
     public void QuitConfirm()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.ExitPlaymode();
+        //UnityEditor.EditorApplication.ExitPlaymode();
     }
 
     public void QuitDeny()
