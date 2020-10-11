@@ -61,31 +61,19 @@ public class CameraManager : MonoBehaviour
                 mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
                 mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
                 SetMouseCamera();
-            }   // If it detects that the controller was disconnected
-            else if (inputManager.GetIsUsingController() && !inputManager.GetControllerConnected())
-            {
-                _pauseMenu.ShowControllerPopup();
-                mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
-                mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
-                SetMouseCamera();
             }
             // Update this so this can be run once the input changes again
             _controllerUpdated = inputManager.GetIsUsingController();
+        }   // If it detects that the controller was disconnected
+        else if (inputManager.GetIsUsingController() && !inputManager.GetControllerConnected())
+        {
+            _pauseMenu.ShowControllerPopup();
+            mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
+            mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
+            SetMouseCamera();
+            inputManager.ManualUpdateController();
+            _controllerUpdated = inputManager.GetIsUsingController();
         }
-
-
-        //         else if (!inputManager.GetControllerConnected() && overrideController == _overrideUpdated)
-        // {
-        //     _pauseMenu.ShowControllerPopup();
-        //     if (_pauseMenu.mouseControllerConfirmed)
-        //     {
-        //         mouseCamera.m_YAxis.Value = controllerCamera.m_YAxis.Value;
-        //         mouseCamera.m_XAxis.Value = controllerCamera.m_XAxis.Value;
-        //         _pauseMenu.mouseControllerConfirmed = false;
-        //         _controllerUpdated = inputManager.GetControllerConnected();
-        //         SetMouseCamera();
-        //     }
-        // }
     }
 
     public void SetControllerCamera()

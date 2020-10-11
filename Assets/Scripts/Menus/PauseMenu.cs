@@ -231,24 +231,10 @@ public class PauseMenu : MonoBehaviour
 
     #region Controller Disconnected
 
-    // public void ControllerContinued()
-    // {
-    //     _inputManager.EnableInput();
-    //     _cameraManager.EnableCameraMovement();
-    //     mouseControllerConfirmed = true;
-    //     controllerDisconnectedPopup.SetActive(false);
-    //     Cursor.lockState = CursorLockMode.Locked;
-    //     Cursor.visible = false;
-    // }
-
     public void ShowControllerPopup()
     {
         controllerDisconnectedPopup.SetActive(true);
-        // _inputManager.DisableInput();
-        // _cameraManager.DisableCameraMovement();
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.lockState = CursorLockMode.None;
-        // Cursor.visible = true;
+        StartCoroutine(ShowPopupForTime());
     }
 
     private IEnumerator ShowPopupForTime()
@@ -256,15 +242,6 @@ public class PauseMenu : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         controllerDisconnectedPopup.SetActive(false);
     }
-
-    // private void ControllerReconnected()
-    // {
-    //     _inputManager.EnableInput();
-    //     _cameraManager.EnableCameraMovement();
-    //     controllerDisconnectedPopup.SetActive(false);
-    //     Cursor.lockState = CursorLockMode.Locked;
-    //     Cursor.visible = false;
-    // }
 
     #endregion
 }
