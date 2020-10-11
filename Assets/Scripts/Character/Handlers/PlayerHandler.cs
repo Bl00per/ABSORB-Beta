@@ -166,6 +166,7 @@ public class PlayerHandler : MonoBehaviour
         {
             mesh.enabled = true;
         }
+        _animator.SetBool("Death", false);
         respawnParticle.SetActive(false);
         _locomotionHandler.enabled = true;
         _cameraManager.deathCamera.Priority = 0;
