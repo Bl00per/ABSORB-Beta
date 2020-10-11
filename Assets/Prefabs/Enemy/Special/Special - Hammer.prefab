@@ -1574,10 +1574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aaebc045458e1942b62724ff97a39f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationPadding: 1
-  avoidDistance: 15
-  startSwingDistance: 2
-  attackCooldown: 2
+  enterAttackStateDistance: 10
+  returnToAttackPosition: 1
+  returnToInitalAngularSpeed: 1
 --- !u!114 &6809976860378941600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,8 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 10
-  destinationPadding: 2
-  animationSequenceTime: 2
+  startAnimationDistance: 5
   swingAnimationName: Attacking
 --- !u!114 &2804856661870454832
 MonoBehaviour:
@@ -2597,12 +2595,12 @@ PrefabInstance:
     - target: {fileID: 8798653982653574370, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.739
       objectReference: {fileID: 0}
     - target: {fileID: 8798653982653574370, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 8798653982653574370, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}

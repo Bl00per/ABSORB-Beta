@@ -88,7 +88,7 @@ public class SpecialAbsorbed : AIBehaviour
             //     _enabled = false;
             // }
 
-            absorbParticleEffect.Stop();
+            //absorbParticleEffect.Stop();
             absorbGameObject.SetActive(true);
             absorbGameObject.transform.SetParent(this.gameObject.transform);
             enemyHandler.Kill();

@@ -214,7 +214,7 @@ MonoBehaviour:
   seperationFactor: 0
   alignmentFactor: 0
   moveDistance: 0
-  wanderRadiusCenter: {fileID: 8986742230317161266}
+  wanderRadiusCenter: {fileID: 5158089209357207977}
   updatePathTime: 2
   wanderRadius: 15
 --- !u!114 &8986742230317161231
@@ -234,6 +234,7 @@ MonoBehaviour:
   alignmentFactor: 5
   moveDistance: 1000
   CoMDistanceFromPlayer: 8
+  returnToWanderDistance: 12
 --- !u!114 &8986742230317161264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,10 +251,10 @@ MonoBehaviour:
   seperationFactor: 0
   alignmentFactor: 0
   moveDistance: 0
-  beginHuddleDistance: 15
-  stopHuddleDistance: 12
-  stoppingDistanceIncrease: 10
-  queueTime: 1.64
+  returnToChaseDistance: 12
+  minGroupWanderRadius: 5
+  maxGroupWanderRadius: 10
+  queueTime: 1
 --- !u!114 &8986742230317161265
 MonoBehaviour:
   m_ObjectHideFlags: 0
