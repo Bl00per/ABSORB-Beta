@@ -7,6 +7,9 @@ public class EndCutscene : MonoBehaviour
 {
     public GameObject player;
     public CinemachineVirtualCamera cutsceneCamera;
+    public float timer;
+    public GameObject logoImage;
+    public GameObject[] objects;
 
     private BoxCollider _triggerBox;
     private PlayerHandler _playerHandler;
@@ -24,6 +27,12 @@ public class EndCutscene : MonoBehaviour
         _playerHandler = player.GetComponent<PlayerHandler>();
         _locomotionHandler = _playerHandler.GetLocomotionHandler();
         _combatHandler = _playerHandler.GetCombatHandler();
+
+        foreach (GameObject gameObject in objects)
+        {
+            gameObject.SetActive(false);
+        }
+        logoImage.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -41,5 +50,18 @@ public class EndCutscene : MonoBehaviour
         _playerHandler.enabled = false;
         _combatHandler.enabled = false;
         _locomotionHandler.enabled = false;
+        StartCoroutine(EnableObjects());
+    }
+
+    private IEnumerator EnableObjects()
+    {
+        yield return new WaitForSeconds(timer);
+        foreach (GameObject gameObject in objects)
+        {
+            gameObject.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(3.0f);
+        logoImage.SetActive(true);
     }
 }
