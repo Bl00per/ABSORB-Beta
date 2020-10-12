@@ -123,10 +123,19 @@ public class CameraManager : MonoBehaviour
 
     public CinemachineFreeLook GetCurrentCamera()
     {
-        
         if (mouseCamera.Priority > 0)
             return mouseCamera;
         else
             return controllerCamera;
+    }
+
+    public CinemachineFreeLook GetControllerCamera()
+    {
+        return controllerCamera;
+    }
+
+    public CinemachineFreeLook GetMouseCamera()
+    {
+        return mouseCamera;
     }
 }

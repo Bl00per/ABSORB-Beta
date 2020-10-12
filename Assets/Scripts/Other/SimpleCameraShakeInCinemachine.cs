@@ -12,27 +12,27 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
     public float shakeFrequency = 2.0f;         // Cinemachine Noise Profile Parameter
 
     // Cinemachine Shake
-    private CinemachineFreeLook _currentFreeCam;
     private CameraManager _cameraManager;
 
-    private CinemachineBasicMultiChannelPerlin[] _cinemachineBasicMultiChannelPerlin;
+    private CinemachineBasicMultiChannelPerlin[] _controllerBMCP;
+    private CinemachineBasicMultiChannelPerlin[] _mouseBMCP;
 
     private void Awake()
     {
-
-
-
     }
 
-    public void Start()
+    private void Start()
     {
         _cameraManager = FindObjectOfType<CameraManager>();
-        _currentFreeCam = _cameraManager.GetCurrentCamera();   
         
         // Creating an array to store the rigs in, to prevent using get component every Shake()
-        _cinemachineBasicMultiChannelPerlin = new CinemachineBasicMultiChannelPerlin[3];
+        _controllerBMCP = new CinemachineBasicMultiChannelPerlin[3];
+        _mouseBMCP = new CinemachineBasicMultiChannelPerlin[3];
         for (int i = 0; i < 3; ++i)
-            _cinemachineBasicMultiChannelPerlin[i] = _currentFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        {
+            _controllerBMCP[i] = _cameraManager.GetControllerCamera().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            _mouseBMCP[i] = _cameraManager.GetMouseCamera().GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        }
     }
 
     public void Key_Shake_DAF(string args)
@@ -49,8 +49,6 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
         shakeFrequency = values[2];
         //Debug.Log(values[0]);
 
-        _currentFreeCam = _cameraManager.GetCurrentCamera();
-        Debug.Log(_currentFreeCam);
         StartCoroutine(Shake());
     }
 
@@ -58,16 +56,32 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
     {
         for (int i = 0; i < 3; ++i)
         {
-            _cinemachineBasicMultiChannelPerlin[i].m_AmplitudeGain = shakeAmplitude;
-            _cinemachineBasicMultiChannelPerlin[i].m_FrequencyGain = shakeFrequency;
+            if (_cameraManager.inputManager.GetIsUsingController())
+            {
+                _controllerBMCP[i].m_AmplitudeGain = shakeAmplitude;
+                _controllerBMCP[i].m_FrequencyGain = shakeFrequency;
+            }
+            else
+            {
+                _mouseBMCP[i].m_AmplitudeGain = shakeAmplitude;
+                _mouseBMCP[i].m_FrequencyGain = shakeFrequency;
+            }
         }
 
         yield return new WaitForSeconds(shakeDuration);
 
         for (int i = 0; i < 3; ++i)
         {
-            _cinemachineBasicMultiChannelPerlin[i].m_AmplitudeGain = 0;
-            _cinemachineBasicMultiChannelPerlin[i].m_FrequencyGain = 0;
+            if (_cameraManager.inputManager.GetIsUsingController())
+            {
+                _controllerBMCP[i].m_AmplitudeGain = 0;
+                _controllerBMCP[i].m_FrequencyGain = 0;
+            }
+            else
+            {
+                _mouseBMCP[i].m_AmplitudeGain = 0;
+                _mouseBMCP[i].m_FrequencyGain = 0;
+            }
         }
 
 
