@@ -88,7 +88,7 @@ public class EliteProjectile : MonoBehaviour
         _isActive = false;
         waterHitEffect.Play();
         waterHitEffect.gameObject.transform.SetParent(null);
-        StartCoroutine(Cleanup());
+        Cleanup();
     }
 
     public EnemyHandler GetHandler()
@@ -106,7 +106,6 @@ public class EliteProjectile : MonoBehaviour
     {
         Destroy(this.gameObject);
         Destroy(waterParryEffect.gameObject, effectTime);
-        yield return new WaitForSeconds(1.5f);
-        Destroy(waterHitEffectGO, effectTime);
+        Destroy(this.gameObject, 0.1f);
     }
 }
