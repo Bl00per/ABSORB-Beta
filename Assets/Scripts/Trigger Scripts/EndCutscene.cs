@@ -7,8 +7,9 @@ public class EndCutscene : MonoBehaviour
 {
     public GameObject player;
     public CinemachineVirtualCamera cutsceneCamera;
-    public float timer;
-    public float timer2;
+    public float eyeTimer = 3.0f;
+    public float logoTimer = 3.0f;
+    public float returnToMenuTimer = 5.0f;
     public GameObject logoImage;
     public GameObject[] objects;
 
@@ -56,13 +57,16 @@ public class EndCutscene : MonoBehaviour
 
     private IEnumerator EnableObjects()
     {
-        yield return new WaitForSeconds(timer);
+        yield return new WaitForSeconds(eyeTimer);
         foreach (GameObject gameObject in objects)
         {
             gameObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(timer2);
+        yield return new WaitForSeconds(logoTimer);
         logoImage.SetActive(true);
+
+        yield return new WaitForSeconds(returnToMenuTimer);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("BetaScene");
     }
 }
