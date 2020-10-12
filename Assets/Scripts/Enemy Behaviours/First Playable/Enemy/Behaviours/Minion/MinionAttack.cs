@@ -65,15 +65,11 @@ public class MinionAttack : AIBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
     }
    
-    public void Key_ActivateMinionAttack()
-    {
-
-        weaponToEnable.SetActive(true);
-    }
     // Deactivates the collision check on the enemy's weapon
     public void Key_DeactivateMinionAttack()
     {
-        weaponToEnable.SetActive(false);
+        weaponToEnable.SetActive(false);
+
         //_canAttack = false;
         brain.SetBehaviour("Movement");
     }
