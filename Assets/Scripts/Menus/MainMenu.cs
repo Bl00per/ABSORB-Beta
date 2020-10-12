@@ -110,6 +110,7 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
         //UnityEditor.EditorApplication.ExitPlaymode();
+       
     }
 
     // Displays the settings menu
