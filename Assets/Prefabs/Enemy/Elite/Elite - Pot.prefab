@@ -77325,13 +77325,17 @@ MonoBehaviour:
   deathSoundLength: 2
   deathParticleEffect: {fileID: 6132531780271446540}
   overallFXTime: 1
-  bodyMeshRenderer: {fileID: 8158816111336067895}
+  bodyMeshRenderer:
+  - {fileID: 6626176570713725647}
   weaponMeshRenderer: {fileID: 8158816111336067895}
   weaponCollider: {fileID: 0}
+  attackSFX: {fileID: 0}
+  attackPE: {fileID: 0}
   typeOfEnemy: 2
   typeOfAbility: 3
   maxHealth: 150
   baseDamage: 10
+  attackCooldown: 1
   printHealthStats: 0
 --- !u!114 &8734437204174852919
 MonoBehaviour:
@@ -77387,7 +77391,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9c14c090393e94e88562114ce7b177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationPadding: 1
+  enterAttackStateDistance: 10
+  retreatFromPlayerDistance: 7
+  retreatDistance: 6
+  returnToAttackPosition: 1
+  returnToInitialAngularSpeed: 1
 --- !u!114 &8734437204174852878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77408,8 +77416,10 @@ MonoBehaviour:
   dashCancelRange: 10
   projectilePrefab: {fileID: 8840168797588337650, guid: ffb8b15cf86e8a14b9050cde0f60e0ee,
     type: 3}
+  fakePrefab: {fileID: 0}
   projectileStartPoint: {fileID: 4947513966798638554}
   waterFireEffect: {fileID: 3874373134391871222}
+  chargingEffect: {fileID: 0}
 --- !u!1 &8734437204614123030
 GameObject:
   m_ObjectHideFlags: 0

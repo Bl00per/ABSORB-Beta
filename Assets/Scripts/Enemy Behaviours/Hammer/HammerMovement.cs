@@ -41,10 +41,12 @@ public class HammerMovement : AIBehaviour
         }
 
         // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
-        if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
+        else if (distance <= enterAttackStateDistance)
         {
             _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
+            brain.GetHandler().SetJustAttacked(true);
+            StartCoroutine(brain.GetHandler().Coroutine_JustAttacked());
         }
     }
 

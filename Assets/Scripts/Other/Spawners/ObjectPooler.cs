@@ -33,7 +33,7 @@ public class ObjectPooler : MonoBehaviour
     public Transform onScreenSpawnPoint;
 
     [Header("The death of this enemy will end the combat sequence.")]
-    public GameObject finalEnemy;
+    public EnemyHandler finalEnemy;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -198,7 +198,7 @@ public class ObjectPooler : MonoBehaviour
         SwapActiveLists(handler);
 
         // Add to queue if we can
-        if (addToQueue && GetCanAddToQueue(handler) && (finalEnemy == null || !finalEnemy.activeInHierarchy))
+        if (addToQueue && GetCanAddToQueue(handler) && (finalEnemy == null || finalEnemy.IsAlive()))
         {
             AddToQueue(handler);
             return true;
@@ -210,28 +210,12 @@ public class ObjectPooler : MonoBehaviour
 
     public void CheckForEnemyTypeSpawn()
     {
-        // Check if the target enemy is still alive and count of inactive is > 0
-        if ((finalEnemy == null || !finalEnemy.activeInHierarchy) && _respawnQueue.Count > 0 && !_isSpawning && spawnerActive)
+        // Check if the target enemy is still alive and count of inacti
+        if ((finalEnemy == null || finalEnemy.IsAlive()) && _respawnQueue.Count > 0 && !_isSpawning && spawnerActive)
         {
-            // // Iterating through the inactive enemies list
-            // foreach (EnemyHandler enemy in _inactiveEnemies)
-            // {
-            //     // Iterating through the enemy respawn list
-            //     foreach (EnemyHandler.EnemyType enemyType in enemyRespawnList)
-            //     {
-            //         // Comparing the enemy type to the index within enemy respawn list
-            //         if (enemy.GetEnemyType() == enemyType)
-            //         {
-            //             // If the types are a match, respawn the enemy
-            //             StartCoroutine(RespawnEnemy(enemy));
-            //             break;
-            //         }
-            //     }
-            // }
-
-        // Iterating through the inactive enemies list
-        foreach (EnemyHandler enemy in _respawnQueue)
-        {
+            // Iterating through the inactive enemies list
+            foreach (EnemyHandler enemy in _respawnQueue)
+            {
                 // If the types are a match, respawn the enemy
                 StartCoroutine(RespawnEnemy(enemy));
                 break;
