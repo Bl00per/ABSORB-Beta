@@ -74,6 +74,21 @@ public class PauseMenu : MonoBehaviour
 
         if (Paused)
         {
+            // Check if first selected is null
+
+            // Show the cursor if the user changes to mouse
+            if (!_inputManager.GetIsUsingController())
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+
+            // Highlight the volume bar instead of the handle when it is highlighted
             if (settingsMenu.activeInHierarchy)
             {
                 GameObject temp = EventSystem.current.currentSelectedGameObject;
@@ -123,11 +138,6 @@ public class PauseMenu : MonoBehaviour
             // Set the play button as the first selected object
             EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
             // If the controller is connected dont display the cursor, it breaks things
-            if (!_inputManager.GetIsUsingController())
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
             _cameraManager.DisableCameraMovement();
         }
     }
@@ -198,7 +208,7 @@ public class PauseMenu : MonoBehaviour
         _readWrite.OverwriteData();
     }
 
-        // Set the volume of the master throught the slider
+    // Set the volume of the master throught the slider
     public void SetMasterLvl(float level)
     {
         if (masterVolumeSlider.value == masterVolumeSlider.minValue)

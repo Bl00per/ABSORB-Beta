@@ -25,6 +25,8 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
+    [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
+    public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
@@ -96,7 +98,6 @@ public class CombatHandler : MonoBehaviour
             AttackComboFinish();
 
     }
-
 
     public float GetAttackTimer()
     {
@@ -349,7 +350,7 @@ public class CombatHandler : MonoBehaviour
         // Make the player fade away as they take damage
         playerShader.material.SetFloat("_AlphaClip", _playerHandler.GetCurrentHealth());
         // Temp to force the player dead
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) && debugDeath)
         {
             _playerHandler.SetIsAlive(false);
             // Debug.Log("Player dead");
