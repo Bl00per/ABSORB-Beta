@@ -227,4 +227,7 @@ public class AbilityHandler : MonoBehaviour
         // Returning null and logging an error, since we shouldn't get here
         return null;
     }
+
+    // Returns the current ability enum
+    public AbilityType GetCurrentAbility() => _currentAbility;
 }
