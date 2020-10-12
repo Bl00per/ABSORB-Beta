@@ -192,25 +192,57 @@ public class CombatHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("EnemyWeapon"))
+
+        // REWORK: Instead of comparing tags and getting the components to different things;
+        // create a EnemyWeapon script that will hold the enemy within. This saves going up the chain finding stuff;
+        // and also means we need no else if statments
+
+        if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
+
+            if(!enemy)
+            {
+                Debug.LogError("ENEMY IS NULL! SHOULD NOT BE");
+            }
+            
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
                 enemy.weaponCollider.enabled = false;
             }
         }
-        
-        else if(other.gameObject.CompareTag("EnemyProjectile"))
-        {
-            EnemyHandler enemy = other.gameObject.GetComponent<EliteProjectile>().GetHandler();
-            if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
-            {
-                _playerHandler.TakeDamage(enemy.GetDamage());
-                enemy.weaponCollider.enabled = false;
-            }
-        }
+
+
+        // if (other.gameObject.CompareTag("EnemyWeapon"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
+
+        // else if (other.gameObject.CompareTag("EnemyProjectile"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponent<EliteProjectile>().GetHandler();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
+
+        // else if (other.gameObject.CompareTag("EnemyMinion"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
     }
 
     #endregion
@@ -342,6 +374,8 @@ public class CombatHandler : MonoBehaviour
 
     #region Death
     [Header("Death Attributes")]
+    public AudioSource deathSFX1;
+    public AudioSource deathSFX2;
     public float timeTillRespawn = 3.0f;
     private bool _respawning = false;
 
@@ -353,6 +387,7 @@ public class CombatHandler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Backspace) && debugDeath)
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
             // Debug.Log("Player dead");
         }
 
@@ -360,6 +395,7 @@ public class CombatHandler : MonoBehaviour
         if (_playerHandler.GetCurrentHealth() <= 0)
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
         }
 
         // Is the player is dead
@@ -380,6 +416,15 @@ public class CombatHandler : MonoBehaviour
         _respawning = false;
         // Go to main menu
         //UnityEngine.SceneManagement.SceneManager.LoadScene("Main_Menu");
+    }
+
+    public void key_deathSFX1()
+    {
+        deathSFX1.Play();
+    }
+    public void key_deathSFX2()
+    {
+        deathSFX2.Play();
     }
 
     #endregion

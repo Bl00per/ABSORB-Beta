@@ -23,22 +23,24 @@ public class EliteProjectile : MonoBehaviour
     private float _lifeTime = 0.0f;
     private Transform _parentTransform;
     private EnemyHandler _enemyHandler;
+    private EnemyWeapon enemyWeapon;
     private float _damage;
 
     // Gets called on awake
     private void Awake()
     {
         _rb = this.GetComponent<Rigidbody>();
+        enemyWeapon = this.GetComponent<EnemyWeapon>();
     }
 
     // Sets up the direction for the projectile
     public void InitialiseProjectile(EnemyHandler enemyHandler, Transform playerTransform, Transform projectileStartPoint, float speed, float lifeTime, float damage)
     {
-
         transform.position = projectileStartPoint.position;
         transform.rotation = projectileStartPoint.rotation;
         _enemyHandler = enemyHandler;
         _parentTransform = enemyHandler.transform;
+        enemyWeapon.SetEnemyHandler(enemyHandler);
         _isActive = true;
 
         float distance = Vector3.Distance(playerTransform.position, transform.position);
@@ -85,7 +87,7 @@ public class EliteProjectile : MonoBehaviour
 
         _isActive = false;
         waterHitEffect.Play();
-        waterParryEffect.gameObject.transform.SetParent(null);
+        waterHitEffect.gameObject.transform.SetParent(null);
         StartCoroutine(Cleanup());
     }
 
@@ -102,9 +104,9 @@ public class EliteProjectile : MonoBehaviour
 
     public IEnumerator Cleanup()
     {
-        yield return new WaitForSeconds(0.1f);
-        Destroy(waterHitEffectGO, effectTime);
-        Destroy(waterParryEffect.gameObject, effectTime);
         Destroy(this.gameObject);
+        Destroy(waterParryEffect.gameObject, effectTime);
+        yield return new WaitForSeconds(1.5f);
+        Destroy(waterHitEffectGO, effectTime);
     }
 }

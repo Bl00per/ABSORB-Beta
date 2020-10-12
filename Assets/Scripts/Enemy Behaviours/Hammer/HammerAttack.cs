@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class HammerAttack : AIBehaviour
 {
-    // test
     [Header("Properties")]
     public float movementSpeed = 10.0f;
-    public float destinationPadding = 3.0f;
-
-    public float animationSequenceTime = 3.0f;
+    public float startAnimationDistance = 5.0f;
     public string swingAnimationName = "Attacking";
 
     private Animator _animator;
-    private float _initialSpeed = 20.0f;
+    private float _initialSpeed = 0.0f;
 
     private void Awake()
     {
@@ -29,17 +26,23 @@ public class HammerAttack : AIBehaviour
     {
         // Setting the movement speed
         brain.GetNavMeshAgent().speed = movementSpeed;
-
-        // Setting the target destination
-        this.LockDestinationToPlayer(destinationPadding);
-
-        // Starting the swing
-        _animator.SetBool(swingAnimationName, true);
     }
 
-    public override void OnStateUpdate() {}
+    public override void OnStateUpdate()
+    {
+        // Setting the target destination
+        this.LockDestinationToPlayer(1.0f);
 
-    public override void OnStateFixedUpdate() {}
+        // Checking if the player is close enough to start the animation sequence
+        if (DetermineAttackFromPlayerVelocity())
+        {
+            float distance = brain.GetDistanceToPlayer();
+            if (distance <= startAnimationDistance)
+                _animator.SetBool(swingAnimationName, true);
+        }
+    }
+
+    public override void OnStateFixedUpdate() { }
 
     public override void OnStateExit()
     {
@@ -47,10 +50,25 @@ public class HammerAttack : AIBehaviour
         _animator.SetBool(swingAnimationName, false);
     }
 
+    // Key Event: Used to transition back into the movement state.
     private void Key_DeactivateSwingAnimation()
     {
         _animator.SetBool(swingAnimationName, false);
         brain.SetBehaviour("Movement");
+    }
+
+    // Returns true if the player is moving towards the enemy, or if they aren't moving fast enough to avoid the attack.
+    private bool DetermineAttackFromPlayerVelocity()
+    {
+        Rigidbody rb = enemyHandler.GetPlayerHandler().GetRigidbody();
+        if (rb.velocity.magnitude <= 3.0F)
+            return true;
+        else
+        {
+            Vector3 rbDir = rb.velocity.normalized;
+            float dot = Vector3.Dot(transform.forward, rbDir);
+            return Vector3.Dot(transform.forward, rbDir) < 0.0F;
+        }
     }
 
     // [Header("References")]
@@ -97,7 +115,7 @@ public class HammerAttack : AIBehaviour
     //     _targetPosition = Vector3.zero;
     //     _isAttacking = false;
 
-        
+
     //     brain.GetNavMeshAgent().isStopped = false;
     // }
 

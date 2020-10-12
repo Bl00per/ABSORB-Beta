@@ -262,7 +262,7 @@ public class EnemyHandler : MonoBehaviour
 
         // Reparenting the VFX after N amount of time
         var cam = Camera.main.GetComponent<MonoBehaviour>();
-        cam.StartCoroutine(ReparentVFX());
+        cam.StartCoroutine(ReparentDeathVFX());
     }
 
     public void Reset()
@@ -272,7 +272,7 @@ public class EnemyHandler : MonoBehaviour
         _isAlive = true;
     }
 
-    private IEnumerator ReparentVFX()
+    private IEnumerator ReparentDeathVFX()
     {
         yield return new WaitForSeconds(overallFXTime);
         deathParticleEffect.transform.SetParent(this.gameObject.transform);

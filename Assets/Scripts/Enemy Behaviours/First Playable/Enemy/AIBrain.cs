@@ -98,19 +98,20 @@ public class AIBrain : MonoBehaviour
         if (/*_currentBehaviourID == "Absorbed" || */_currentBehaviourID == behaviour)
             return;
 
+        // Setting the last state to be the current state before changing
+        _lastStateID = _currentBehaviourID;
+
         // Checking if the current state we are about to leave is the attack state
-        if(behaviour == "Attack")
+        if (_currentBehaviourID == "Attack")
         {
             // Setting the just attacked bool to true, and setting it false on a coroutine 
             _handler.SetJustAttacked(true);
             StartCoroutine(_handler.Coroutine_JustAttacked());
         }
 
-        // Setting the last state to be the current state before changing
-        _lastStateID = _currentBehaviourID;
-
         // Call OnExit() before the state switch, then call OnEnter() after.
         _aiBehaviours[_currentBehaviourID].OnStateExit();
+
         _currentBehaviourID = behaviour;
         _aiBehaviours[_currentBehaviourID].OnStateEnter();
 
@@ -140,7 +141,7 @@ public class AIBrain : MonoBehaviour
     {
         yield return new WaitForSeconds(pathUpdateCooldownTime);
 
-        if(_handler.GetFunctional())
+        if (_handler.GetFunctional())
         {
             _navMeshAgent.SetDestination(_targetDestination);
             _targetDestination = targetDestination;

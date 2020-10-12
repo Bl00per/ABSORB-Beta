@@ -4,79 +4,63 @@ using UnityEngine;
 
 public class HammerMovement : AIBehaviour
 {
-
     [Header("Properties")]
-    public float beginCircleDistance = 10.0f;
-    public float circleSpeed = 0.1f;
-    public float circleRadius = 9.5f;
+    public float enterAttackStateDistance = 10.0f;
 
-    private float _circleTimer = 0.0f;
-    private float _defaultAngularSpeed = 0.0f;
-    private bool _facePlayer = false;
-    private Vector3 _positionFix = Vector3.zero;
+    [Header("Timers")]
+    public float returnToAttackPosition = 1.0f;
+    public float returnToInitalAngularSpeed = 1.0f;
+
+    private Vector3 _attackPosition = Vector3.zero;
+    private float _initialAngularSpeed = 0.0f;
+    private bool _startedRetreat = false;
 
     private void Start()
     {
-        _defaultAngularSpeed = brain.GetNavMeshAgent().angularSpeed;
+        // Storing the initial angular speed of the agent
+        _initialAngularSpeed = brain.GetNavMeshAgent().angularSpeed;
     }
 
-    public override void OnStateEnter() { }
+    public override void OnStateEnter()
+    {
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+    }
 
     public override void OnStateUpdate()
     {
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
-        // Checking if we should be facing the player or not
-        if (_facePlayer)
-            brain.GetNavMeshAgent().angularSpeed = 0.0f;
-        else
-            brain.GetNavMeshAgent().angularSpeed = _defaultAngularSpeed;
+        // Check if the enemy has just attacked, if they have then return to their previous position
+        if (enemyHandler.GetJustAttacked())
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+            if(!_startedRetreat)
+                StartCoroutine(Retreat());
+            return;
+        }
 
         // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
-        if (distance <= brain.GetNavMeshAgent().stoppingDistance && !enemyHandler.GetJustAttacked())
+        if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
         {
+            _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
         }
-        else if (distance <= beginCircleDistance)
-        {
-            // Forcing the enemy to face the player
-            _positionFix = brain.PlayerTransform.position;
-            _positionFix.y = brain.transform.position.y;
-            //brain.transform.forward = (_positionFix - brain.transform.position).normalized;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation((_positionFix - brain.transform.position).normalized), 0.20F);
-
-            // Moving the enemy around the player
-            OverrideDestination((GetPositionAroundCenter(_circleTimer, brain.PlayerTransform.position, circleRadius)), 1.0f);
-
-            // Incrementing the circle timer
-            if (_circleTimer >= 1.0f)
-                _circleTimer = 0.0f;
-            else
-                _circleTimer += circleSpeed * Time.deltaTime;
-        }
     }
 
-    public override void OnStateExit()
-    {
-    }
+    public override void OnStateExit() { }
 
-    public override void OnStateFixedUpdate()
-    {
+    public override void OnStateFixedUpdate() { }
 
-    }
-
-    // Returns a randomized position from the radius around the center of an object
-    // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
-    private Vector3 GetPositionAroundCenter(float value, Vector3 center, float radius)
+    private IEnumerator Retreat()
     {
-        // create random angle between 0 to 360 degrees 
-        float ang = value * 360;
-        Vector3 pos = Vector3.zero;
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.y = center.y;
-        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        return pos;
+        _startedRetreat = true;
+        brain.GetNavMeshAgent().angularSpeed = 0.0f;
+        yield return new WaitForSeconds(returnToAttackPosition);
+        OverrideDestination(_attackPosition, 1.0f); ;
+        yield return new WaitForSeconds(returnToInitalAngularSpeed);
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+        _startedRetreat = false;
     }
 
     // [Header("Properties")]

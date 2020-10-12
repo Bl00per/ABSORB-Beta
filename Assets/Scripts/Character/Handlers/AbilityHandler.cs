@@ -107,7 +107,7 @@ public class AbilityHandler : MonoBehaviour
                 _animator.SetBool("Absorb", true);
 
                 // Activate slowdown
-                _locomotionHanlder.Key_ActivateSlowdown();
+                //_playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
 
                 // If the player is shielding, then deactivate the shield
                 if (_combatHandler.shieldState == CombatHandler.ShieldState.Shielding)
@@ -130,7 +130,7 @@ public class AbilityHandler : MonoBehaviour
     public void Key_DeactivateAbsorb()
     {
         _animator.SetBool("Absorb", false);
-        _locomotionHanlder.Key_DeactivateSlowdown();
+        //_playerHandler.GetLocomotionHandler().Key_DeactivateSlowdown();
         _isAbosrbing = false;
     }
 
