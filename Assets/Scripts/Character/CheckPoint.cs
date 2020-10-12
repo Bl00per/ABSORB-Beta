@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    public Trigger triggerBox;
+    //public Trigger triggerBox;
     public Transform spawnPosition;
 
     private PlayerHandler _playerHandler;
@@ -15,11 +15,20 @@ public class CheckPoint : MonoBehaviour
         _playerHandler = FindObjectOfType<PlayerHandler>();
     }
 
-    void Update()
+    // void Update()
+    // {
+    //     // if (triggerBox.Enabled && triggerBox.Collider.CompareTag("Player"))
+    //     // {
+    //     //     Debug.Log("Player walked through trigger");
+    //     //     _playerHandler.SetRespawnPosition(this.spawnPosition.position);
+    //     // }
+    // }
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (triggerBox.Enabled && triggerBox.Collider.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            //Debug.Log("Player walked through trigger");
+            Debug.Log("Player walked through trigger");
             _playerHandler.SetRespawnPosition(this.spawnPosition.position);
         }
     }

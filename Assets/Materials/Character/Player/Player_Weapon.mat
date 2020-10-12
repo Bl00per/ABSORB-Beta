@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Player_Weapon
   m_Shader: {fileID: 4800000, guid: 972a05a1fafc1c54d8287892f2a939b6, type: 3}
-  m_ShaderKeywords: USE_ALPHA_CLIPING USE_FRESNEL USE_HEIGHT USE_MAINTEX USE_REFRACTIVE
+  m_ShaderKeywords: USE_ALPHA_CLIPING USE_FRESNEL USE_HEIGHT
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -53,7 +53,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: dc7a239154c12c44da23d17d61581bda, type: 3}
-        m_Scale: {x: 0.1, y: 0.1}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
@@ -61,7 +61,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
         m_Texture: {fileID: 2800000, guid: fd1e47788d217004b8b7325ef23ad5d0, type: 3}
-        m_Scale: {x: 0.5, y: 0.5}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
@@ -89,10 +89,10 @@ Material:
     - _DstBlend: 0
     - _FPOW: 0.3
     - _FresnelDistort: 0
-    - _FresnelPow: 1.44
-    - _FresnelR0: 0.25
+    - _FresnelPow: 2.91
+    - _FresnelR0: 0.57
     - _Glossiness: 0.5
-    - _Height: -0.1
+    - _Height: -0.07
     - _InvFade: 3
     - _Metallic: 0
     - _Mode: 0
@@ -101,7 +101,7 @@ Material:
     - _OffsetYHeightMap: 0
     - _Parallax: 0.02
     - _R0: 0.05
-    - _RefractiveStrength: 0
+    - _RefractiveStrength: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _UseAlphaCliping: 1
@@ -109,8 +109,8 @@ Material:
     - _UseCutout: 0
     - _UseFresnel: 1
     - _UseHeight: 1
-    - _UseMainTex: 1
-    - _UseRefractive: 1
+    - _UseMainTex: 0
+    - _UseRefractive: 0
     - _UseSoft: 0
     - _ZWrite: 1
     - _ZWriteMode: 0
@@ -119,11 +119,11 @@ Material:
     - _CutoutColor: {r: 1, g: 0, b: 0, a: 1}
     - _DropWavesScale: {r: 1, g: 0.5, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 0.07161863, g: 0.03137612, b: 0.95024765, a: 1}
+    - _FresnelColor: {r: 1.7616467, g: 1.7616467, b: 1.7616467, a: 1}
     - _HeightUVScrollDistort: {r: 0, g: -1, b: 0, a: 0}
-    - _MainColor: {r: 0, g: 0.02504062, b: 0.509434, a: 1}
+    - _MainColor: {r: 0.7264151, g: 0.01713243, b: 0.2253373, a: 1}
     - _NoiseScale: {r: 0, g: 0, b: 0, a: 0}
     - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _RimColor: {r: 0.057093438, g: 0.06710122, b: 0.08088237, a: 1}
     - _Speed: {r: 2, g: 15, b: 0, a: 8}
-    - _TintColor: {r: 0.32822263, g: 0.32453722, b: 0.4811321, a: 1}
+    - _TintColor: {r: 0.6431373, g: 0, b: 0.549668, a: 1}

@@ -35,7 +35,7 @@ public class EnemyHandler : MonoBehaviour
     public float overallFXTime = 1.0f;
 
     [Header("References")]
-    public SkinnedMeshRenderer bodyMeshRenderer;
+    public SkinnedMeshRenderer[] bodyMeshRenderer;
     public SkinnedMeshRenderer weaponMeshRenderer;
     public Collider weaponCollider;
     public AudioSource attackSFX;
@@ -212,7 +212,10 @@ public class EnemyHandler : MonoBehaviour
             _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
-            bodyMeshRenderer.enabled = true;
+            foreach (SkinnedMeshRenderer mesh in bodyMeshRenderer)
+            {
+                mesh.enabled = true;
+            }
             _bodyCollider.enabled = true;
             _animator.enabled = true;
             _navMeshAgent.enabled = true;
@@ -225,7 +228,10 @@ public class EnemyHandler : MonoBehaviour
             _isAlive = false;
             _aiBrain.enabled = false;
             _rigidbody.isKinematic = true;
-            bodyMeshRenderer.enabled = false;
+            foreach (SkinnedMeshRenderer mesh in bodyMeshRenderer)
+            {
+                mesh.enabled = false;
+            }
             _bodyCollider.enabled = false;
             _animator.enabled = false;
             _navMeshAgent.enabled = false;

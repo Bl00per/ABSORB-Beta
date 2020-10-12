@@ -107,7 +107,7 @@ public class AbilityHammer : Ability
                 }
                 enemyHit.TakeDamage(damageToTake, AbilityHandler.AbilityType.HAMMER);
             }
-            else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable"))
+            else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && hit.transform.gameObject.CompareTag("Rock"))
             {
                 hit.transform.gameObject.SetActive(false);
             }

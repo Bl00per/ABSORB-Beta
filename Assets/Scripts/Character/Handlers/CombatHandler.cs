@@ -25,6 +25,8 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
+    [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
+    public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
@@ -96,7 +98,6 @@ public class CombatHandler : MonoBehaviour
             AttackComboFinish();
 
     }
-
 
     public float GetAttackTimer()
     {
@@ -373,6 +374,8 @@ public class CombatHandler : MonoBehaviour
 
     #region Death
     [Header("Death Attributes")]
+    public AudioSource deathSFX1;
+    public AudioSource deathSFX2;
     public float timeTillRespawn = 3.0f;
     private bool _respawning = false;
 
@@ -381,9 +384,10 @@ public class CombatHandler : MonoBehaviour
         // Make the player fade away as they take damage
         playerShader.material.SetFloat("_AlphaClip", _playerHandler.GetCurrentHealth());
         // Temp to force the player dead
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) && debugDeath)
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
             // Debug.Log("Player dead");
         }
 
@@ -391,6 +395,7 @@ public class CombatHandler : MonoBehaviour
         if (_playerHandler.GetCurrentHealth() <= 0)
         {
             _playerHandler.SetIsAlive(false);
+            _animator.SetBool("Death", true);
         }
 
         // Is the player is dead
@@ -411,6 +416,15 @@ public class CombatHandler : MonoBehaviour
         _respawning = false;
         // Go to main menu
         //UnityEngine.SceneManagement.SceneManager.LoadScene("Main_Menu");
+    }
+
+    public void key_deathSFX1()
+    {
+        deathSFX1.Play();
+    }
+    public void key_deathSFX2()
+    {
+        deathSFX2.Play();
     }
 
     #endregion
