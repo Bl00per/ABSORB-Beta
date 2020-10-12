@@ -5238,10 +5238,13 @@ MonoBehaviour:
   bodyMeshRenderer: {fileID: 4534045583985982133}
   weaponMeshRenderer: {fileID: 8174543074673664526}
   weaponCollider: {fileID: 8174543074673664512}
+  attackSFX: {fileID: 0}
+  attackPE: {fileID: 0}
   typeOfEnemy: 2
   typeOfAbility: 1
   maxHealth: 150
   baseDamage: 10
+  attackCooldown: 1
   printHealthStats: 0
 --- !u!114 &2030620166790689613
 MonoBehaviour:
@@ -5297,8 +5300,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae98f145f1a396144a660ca142603451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationPadding: 1
-  avoidDistance: 10
+  enterAttackStateDistance: 10
+  returnToAttackPosition: 1
+  returnToInitalAngularSpeed: 1
 --- !u!114 &2030620166790689653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5311,10 +5315,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6614b8cd57fdcb14a9d6eb88ed76cce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 10
+  startAnimationDistance: 5
   swingAnimationName: Attacking
-  amountOfAttacks: 4
-  speedMultiplier: 1.5
-  cancelAttackDistance: 10
 --- !u!1 &2732794505127664480
 GameObject:
   m_ObjectHideFlags: 0
@@ -34470,6 +34473,7 @@ GameObject:
   - component: {fileID: 8174543074673664527}
   - component: {fileID: 8174543074673664512}
   - component: {fileID: 8174543074673664513}
+  - component: {fileID: 3303927645976899092}
   m_Layer: 10
   m_Name: Sickle
   m_TagString: EnemyWeapon
@@ -37057,5 +37061,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10163a67d75a59e498486d622cd85d6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3303927645976899092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174543074673664515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

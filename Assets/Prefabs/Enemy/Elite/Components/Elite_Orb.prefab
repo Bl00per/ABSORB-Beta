@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 8840168797588337654}
   - component: {fileID: 1428469120824874813}
   - component: {fileID: 6391154953088306696}
+  - component: {fileID: 5542929824122172101}
   m_Layer: 10
   m_Name: Elite_Orb
   m_TagString: EnemyProjectile
@@ -256,7 +257,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waterHitEffectGO: {fileID: 7243938633558710803}
   waterHitEffect: {fileID: 7368331715292053081}
+  waterParryEffect: {fileID: 0}
   waterHitAudio: {fileID: 1418244907931542846}
+  waterParryAudio: {fileID: 0}
   directionOffset: {x: 0, y: 1.5, z: 0}
   effectTime: 2
 --- !u!82 &1428469120824874813
@@ -451,6 +454,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5542929824122172101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8840168797588337650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3764559341423575694
 PrefabInstance:
   m_ObjectHideFlags: 0

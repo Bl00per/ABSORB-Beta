@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HammerAttack : AIBehaviour
 {
-    // test
     [Header("Properties")]
     public float movementSpeed = 10.0f;
     public float startAnimationDistance = 5.0f;
@@ -51,12 +50,14 @@ public class HammerAttack : AIBehaviour
         _animator.SetBool(swingAnimationName, false);
     }
 
+    // Key Event: Used to transition back into the movement state.
     private void Key_DeactivateSwingAnimation()
     {
         _animator.SetBool(swingAnimationName, false);
         brain.SetBehaviour("Movement");
     }
 
+    // Returns true if the player is moving towards the enemy, or if they aren't moving fast enough to avoid the attack.
     private bool DetermineAttackFromPlayerVelocity()
     {
         Rigidbody rb = enemyHandler.GetPlayerHandler().GetRigidbody();
