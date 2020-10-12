@@ -248,9 +248,9 @@ public class EnemyHandler : MonoBehaviour
 
         // Playing death VFX
         PlayDeathFX();
-
         // Removes the group control over the enemy
         _groupHandler?.Remove(this);
+        EnemyDetection.enemies.Clear();
     }
 
     private void PlayDeathFX()

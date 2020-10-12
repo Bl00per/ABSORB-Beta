@@ -56,6 +56,7 @@ public class EnemyDetection : MonoBehaviour
 
             if (!enemies.Contains(other.transform))
             {
+               
                 enemies.Add(other.transform);
                 
             }

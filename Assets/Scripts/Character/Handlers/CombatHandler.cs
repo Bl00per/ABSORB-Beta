@@ -34,6 +34,7 @@ public class CombatHandler : MonoBehaviour
     private Rigidbody _rigidbody;
     private Transform _transform;
     private Animator _animator;
+    private Rigidbody _rb;
 
     // Start is called before first frame
     private void Start()
@@ -44,7 +45,7 @@ public class CombatHandler : MonoBehaviour
         _transform = _playerHandler.GetTransform();
         _animator = _playerHandler.GetAnimator();
         _inputManager = _playerHandler.GetInputManager();
-
+        _rb = this.GetComponent<Rigidbody>();
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
         shieldState = ShieldState.Default;
@@ -54,6 +55,8 @@ public class CombatHandler : MonoBehaviour
         _tempShieldCDTimer = shieldCooldown;
 
         currentTimeScale = Time.timeScale;
+
+        enemy = null;
     }
 
     // Update is called once per frame
@@ -71,15 +74,20 @@ public class CombatHandler : MonoBehaviour
     public float minTimeBetweenAttack = 0.05f;
     public float maxTimeBetweenAttack = 1.0f;
     private float _attackTimer = 0.0f;
+    public float attackRotSpeed;
     private bool _runAttackTimer = false;
     private bool _comboStart = true;
-
+    private bool _attacking;
+    private Transform enemy;
+    public GameObject lockOnGO;
     private void UpdateAttack()
     {
+        EnemyDetector();
         if (_comboStart)
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
             {
+                _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
                 _comboStart = false;
@@ -99,6 +107,33 @@ public class CombatHandler : MonoBehaviour
 
     }
 
+    public void EnemyDetector()
+    {
+        enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
+
+        if (_attacking) //if the player is attacking
+        {
+            if (enemy != null) //if an enemy is within range
+            {
+                lockOnGO.transform.position = enemy.position;
+                lockOnGO.SetActive(true);
+
+                Vector3 direction = enemy.transform.position - _rb.transform.position;
+                direction.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(direction);
+                _rb.transform.rotation = Quaternion.Lerp(_rb.transform.rotation, rotation, attackRotSpeed * Time.deltaTime);
+            }
+            else // if an enemy is not in range
+            {
+                lockOnGO.SetActive(false);
+            }
+        }
+        else // if the player is not attacking
+        {
+            lockOnGO.SetActive(false);
+        }
+    }
+
     public float GetAttackTimer()
     {
         return _attackTimer;
@@ -111,6 +146,7 @@ public class CombatHandler : MonoBehaviour
 
     public void AttackComboFinish()
     {
+        _attacking = false;
         _comboStart = true;
         _animator.SetInteger("ComboNo.", 0);
         _animator.SetBool("Attack1", false);
