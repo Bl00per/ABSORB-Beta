@@ -17,7 +17,7 @@ public class EnemyHandler : MonoBehaviour
     [Header("Damage FX")]
     public ParticleSystem damageEffect;
     public AudioSource damageEffectAudio;
-    
+
 
     [Header("Parry FX")]
     public bool hasParryEffect = false;
@@ -35,7 +35,7 @@ public class EnemyHandler : MonoBehaviour
     public float overallFXTime = 1.0f;
 
     [Header("References")]
-    public SkinnedMeshRenderer bodyMeshRenderer;
+    public SkinnedMeshRenderer[] bodyMeshRenderer;
     public SkinnedMeshRenderer weaponMeshRenderer;
     public Collider weaponCollider;
     public AudioSource attackSFX;
@@ -85,7 +85,7 @@ public class EnemyHandler : MonoBehaviour
             _specialParried = this.GetComponent<SpecialParried>();
 
         // Get the particle parent
-        if(hasParryEffect)
+        if (hasParryEffect)
             _parryParticleParent = parryEffect.transform.parent;
     }
 
@@ -134,9 +134,9 @@ public class EnemyHandler : MonoBehaviour
     {
         if (hasParryEffect)
         {
-            if(!parryEffect.gameObject.activeInHierarchy)
+            if (!parryEffect.gameObject.activeInHierarchy)
                 parryEffect.gameObject.SetActive(true);
-                
+
             parryEffect.transform.SetParent(null);
             parryEffect.Play();
             parryAudio.Play();
@@ -212,7 +212,10 @@ public class EnemyHandler : MonoBehaviour
             _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
-            bodyMeshRenderer.enabled = true;
+            foreach (SkinnedMeshRenderer mesh in bodyMeshRenderer)
+            {
+                mesh.enabled = true;
+            }
             _bodyCollider.enabled = true;
             _animator.enabled = true;
             _navMeshAgent.enabled = true;
@@ -225,7 +228,10 @@ public class EnemyHandler : MonoBehaviour
             _isAlive = false;
             _aiBrain.enabled = false;
             _rigidbody.isKinematic = true;
-            bodyMeshRenderer.enabled = false;
+            foreach (SkinnedMeshRenderer mesh in bodyMeshRenderer)
+            {
+                mesh.enabled = false;
+            }
             _bodyCollider.enabled = false;
             _animator.enabled = false;
             _navMeshAgent.enabled = false;
@@ -259,7 +265,7 @@ public class EnemyHandler : MonoBehaviour
         cam.StartCoroutine(ReparentVFX());
     }
 
-public void Reset()
+    public void Reset()
     {
         _aiBrain.SetBehaviour("Idle");
         _currentHealth = maxHealth;
