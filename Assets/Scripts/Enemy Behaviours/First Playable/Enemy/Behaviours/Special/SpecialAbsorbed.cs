@@ -61,7 +61,7 @@ public class SpecialAbsorbed : AIBehaviour
         absorbSoundEffect.Play();
         absorbParticleEffect.Play();
         absorbGameObject.SetActive(true);
-        absorbGameObject.transform.SetParent(null);
+        //absorbGameObject.transform.SetParent(null);
     }
 
     public override void OnStateExit() { }

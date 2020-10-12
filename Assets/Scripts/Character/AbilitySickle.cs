@@ -33,9 +33,9 @@ public class AbilitySickle : Ability
     }
     public void Key_ActivateSickleAbility()
     {
-        
+
         sickleGameObject.SetActive(true);
-        
+
     }
     public void Key_DeactivateSickleAbility()
     {
@@ -43,5 +43,20 @@ public class AbilitySickle : Ability
         sickleGameObject.SetActive(false);
         abilityHandler.SetAbility(AbilityHandler.AbilityType.NONE);
     }
+    public void Key_sickleSFX()
+    {
+         sickleSFX.Play();
+    }
+
+    public void Key_SetSickleCollider()
+    {
+        sickleCollider.enabled = true;
+    }
+    
+    public void Key_UnsetSickleCollider()
+    {
+        sickleCollider.enabled = false;
+    }
+
 
 }

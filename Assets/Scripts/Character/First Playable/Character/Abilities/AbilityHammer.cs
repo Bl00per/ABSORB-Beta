@@ -8,6 +8,7 @@ public class AbilityHammer : Ability
     public GameObject hammerGameObject;
     public Transform groundSmashTransform;
     public Transform impactLocation;
+    public AudioSource hammerGrunt;
 
     [Header("Properties")]
     public float groundSmashReparentTimer = 2.0f;
@@ -72,6 +73,12 @@ public class AbilityHammer : Ability
         // Check for any hits
         CheckForEnemyHit();
         active = false;
+    }
+
+    public void Key_HammerGruntSFX()
+    {
+        hammerGrunt.pitch = Random.Range(0.5f, 0.7f);
+        hammerGrunt.Play();
     }
 
     private IEnumerator ReparentGroundSmash()
