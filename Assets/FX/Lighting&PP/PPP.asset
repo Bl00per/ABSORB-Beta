@@ -19,7 +19,7 @@ MonoBehaviour:
     m_Value: {fileID: 2800000, guid: 55a79a92462632c49ac61fce034f0527, type: 3}
   contribution:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0.56
     min: 0
     max: 1
 --- !u!114 &-7985863481487998446
@@ -34,7 +34,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
   m_Name: Vignette
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   color:
     m_OverrideState: 1
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
   m_Name: Tonemapping
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
@@ -140,11 +140,11 @@ MonoBehaviour:
   m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 1
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 3.09
     min: 0
   scatter:
     m_OverrideState: 0
@@ -183,11 +183,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
   m_Name: DepthOfField
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   gaussianStart:
     m_OverrideState: 1
     m_Value: 1946.95
@@ -215,7 +215,7 @@ MonoBehaviour:
     max: 32
   focalLength:
     m_OverrideState: 1
-    m_Value: 55
+    m_Value: 116
     min: 1
     max: 300
   bladeCount:
