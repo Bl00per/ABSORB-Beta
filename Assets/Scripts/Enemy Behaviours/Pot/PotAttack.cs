@@ -29,13 +29,18 @@ public class PotAttack : AIBehaviour
     public override void OnStateEnter()
     {
         _animator.SetBool("Attacking", true);
-/*        waterFireEffect.Play();
-        EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
-        eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
-        StartCoroutine(JustFiredTimer());*/
+
+        enemyHandler.GetBrain().GetNavMeshAgent().isStopped = true;
+        /*        waterFireEffect.Play();
+                EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
+                eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
+                StartCoroutine(JustFiredTimer());*/
     }
 
-    public override void OnStateExit() { }
+    public override void OnStateExit()
+    {
+        enemyHandler.GetBrain().GetNavMeshAgent().isStopped = false;
+    }
 
     public override void OnStateFixedUpdate() { }
 
@@ -50,22 +55,20 @@ public class PotAttack : AIBehaviour
 
         // Rotate to face direction
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), turnSpeed);
-        
+
     }
 
     public IEnumerator JustFiredTimer()
     {
         yield return new WaitForSecondsRealtime(justFiredProjectileTimer);
         if (!brain.GetHandler().IsParried())
-        {
-            _animator.SetBool("Attacking", false);
             brain.SetBehaviour("Movement");
-        }
     }
 
     public void key_FireProjectile()
     {
         //waterFireEffect.Play();
+        _animator.SetBool("Attacking", false);
         EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
         eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
         StartCoroutine(JustFiredTimer());
@@ -79,7 +82,7 @@ public class PotAttack : AIBehaviour
 
     public IEnumerator Charging()
     {
-        yield return new WaitForSecondsRealtime (1f);
+        yield return new WaitForSecondsRealtime(1f);
         fakePrefab.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         fakePrefab.SetActive(false);
     }

@@ -25,6 +25,8 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
+    [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
+    public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
@@ -96,7 +98,6 @@ public class CombatHandler : MonoBehaviour
             AttackComboFinish();
 
     }
-
 
     public float GetAttackTimer()
     {
@@ -191,25 +192,57 @@ public class CombatHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("EnemyWeapon"))
+
+        // REWORK: Instead of comparing tags and getting the components to different things;
+        // create a EnemyWeapon script that will hold the enemy within. This saves going up the chain finding stuff;
+        // and also means we need no else if statments
+
+        if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
+
+            if(!enemy)
+            {
+                Debug.LogError("ENEMY IS NULL! SHOULD NOT BE");
+            }
+            
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
                 enemy.weaponCollider.enabled = false;
             }
         }
-        
-        else if(other.gameObject.CompareTag("EnemyProjectile"))
-        {
-            EnemyHandler enemy = other.gameObject.GetComponent<EliteProjectile>().GetHandler();
-            if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
-            {
-                _playerHandler.TakeDamage(enemy.GetDamage());
-                enemy.weaponCollider.enabled = false;
-            }
-        }
+
+
+        // if (other.gameObject.CompareTag("EnemyWeapon"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
+
+        // else if (other.gameObject.CompareTag("EnemyProjectile"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponent<EliteProjectile>().GetHandler();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
+
+        // else if (other.gameObject.CompareTag("EnemyMinion"))
+        // {
+        //     EnemyHandler enemy = other.gameObject.GetComponentInParent<EnemyHandler>();
+        //     if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        //     {
+        //         _playerHandler.TakeDamage(enemy.GetDamage());
+        //         enemy.weaponCollider.enabled = false;
+        //     }
+        // }
     }
 
     #endregion
@@ -351,7 +384,7 @@ public class CombatHandler : MonoBehaviour
         // Make the player fade away as they take damage
         playerShader.material.SetFloat("_AlphaClip", _playerHandler.GetCurrentHealth());
         // Temp to force the player dead
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.Backspace) && debugDeath)
         {
             _playerHandler.SetIsAlive(false);
             _animator.SetBool("Death", true);

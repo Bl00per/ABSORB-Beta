@@ -159,6 +159,12 @@ public class InputManager : MonoBehaviour
         return _isUsingController;
     }
 
+    // Toggle the isUsingContrller bool
+    public void ManualUpdateController()
+    {
+        _isUsingController = !_isUsingController;
+    }
+
     public Vector2 GetMovementDirectionFromInput()
     {
         if (!GetInputDisabled())

@@ -88,7 +88,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 766877272234327275}
   m_LocalRotation: {x: -3.4694473e-17, y: 2.7755576e-17, z: 1.124e-41, w: 1}
-  m_LocalPosition: {x: -0.0019665342, y: -0.000090548405, z: -0.11354061}
+  m_LocalPosition: {x: 0.0014181319, y: -0.000090548405, z: -0.11540474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1309128590141360753}
@@ -218,7 +218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2493424233569691995}
   m_LocalRotation: {x: -3.469446e-17, y: -3.245622e-10, z: -2.2521016e-27, w: 1}
-  m_LocalPosition: {x: -0.10285764, y: 0.081911065, z: -0.0748683}
+  m_LocalPosition: {x: -0.10285764, y: 0.08539069, z: -0.0748683}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1309128590141360753}
@@ -248,7 +248,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2706629529017345275}
   m_LocalRotation: {x: -2.7755576e-17, y: -0.1872002, z: 7.695412e-26, w: 0.9823218}
-  m_LocalPosition: {x: -0.96960664, y: -0.00067462673, z: -0.19711232}
+  m_LocalPosition: {x: -1.0101315, y: -0.00067462673, z: -0.23261124}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1434751656060451542}
@@ -280,7 +280,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2998001059824309835}
   m_LocalRotation: {x: -3.4694473e-17, y: 2.7755576e-17, z: 1.124e-41, w: 1}
-  m_LocalPosition: {x: -0.10314547, y: -0.07815795, z: -0.07712604}
+  m_LocalPosition: {x: -0.10314547, y: -0.08214979, z: -0.07712604}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1309128590141360753}
@@ -10092,7 +10092,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3745346542769022801}
-  m_LocalRotation: {x: 1.2438775e-16, y: -0.19790466, z: 9.457554e-17, w: 0.98022133}
+  m_LocalRotation: {x: 1.1102228e-16, y: -0.31123105, z: -1.7347231e-16, w: 0.9503343}
   m_LocalPosition: {x: -0.15691672, y: -2.810826e-17, z: -1.4210854e-16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -10124,7 +10124,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3811947290857340591}
   m_LocalRotation: {x: -5.551115e-17, y: 2.6020852e-18, z: 1.686e-42, w: 1}
-  m_LocalPosition: {x: -0.009341707, y: 0.000020756239, z: -0.07828623}
+  m_LocalPosition: {x: -0.015359132, y: 0.000020756239, z: -0.07842867}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8083940517772922242}
@@ -10143,15 +10143,14 @@ GameObject:
   - component: {fileID: 3862423504091585034}
   - component: {fileID: 4399012327263053344}
   - component: {fileID: 4259899960259495436}
-  - component: {fileID: 3593453364837397834}
-  - component: {fileID: 7681235080657279104}
+  - component: {fileID: 1622808860281067517}
   m_Layer: 10
   m_Name: MinionWeapon
   m_TagString: EnemyWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3862423504091585037
 Transform:
   m_ObjectHideFlags: 0
@@ -10279,95 +10278,28 @@ AudioSource:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3862423504091585036}
   m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 9040854011744907762, guid: a866300788c228548b9e48e2c5a1839b,
-    type: 2}
-  m_audioClip: {fileID: 8300000, guid: 425880a2b040c5b438fdbfd7fd0a9b2d, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.9
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4ee8f8a769d697c4c83f5354d072e313, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1622808860281067517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3862423504091585036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3890974041245098600
 GameObject:
   m_ObjectHideFlags: 0
@@ -10522,7 +10454,7 @@ NavMeshAgent:
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 300
-  m_StoppingDistance: 3
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -10543,7 +10475,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 1a2cabb840704704ea2e995b588bd930, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -10574,8 +10506,8 @@ MonoBehaviour:
   bodyMeshRenderer: {fileID: 8868169853625625682}
   weaponMeshRenderer: {fileID: 3593453364837397834}
   weaponCollider: {fileID: 4399012327263053344}
-  attackSFX: {fileID: 7681235080657279104}
-  attackPE: {fileID: 5012530999274022523}
+  attackSFX: {fileID: 0}
+  attackPE: {fileID: 0}
   typeOfEnemy: 0
   typeOfAbility: 0
   maxHealth: 75
@@ -10837,7 +10769,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5448303300751451289}
-  m_LocalRotation: {x: 6.245005e-17, y: 0.2065813, z: 2.3444608e-23, w: 0.97842944}
+  m_LocalRotation: {x: 9.71445e-17, y: 0.27702522, z: 8.95111e-25, w: 0.96086264}
   m_LocalPosition: {x: -0.17969471, y: 8.169238e-17, z: 2.9132252e-15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -68752,7 +68684,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7040750707280600041}
-  m_LocalRotation: {x: 7.653493e-17, y: 0.95575887, z: -7.653493e-17, w: 0.2941513}
+  m_LocalRotation: {x: 8.132252e-17, y: 0.9070286, z: -8.132252e-17, w: 0.42106903}
   m_LocalPosition: {x: 0.056248024, y: 0.00067462673, z: 0.007070043}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -83428,7 +83360,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8927181647369622593}
-  m_LocalRotation: {x: 1.3530085e-16, y: -0.24886648, z: 3.05511e-16, w: 0.9685378}
+  m_LocalRotation: {x: 1.6653344e-16, y: -0.3786227, z: 2.879641e-16, w: 0.9255511}
   m_LocalPosition: {x: -0.15939891, y: -3.4205033e-17, z: -1.4210854e-16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
