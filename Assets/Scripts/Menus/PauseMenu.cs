@@ -74,19 +74,7 @@ public class PauseMenu : MonoBehaviour
 
         if (Paused)
         {
-            // Check if first selected is null
-
-            // Show the cursor if the user changes to mouse
-            if (!_inputManager.GetIsUsingController())
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+            ControllerRecognition();
 
             // Highlight the volume bar instead of the handle when it is highlighted
             if (settingsMenu.activeInHierarchy)
@@ -166,6 +154,33 @@ public class PauseMenu : MonoBehaviour
         quitPopup.SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(quitGameButton);
+    }
+
+    private void ControllerRecognition()
+    {
+        // Show or hide the cursor during Pause depending on controller status and update in realtime
+        if (_inputManager.GetIsUsingController())
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            // If the selected button is ever set to null when using controller
+            if (pauseMenu.activeInHierarchy && EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
+            }   // If you lose the selected button in the settings menu
+            else if (settingsMenu.activeInHierarchy && EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(settingFirstSelectedButton);
+            }
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     #endregion

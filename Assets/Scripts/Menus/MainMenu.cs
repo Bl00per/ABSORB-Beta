@@ -28,6 +28,7 @@ public class MainMenu : MonoBehaviour
     private PlayerHandler _playerHandler;
     private LocomotionHandler _locomotionHandler;
     private CombatHandler _combatHandler;
+    private InputManager _inputManager;
     private ReadWriteText _readWrite;
     private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null;
     [HideInInspector]
@@ -42,6 +43,7 @@ public class MainMenu : MonoBehaviour
         _locomotionHandler = _playerHandler.GetLocomotionHandler();
         _combatHandler = _playerHandler.GetCombatHandler();
         _readWrite = GetComponent<ReadWriteText>();
+        _inputManager = FindObjectOfType<InputManager>();
         inMainMenu = true;
         mainSettingsMenu.SetActive(false);
 
@@ -71,6 +73,8 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
+        ControllerRecognition();
+
         if (mainSettingsMenu.activeInHierarchy)
         {
             GameObject temp = EventSystem.current.currentSelectedGameObject;
@@ -121,6 +125,32 @@ public class MainMenu : MonoBehaviour
         mainMenu.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(settingsClosedButton);
+    }
+
+    private void ControllerRecognition()
+    {
+        // Show or hide the cursor during Pause depending on controller status and update in realtime
+        if (_inputManager.GetIsUsingController())
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            // If the selected button is ever set to null when using controller
+            if (mainMenu.activeInHierarchy && EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(mainMenuFirstSelectedButton);
+            }   // If you lose the selected button in the settings menu
+            else if (mainSettingsMenu.activeInHierarchy && EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                EventSystem.current.SetSelectedGameObject(settingsFirstSelectedButton);
+            }
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     // Set all the settings for the game on start from the read data file (if it exists)
