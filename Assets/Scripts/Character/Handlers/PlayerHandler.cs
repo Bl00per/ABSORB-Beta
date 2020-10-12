@@ -36,6 +36,7 @@ public class PlayerHandler : MonoBehaviour
     private CombatHandler _combatHandler;
     private InputManager _inputManager;
     private CameraManager _cameraManager;
+    private SimpleCameraShakeInCinemachine _simpleCameraShake;
     private CheckPoint _checkpoints;
     private Vector3 _respawnPosition;
     private CapsuleCollider _capsule;
@@ -63,6 +64,7 @@ public class PlayerHandler : MonoBehaviour
         _combatHandler = this.GetComponent<CombatHandler>();
         _inputManager = FindObjectOfType<InputManager>();
         _cameraManager = FindObjectOfType<CameraManager>();
+        _simpleCameraShake = FindObjectOfType<SimpleCameraShakeInCinemachine>();
         _checkpoints = FindObjectOfType<CheckPoint>();
         _capsule = GetComponent<CapsuleCollider>();
         _currentHealth = maxHealth;
@@ -205,6 +207,7 @@ public class PlayerHandler : MonoBehaviour
     {
         hitParticleSystem.Play();
         hitSFX.Play();
+        _simpleCameraShake.Key_Shake_DAF("0.4|1.0|2.0");
         //collidedObject = null;
         // if (debug)
         //     Debug.Log("Player damage taken: " + damageAmount);
@@ -292,6 +295,7 @@ public class PlayerHandler : MonoBehaviour
 
     #endregion
 
+    [HideInInspector]
     public bool shieldGrowing;
     public void Key_ShieldGrow()
     {
