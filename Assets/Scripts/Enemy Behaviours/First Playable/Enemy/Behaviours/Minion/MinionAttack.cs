@@ -44,7 +44,6 @@ public class MinionAttack : AIBehaviour
         enemyHandler.SetJustAttacked(true); 
         StartCoroutine(enemyHandler.Coroutine_JustAttacked()); 
         _animator.SetBool("Attacking", true); 
-        this.LockDestinationToPlayer(1.0f); 
     } 
  
     public override void OnStateExit() { } 
@@ -56,12 +55,12 @@ public class MinionAttack : AIBehaviour
         // Get direction to player 
         Vector3 dir = brain.GetDirectionToPlayer(); 
  
-        // Checking if we should be locked onto the player or not... 
-        if (this.destinationLockedToPlayer) 
-            this.currentDestination = brain.PlayerTransform.position; 
+        // // Checking if we should be locked onto the player or not... 
+        // if (this.destinationLockedToPlayer) 
+        //     this.currentDestination = brain.PlayerTransform.position; 
  
-        // Updating the target destination every frame 
-        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f); 
+        // // Updating the target destination every frame 
+        // brain.SetDestinationOnCooldown(this.currentDestination, 1.0f); 
  
         // Rotate to face direction 
         if (lookAtPlayer) 
