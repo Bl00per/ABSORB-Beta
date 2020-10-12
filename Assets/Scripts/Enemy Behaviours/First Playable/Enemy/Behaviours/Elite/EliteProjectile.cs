@@ -104,8 +104,8 @@ public class EliteProjectile : MonoBehaviour
 
     public void Cleanup()
     {
+        Destroy(this.gameObject);
         Destroy(waterParryEffect.gameObject, effectTime);
-        Destroy(waterHitEffectGO, effectTime);
         Destroy(this.gameObject, 0.1f);
     }
 }

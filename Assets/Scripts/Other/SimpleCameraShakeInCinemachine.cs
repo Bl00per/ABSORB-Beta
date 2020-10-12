@@ -12,7 +12,8 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
     public float shakeFrequency = 2.0f;         // Cinemachine Noise Profile Parameter
 
     // Cinemachine Shake
-    public CinemachineFreeLook cmFreeCam;
+    private CinemachineFreeLook _currentFreeCam;
+    private CameraManager _cameraManager;
 
     private CinemachineBasicMultiChannelPerlin[] _cinemachineBasicMultiChannelPerlin;
 
@@ -21,7 +22,10 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
         // Creating an array to store the rigs in, to prevent using get component every Shake()
         _cinemachineBasicMultiChannelPerlin = new CinemachineBasicMultiChannelPerlin[3];
         for (int i = 0; i < 3; ++i)
-            _cinemachineBasicMultiChannelPerlin[i] = cmFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            _cinemachineBasicMultiChannelPerlin[i] = _currentFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        _cameraManager = FindObjectOfType<CameraManager>();
+        _currentFreeCam = _cameraManager.GetCurrentCamera();
     }
 
     public void Key_Shake_DAF(string args)
@@ -38,10 +42,10 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
         shakeFrequency = values[2];
         //Debug.Log(values[0]);
 
+        _currentFreeCam = _cameraManager.GetCurrentCamera();
         StartCoroutine(Shake());
-
-
     }
+
     private IEnumerator Shake()
     {
         for (int i = 0; i < 3; ++i)
@@ -60,22 +64,22 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
 
 
 
-        // cmFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
-        // cmFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
-        // cmFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
+        // _currentFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
+        // _currentFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
+        // _currentFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeAmplitude;
 
-        // cmFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
-        // cmFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
-        // cmFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
+        // _currentFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
+        // _currentFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
+        // _currentFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = shakeFrequency;
 
         // yield return new WaitForSeconds(shakeDuration);
-        // cmFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
-        // cmFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
-        // cmFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        // _currentFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        // _currentFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
+        // _currentFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
 
-        // cmFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
-        // cmFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
-        // cmFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+        // _currentFreeCam.GetRig(0).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+        // _currentFreeCam.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+        // _currentFreeCam.GetRig(2).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
 
     }
 

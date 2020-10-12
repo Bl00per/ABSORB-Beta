@@ -418,13 +418,13 @@ public class CombatHandler : MonoBehaviour
         //UnityEngine.SceneManagement.SceneManager.LoadScene("Main_Menu");
     }
 
-    public void key_deathSFX1()
-    {
-        deathSFX1.Play();
-    }
-    public void key_deathSFX2()
-    {
-        deathSFX2.Play();
+    public void key_deathSFX1()
+    {
+        deathSFX1.Play();
+    }
+    public void key_deathSFX2()
+    {
+        deathSFX2.Play();
     }
 
     #endregion
