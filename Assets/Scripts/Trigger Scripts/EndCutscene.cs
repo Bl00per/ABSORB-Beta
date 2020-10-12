@@ -8,6 +8,7 @@ public class EndCutscene : MonoBehaviour
     public GameObject player;
     public CinemachineVirtualCamera cutsceneCamera;
     public float timer;
+    public float timer2;
     public GameObject logoImage;
     public GameObject[] objects;
 
@@ -61,7 +62,7 @@ public class EndCutscene : MonoBehaviour
             gameObject.SetActive(true);
         }
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(timer2);
         logoImage.SetActive(true);
     }
 }
