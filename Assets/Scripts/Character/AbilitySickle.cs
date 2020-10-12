@@ -66,27 +66,5 @@ public class AbilitySickle : Ability
                 other.transform.gameObject.SetActive(false);
           }
     }
-    public void Key_SetSickleCollider()
-    {
-        sickleCollider.enabled = true;
-    
-    }   
-    public void Key_UnsetSickleCollider()
-    {
-        sickleCollider.enabled = false;
-    } 
-    public void Key_sickleSFX()
-    {
-        sickleSFX.pitch = Random.Range(0.8f, 1.2f);
-        sickleSFX.PlayOneShot(sickleSFX.clip);
-    }  
-    
-    private void OnTriggerEnter(Collider other)
-    {
-          if (other.transform.gameObject.layer == LayerMask.NameToLayer("Interactable") && other.gameObject.CompareTag("Vines"))
-          {
-                //Debug.Log("Hit interactable");
-                other.transform.gameObject.SetActive(false);
-          }
-    }
+
 }

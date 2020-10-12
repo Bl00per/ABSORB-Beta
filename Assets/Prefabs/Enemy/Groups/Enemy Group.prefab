@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8440855204748670342
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5158089209357207977}
-  m_Layer: 0
-  m_Name: WanderPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5158089209357207977
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8440855204748670342}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8986742230317161266}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8986742229313089359
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +125,6 @@ Transform:
   m_Children:
   - {fileID: 8986742230425130354}
   - {fileID: 8986742230674938590}
-  - {fileID: 5158089209357207977}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -214,7 +183,7 @@ MonoBehaviour:
   seperationFactor: 0
   alignmentFactor: 0
   moveDistance: 0
-  wanderRadiusCenter: {fileID: 5158089209357207977}
+  wanderRadiusCenter: {fileID: 0}
   updatePathTime: 2
   wanderRadius: 15
 --- !u!114 &8986742230317161231
@@ -252,9 +221,9 @@ MonoBehaviour:
   alignmentFactor: 0
   moveDistance: 0
   returnToChaseDistance: 12
-  minGroupWanderRadius: 5
-  maxGroupWanderRadius: 10
   queueTime: 1
+  returnToPassiveRadiusMin: 10
+  returnToPassiveRadiusMax: 15
 --- !u!114 &8986742230317161265
 MonoBehaviour:
   m_ObjectHideFlags: 0

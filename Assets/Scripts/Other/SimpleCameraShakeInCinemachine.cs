@@ -24,6 +24,11 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
         for (int i = 0; i < 3; ++i)
             _cinemachineBasicMultiChannelPerlin[i] = _currentFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
 
+
+    }
+
+    public void Start()
+    {
         _cameraManager = FindObjectOfType<CameraManager>();
         _currentFreeCam = _cameraManager.GetCurrentCamera();
     }
