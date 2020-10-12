@@ -19,10 +19,7 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
 
     private void Awake()
     {
-        // Creating an array to store the rigs in, to prevent using get component every Shake()
-        _cinemachineBasicMultiChannelPerlin = new CinemachineBasicMultiChannelPerlin[3];
-        for (int i = 0; i < 3; ++i)
-            _cinemachineBasicMultiChannelPerlin[i] = _currentFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
 
 
     }
@@ -30,7 +27,12 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
     public void Start()
     {
         _cameraManager = FindObjectOfType<CameraManager>();
-        _currentFreeCam = _cameraManager.GetCurrentCamera();
+        _currentFreeCam = _cameraManager.GetCurrentCamera();   
+        
+        // Creating an array to store the rigs in, to prevent using get component every Shake()
+        _cinemachineBasicMultiChannelPerlin = new CinemachineBasicMultiChannelPerlin[3];
+        for (int i = 0; i < 3; ++i)
+            _cinemachineBasicMultiChannelPerlin[i] = _currentFreeCam.GetRig(i).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     public void Key_Shake_DAF(string args)
@@ -48,6 +50,7 @@ public class SimpleCameraShakeInCinemachine : MonoBehaviour
         //Debug.Log(values[0]);
 
         _currentFreeCam = _cameraManager.GetCurrentCamera();
+        Debug.Log(_currentFreeCam);
         StartCoroutine(Shake());
     }
 
