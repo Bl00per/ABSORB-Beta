@@ -63,8 +63,7 @@ public class GroupCombat : GroupState
         queueFlag = true;
 
         // Locking the enemies destination to the player, getting them to attack
-        if(_unitSlots[_activeIndex].GetEnemyType() == EnemyHandler.EnemyType.MINION)
-            _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+        //_unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
 
         // Waiting a queue time before proceeding, giving the functionality of a timer
         yield return new WaitForSeconds(queueTime);

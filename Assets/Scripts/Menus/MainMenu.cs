@@ -73,26 +73,29 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        ControllerRecognition();
-
-        if (mainSettingsMenu.activeInHierarchy)
+        if (inMainMenu)
         {
-            GameObject temp = EventSystem.current.currentSelectedGameObject;
-            // I can't use a switch statement for this, I really tried. Forgive me
-            if (temp == masterVolumeSlider.gameObject)
-                _masterSliderFill.color = new Vector4(213f, 0, 217f, 255f);
-            else
-                _masterSliderFill.color = Color.white;
+            ControllerRecognition();
 
-            if (temp == musicVolumeSlider.gameObject)
-                _musicSliderFill.color = new Vector4(213f, 0, 217f, 255f);
-            else
-                _musicSliderFill.color = Color.white;
+            if (mainSettingsMenu.activeInHierarchy)
+            {
+                GameObject temp = EventSystem.current.currentSelectedGameObject;
+                // I can't use a switch statement for this, I really tried. Forgive me
+                if (temp == masterVolumeSlider.gameObject)
+                    _masterSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _masterSliderFill.color = Color.white;
 
-            if (temp == sfxVolumeSlider.gameObject)
-                _sfxSliderFill.color = new Vector4(213f, 0, 217f, 255f);
-            else
-                _sfxSliderFill.color = Color.white;
+                if (temp == musicVolumeSlider.gameObject)
+                    _musicSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _musicSliderFill.color = Color.white;
+
+                if (temp == sfxVolumeSlider.gameObject)
+                    _sfxSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _sfxSliderFill.color = Color.white;
+            }
         }
     }
 

@@ -114,15 +114,18 @@ public class CameraManager : MonoBehaviour
     public void EnableCameraMovement()
     {
         // Set the speed of the cameras back to default
-        if (inputManager.GetControllerConnected())
-        {
-            controllerCamera.m_YAxis.m_MaxSpeed = _tempControllerSpeedY;
-            controllerCamera.m_XAxis.m_MaxSpeed = _tempControllerSpeedX;
-        }
+        controllerCamera.m_YAxis.m_MaxSpeed = _tempControllerSpeedY;
+        controllerCamera.m_XAxis.m_MaxSpeed = _tempControllerSpeedX;
+
+        mouseCamera.m_YAxis.m_MaxSpeed = _tempMouseSpeedY;
+        mouseCamera.m_XAxis.m_MaxSpeed = _tempMouseSpeedX;
+    }
+
+    public CinemachineFreeLook GetCurrentCamera()
+    {
+        if (mouseCamera.Priority > 1)
+            return mouseCamera;
         else
-        {
-            mouseCamera.m_YAxis.m_MaxSpeed = _tempMouseSpeedY;
-            mouseCamera.m_XAxis.m_MaxSpeed = _tempMouseSpeedX;
-        }
+            return controllerCamera;
     }
 }
