@@ -10293,8 +10293,9 @@ AudioSource:
   m_GameObject: {fileID: 3862423504091585036}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 9040854011744907762, guid: a866300788c228548b9e48e2c5a1839b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 425880a2b040c5b438fdbfd7fd0a9b2d, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -10457,7 +10458,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.8
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -10793,8 +10794,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enterAttackStateDistance: 5
-  returnToAttackPosition: 1
-  returnToInitalAngularSpeed: 1
+  retreatDistance: 1
+  returnToAttackPosition: 2
+  returnToInitialAngularSpeed: 2
 --- !u!114 &4165402235293637457
 MonoBehaviour:
   m_ObjectHideFlags: 0
