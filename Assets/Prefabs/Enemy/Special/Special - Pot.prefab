@@ -479,7 +479,9 @@ MonoBehaviour:
   deathSoundLength: 2
   deathParticleEffect: {fileID: 3619682150783865577}
   overallFXTime: 1
-  bodyMeshRenderer: {fileID: 4637594308398444586}
+  bodyMeshRenderer:
+  - {fileID: 4637594308398444586}
+  - {fileID: 1618211037323172584}
   weaponMeshRenderer: {fileID: 1618211037323172584}
   weaponCollider: {fileID: 768858922}
   attackSFX: {fileID: 1231521354}
@@ -574,7 +576,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9c14c090393e94e88562114ce7b177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationPadding: 1
+  enterAttackStateDistance: 10
+  retreatFromPlayerDistance: 7
+  retreatDistance: 6
+  returnToAttackPosition: 1
+  returnToInitialAngularSpeed: 1
 --- !u!114 &1935687146708632264
 MonoBehaviour:
   m_ObjectHideFlags: 0

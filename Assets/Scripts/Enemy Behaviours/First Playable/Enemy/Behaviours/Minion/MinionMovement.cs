@@ -5,6 +5,75 @@ using UnityEngine.AI;
 
 public class MinionMovement : AIBehaviour
 {
+    [Header("Properties")]
+    public float enterAttackStateDistance = 10.0f;
+
+    [Header("Timers")]
+    public float returnToAttackPosition = 1.0f;
+    public float returnToInitalAngularSpeed = 1.0f;
+
+    private Vector3 _attackPosition = Vector3.zero;
+    private float _initialAngularSpeed = 0.0f;
+    private bool _startedRetreat = false;
+
+    private void Start()
+    {
+        // Storing the initial angular speed of the agent
+        _initialAngularSpeed = brain.GetNavMeshAgent().angularSpeed;
+    }
+
+    public override void OnStateEnter()
+    {
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+
+        if (brain.GetLastStateID() == "Attack")
+            this.LockDestinationToPlayer(1.0f);
+    }
+
+    public override void OnStateUpdate()
+    {
+        // Storing the distance to preform multiple checks on
+        float distance = brain.GetDistanceToPlayer();
+
+        
+        // Checking if we should be locked onto the player or not...
+        if (this.destinationLockedToPlayer)
+            this.currentDestination = brain.PlayerTransform.position;
+
+        // Updating the target destination every frame
+        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
+
+        // Check if the enemy has just attacked, if they have then return to their previous position
+        if (enemyHandler.GetJustAttacked())
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+            if (!_startedRetreat)
+                StartCoroutine(Retreat());
+            return;
+        }
+
+        // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
+        if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
+        {
+            _attackPosition = transform.position;
+            brain.SetBehaviour("Attack");
+        }
+    }
+
+    public override void OnStateExit() { }
+
+    public override void OnStateFixedUpdate() { }
+
+    private IEnumerator Retreat()
+    {
+        _startedRetreat = true;
+        brain.GetNavMeshAgent().angularSpeed = 0.0f;
+        yield return new WaitForSeconds(returnToAttackPosition);
+        OverrideDestination(_attackPosition, 1.0f); ;
+        yield return new WaitForSeconds(returnToInitalAngularSpeed);
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+        _startedRetreat = false;
+    }
     /*
 
         Creating a movement state machine to help control each state better;
@@ -39,198 +108,198 @@ public class MinionMovement : AIBehaviour
 
     */
 
-    [Header("Properties")]
-    public float sprintSpeed = 20.0f;
-    public float sprintRange = 20.0f;
-    public float avoidSpeed = 10.0f;
-    [Range(0, 1)]
-    public float avoidChance = 0.2f;
-    public float avoidRadius = 15.0f;
-    public float destinationPadding = 0.5f;
+    // [Header("Properties")]
+    // public float sprintSpeed = 20.0f;
+    // public float sprintRange = 20.0f;
+    // public float avoidSpeed = 10.0f;
+    // [Range(0, 1)]
+    // public float avoidChance = 0.2f;
+    // public float avoidRadius = 15.0f;
+    // public float destinationPadding = 0.5f;
 
-    // The inital speed; set from within the nav mesh component
-    private float _initialSpeed = 0.0f;
+    // // The inital speed; set from within the nav mesh component
+    // private float _initialSpeed = 0.0f;
 
-    // The attack transition range; set from "stopping distance" within the nav mesh component
-    private float _attackRange = 0.0f;
+    // // The attack transition range; set from "stopping distance" within the nav mesh component
+    // private float _attackRange = 0.0f;
 
-    // A flag to determine if the enemy is avoiding or not
-    private bool _isAvoiding = false;
+    // // A flag to determine if the enemy is avoiding or not
+    // private bool _isAvoiding = false;
 
-    // Sub FSM to control the movement states
-    private enum MovementState
-    {
-        NORMAL,
-        SPRINTING,
-        COMBAT_TRANSITION,
-    }
-    private MovementState _currentState;
+    // // Sub FSM to control the movement states
+    // private enum MovementState
+    // {
+    //     NORMAL,
+    //     SPRINTING,
+    //     COMBAT_TRANSITION,
+    // }
+    // private MovementState _currentState;
 
-    // The distance to the player; updated every frame
-    private float _distanceToDestination = 0.0f;
+    // // The distance to the player; updated every frame
+    // private float _distanceToDestination = 0.0f;
 
-    // Called on initialise
-    private void Awake() { }
+    // // Called on initialise
+    // private void Awake() { }
 
-    // Called before first frame
-    private void Start()
-    {
-        // Getting the initial speed from the nav mesh component
-        _initialSpeed = brain.GetNavMeshAgent().speed;
+    // // Called before first frame
+    // private void Start()
+    // {
+    //     // Getting the initial speed from the nav mesh component
+    //     _initialSpeed = brain.GetNavMeshAgent().speed;
 
-        // Getting the attack range from the nav mesh component
-        _attackRange = brain.GetNavMeshAgent().stoppingDistance;
-    }
+    //     // Getting the attack range from the nav mesh component
+    //     _attackRange = brain.GetNavMeshAgent().stoppingDistance;
+    // }
 
-    // Called on enter
-    public override void OnStateEnter()
-    {
-        // Setting the entry state to "normal"
-        _currentState = MovementState.NORMAL;
+    // // Called on enter
+    // public override void OnStateEnter()
+    // {
+    //     // Setting the entry state to "normal"
+    //     _currentState = MovementState.NORMAL;
 
-        // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
-        //this.LockDestinationToPlayer(destinationPadding);
-    }
+    //     // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
+    //     //this.LockDestinationToPlayer(destinationPadding);
+    // }
 
-    // Called every frame
-    public override void OnStateUpdate()
-    {
-        // Updating all FSM logic
-        UpdateLogic();
+    // // Called every frame
+    // public override void OnStateUpdate()
+    // {
+    //     // Updating all FSM logic
+    //     UpdateLogic();
 
-        // Update the FSM
-        switch (_currentState)
-        {
-            case MovementState.NORMAL:
-                UpdateNormalState();
-                break;
+    //     // Update the FSM
+    //     switch (_currentState)
+    //     {
+    //         case MovementState.NORMAL:
+    //             UpdateNormalState();
+    //             break;
 
-            case MovementState.SPRINTING:
-                UpdateSprintingState();
-                break;
+    //         case MovementState.SPRINTING:
+    //             UpdateSprintingState();
+    //             break;
 
-            case MovementState.COMBAT_TRANSITION:
-                UpdateCombatTransition();
-                break;
-        }
-    }
+    //         case MovementState.COMBAT_TRANSITION:
+    //             UpdateCombatTransition();
+    //             break;
+    //     }
+    // }
 
-    // Called every physics
-    public override void OnStateFixedUpdate() { }
+    // // Called every physics
+    // public override void OnStateFixedUpdate() { }
 
-    // Called on exit
-    public override void OnStateExit() { }
+    // // Called on exit
+    // public override void OnStateExit() { }
 
-    // Checks the current distance from the player and determines what state to be in
-    private void UpdateLogic()
-    {
-        // Updating the distance to the final destination
-        _distanceToDestination = brain.GetNavMeshAgent().remainingDistance;
+    // // Checks the current distance from the player and determines what state to be in
+    // private void UpdateLogic()
+    // {
+    //     // Updating the distance to the final destination
+    //     _distanceToDestination = brain.GetNavMeshAgent().remainingDistance;
 
-        // Checking if we should be locked onto the player or not...
-        if (this.destinationLockedToPlayer)
-            this.currentDestination = brain.PlayerTransform.position;
+    //     // Checking if we should be locked onto the player or not...
+    //     if (this.destinationLockedToPlayer)
+    //         this.currentDestination = brain.PlayerTransform.position;
 
-        // If player is out of sprint range;
-        if (_distanceToDestination > sprintRange && _currentState == MovementState.NORMAL)
-        {
-            // Updating the current speed to sprint speed;
-            brain.GetNavMeshAgent().speed = sprintSpeed;
+    //     // If player is out of sprint range;
+    //     if (_distanceToDestination > sprintRange && _currentState == MovementState.NORMAL)
+    //     {
+    //         // Updating the current speed to sprint speed;
+    //         brain.GetNavMeshAgent().speed = sprintSpeed;
 
-            // Setting the current state to sprinting
-            _currentState = MovementState.SPRINTING;
-        }
+    //         // Setting the current state to sprinting
+    //         _currentState = MovementState.SPRINTING;
+    //     }
 
-        // If player is in sprint range;
-        else if (_distanceToDestination < sprintRange && _currentState == MovementState.SPRINTING)
-        {
-            // Updating the current speed to the inital speed
-            brain.GetNavMeshAgent().speed = _initialSpeed;
+    //     // If player is in sprint range;
+    //     else if (_distanceToDestination < sprintRange && _currentState == MovementState.SPRINTING)
+    //     {
+    //         // Updating the current speed to the inital speed
+    //         brain.GetNavMeshAgent().speed = _initialSpeed;
 
-            // Setting the current state to normal
-            _currentState = MovementState.NORMAL;
-        }
+    //         // Setting the current state to normal
+    //         _currentState = MovementState.NORMAL;
+    //     }
 
-        // If player is close enough to attack;
-        else if (_distanceToDestination <= _attackRange)
-        {
-            // If locked onto player, enter the combat transition
-            if (destinationLockedToPlayer)
-            {
-                // Updating the current speed to the inital speed
-                brain.GetNavMeshAgent().speed = _initialSpeed;
+    //     // If player is close enough to attack;
+    //     else if (_distanceToDestination <= _attackRange)
+    //     {
+    //         // If locked onto player, enter the combat transition
+    //         if (destinationLockedToPlayer)
+    //         {
+    //             // Updating the current speed to the inital speed
+    //             brain.GetNavMeshAgent().speed = _initialSpeed;
 
-                // Setting the current state to the combat transtion
-                _currentState = MovementState.COMBAT_TRANSITION;
-            }
-            // If not locked on but close to final destination
-            else
-            {
-                // Currently just locking back onto the player after avoiding;
-                if (_isAvoiding)
-                {
-                    //LockDestinationToPlayer(destinationPadding);
-                    _isAvoiding = false;
-                }
-                else
-                {
-                    // This should be called when the enemy reachs the end position, when they arent targeting the player
-                }
-            }
-        }
-    }
+    //             // Setting the current state to the combat transtion
+    //             _currentState = MovementState.COMBAT_TRANSITION;
+    //         }
+    //         // If not locked on but close to final destination
+    //         else
+    //         {
+    //             // Currently just locking back onto the player after avoiding;
+    //             if (_isAvoiding)
+    //             {
+    //                 //LockDestinationToPlayer(destinationPadding);
+    //                 _isAvoiding = false;
+    //             }
+    //             else
+    //             {
+    //                 // This should be called when the enemy reachs the end position, when they arent targeting the player
+    //             }
+    //         }
+    //     }
+    // }
 
-    // The "Normal" state update
-    private void UpdateNormalState()
-    {
-        brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
-    }
+    // // The "Normal" state update
+    // private void UpdateNormalState()
+    // {
+    //     brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
+    // }
 
-    // The "Sprinting" state update
-    private void UpdateSprintingState()
-    {
-        brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
-    }
+    // // The "Sprinting" state update
+    // private void UpdateSprintingState()
+    // {
+    //     brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
+    // }
 
-    // The "Avoid" state update
-    private void UpdateCombatTransition()
-    {
-        if(enemyHandler.GetJustAttacked())
-            return;
+    // // The "Avoid" state update
+    // private void UpdateCombatTransition()
+    // {
+    //     if(enemyHandler.GetJustAttacked())
+    //         return;
 
-        // Check if the enemy should avoid or attack
-        // For now, just finding a random position around the player and moving to there
-        // Once I have implemented groups, the enemy will avoid according to the groups position.       else
-        if (Random.value <= avoidChance)
-            ForceAvoidState();
-        {
-            // If attack
-            brain.SetBehaviour("Attack");
-            ForceAvoidState();
-        }
-    }
+    //     // Check if the enemy should avoid or attack
+    //     // For now, just finding a random position around the player and moving to there
+    //     // Once I have implemented groups, the enemy will avoid according to the groups position.       else
+    //     if (Random.value <= avoidChance)
+    //         ForceAvoidState();
+    //     {
+    //         // If attack
+    //         brain.SetBehaviour("Attack");
+    //         ForceAvoidState();
+    //     }
+    // }
 
-    // Forces the avoid function
-    // TODO: Make this check if the destination is on the same Y or something
-    // because the minion can run all the way down a platform when trying to avoid
-    public void ForceAvoidState()
-    {
-        _isAvoiding = true;
-        this.OverrideDestination(GetRandomizedPositionAroundCenter(brain.PlayerTransform.position, avoidRadius), 1.0f);
-    }
+    // // Forces the avoid function
+    // // TODO: Make this check if the destination is on the same Y or something
+    // // because the minion can run all the way down a platform when trying to avoid
+    // public void ForceAvoidState()
+    // {
+    //     _isAvoiding = true;
+    //     this.OverrideDestination(GetRandomizedPositionAroundCenter(brain.PlayerTransform.position, avoidRadius), 1.0f);
+    // }
 
-    // Returns a randomized position from the radius around the center of an object
-    // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
-    private Vector3 GetRandomizedPositionAroundCenter(Vector3 center, float radius)
-    {
-        // create random angle between 0 to 360 degrees 
-        float ang = Random.value * 360;
-        Vector3 pos = Vector3.zero;
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.y = center.y + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        pos.z = center.z;
-        return pos;
-    }
+    // // Returns a randomized position from the radius around the center of an object
+    // // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
+    // private Vector3 GetRandomizedPositionAroundCenter(Vector3 center, float radius)
+    // {
+    //     // create random angle between 0 to 360 degrees 
+    //     float ang = Random.value * 360;
+    //     Vector3 pos = Vector3.zero;
+    //     pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+    //     pos.y = center.y + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+    //     pos.z = center.z;
+    //     return pos;
+    // }
 
     /*
     [Header("General Movement")]
