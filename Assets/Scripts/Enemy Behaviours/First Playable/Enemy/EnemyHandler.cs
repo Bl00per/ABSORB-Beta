@@ -17,7 +17,7 @@ public class EnemyHandler : MonoBehaviour
     [Header("Damage FX")]
     public ParticleSystem damageEffect;
     public AudioSource damageEffectAudio;
-    
+
 
     [Header("Parry FX")]
     public bool hasParryEffect = false;
@@ -85,7 +85,7 @@ public class EnemyHandler : MonoBehaviour
             _specialParried = this.GetComponent<SpecialParried>();
 
         // Get the particle parent
-        if(hasParryEffect)
+        if (hasParryEffect)
             _parryParticleParent = parryEffect.transform.parent;
     }
 
@@ -134,9 +134,9 @@ public class EnemyHandler : MonoBehaviour
     {
         if (hasParryEffect)
         {
-            if(!parryEffect.gameObject.activeInHierarchy)
+            if (!parryEffect.gameObject.activeInHierarchy)
                 parryEffect.gameObject.SetActive(true);
-                
+
             parryEffect.transform.SetParent(null);
             parryEffect.Play();
             parryAudio.Play();
@@ -256,17 +256,17 @@ public class EnemyHandler : MonoBehaviour
 
         // Reparenting the VFX after N amount of time
         var cam = Camera.main.GetComponent<MonoBehaviour>();
-        cam.StartCoroutine(ReparentVFX());
+        cam.StartCoroutine(ReparentDeathVFX());
     }
 
-public void Reset()
+    public void Reset()
     {
         _aiBrain.SetBehaviour("Idle");
         _currentHealth = maxHealth;
         _isAlive = true;
     }
 
-    private IEnumerator ReparentVFX()
+    private IEnumerator ReparentDeathVFX()
     {
         yield return new WaitForSeconds(overallFXTime);
         deathParticleEffect.transform.SetParent(this.gameObject.transform);
