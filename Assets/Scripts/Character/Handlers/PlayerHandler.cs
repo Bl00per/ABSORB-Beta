@@ -297,12 +297,19 @@ public class PlayerHandler : MonoBehaviour
 
     [HideInInspector]
     public bool shieldGrowing;
-    public void Key_ShieldGrow()
-    {
-        shieldGrowing = true;
-    }
-    public void Key_ShieldShrink()
-    {
-        shieldGrowing = false;
+    public void Key_ShieldGrow()
+
+    {
+
+        shieldGrowing = true;
+
+    }
+
+    public void Key_ShieldShrink()
+
+    {
+
+        shieldGrowing = false;
+
     }
 }

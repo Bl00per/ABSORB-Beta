@@ -9,8 +9,7 @@ public class GroupCombat : GroupState
 
     [Header("Unit Slotting Properties")]
     public float queueTime = 1.5f;
-    public int returnToPassiveRadiusMin = 10;
-    public int returnToPassiveRadiusMax = 15;
+    public float circleRadius = 7.5f;
 
     private bool queueFlag = false;
     private int _activeIndex = 0;
@@ -31,7 +30,7 @@ public class GroupCombat : GroupState
         if (!queueFlag && _unitSlots.Count > 0)
             StartCoroutine(QueueAttack());
 
-        // Iterating over each of the passive enemies
+        // Iterating over each of the passive enemies (Currently only doing this for minions)
         for (int i = 0; i < _unitSlots.Count; ++i)
         {
             // Continuing loop if the active index is equal to the iterator
@@ -41,6 +40,9 @@ public class GroupCombat : GroupState
             // Get the enemy brain at this index
             AIBrain aiBrain = _unitSlots[i].GetBrain();
 
+            if(aiBrain.GetHandler().GetEnemyType() != EnemyHandler.EnemyType.MINION)
+                return;
+
             // Forcing the enemy to face the player
             _positionFix = aiBrain.PlayerTransform.position;
             _positionFix.y = aiBrain.transform.position.y;
@@ -49,7 +51,7 @@ public class GroupCombat : GroupState
             //Vector3 position = GetPassivePosition(aiBrain.PlayerTransform.position, Random.Range(returnToPassiveRadiusMin, returnToPassiveRadiusMax));
 
             // Moving enemy to a new passive position
-            //aiBrain.GetAIBehaviour("Movement").OverrideDestination(position, 1.0f);
+            aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, aiBrain.PlayerTransform.position, i), 1.0f);
         }
     }
 
@@ -63,7 +65,7 @@ public class GroupCombat : GroupState
         queueFlag = true;
 
         // Locking the enemies destination to the player, getting them to attack
-        if(_unitSlots[_activeIndex].GetEnemyType() == EnemyHandler.EnemyType.MINION)
+        if (_unitSlots[_activeIndex].GetEnemyType() == EnemyHandler.EnemyType.MINION)
             _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
 
         // Waiting a queue time before proceeding, giving the functionality of a timer
@@ -122,13 +124,10 @@ public class GroupCombat : GroupState
             _activeIndex++;
     }
 
-    private Vector3 GetPassivePosition(Vector3 center, float radius)
+    public Vector3 GetPositionAroundPoint(AIBrain enemy, Vector3 position, int index)
     {
-        float ang = Random.value * 90;
-        Vector3 pos = Vector3.zero;
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.y = center.y;
-        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        return pos;
+        float degreesPerIndex = 360f / this.enemyGroupHandler.GetEnemies().Count;
+        var offset = new Vector3(0f, 0f, circleRadius);
+        return position + (Quaternion.Euler(new Vector3(0f, degreesPerIndex * index, 0f)) * offset);
     }
 }
