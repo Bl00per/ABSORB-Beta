@@ -5,7 +5,7 @@ using UnityEngine;
 public class HammerMovement : AIBehaviour
 {
     [Header("Properties")]
-    public float enterAttackStateDistance = 10.0f;
+    public float enterAttackStateDistance = 2.0f;
 
     [Header("Timers")]
     public float returnToAttackPosition = 1.0f;

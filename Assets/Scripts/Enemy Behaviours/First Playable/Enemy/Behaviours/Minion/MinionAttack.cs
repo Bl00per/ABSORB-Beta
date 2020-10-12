@@ -42,16 +42,12 @@ public class MinionAttack : AIBehaviour
     public override void OnStateEnter()
     {
         enemyHandler.SetJustAttacked(true);
+        StartCoroutine(enemyHandler.Coroutine_JustAttacked());
         _animator.SetBool("Attacking", true);
+        this.LockDestinationToPlayer(1.0f);
     }
 
-    public override void OnStateExit()
-    {
-        
-        _animator.SetBool("Attacking", false);
-        // _hasAttacked = false;
-        //_canAttack = false;
-    }
+    public override void OnStateExit() { }
 
     public override void OnStateFixedUpdate() { }
 
@@ -60,16 +56,23 @@ public class MinionAttack : AIBehaviour
         // Get direction to player
         Vector3 dir = brain.GetDirectionToPlayer();
 
+        // Checking if we should be locked onto the player or not...
+        if (this.destinationLockedToPlayer)
+            this.currentDestination = brain.PlayerTransform.position;
+
+        // Updating the target destination every frame
+        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
+
         // Rotate to face direction
         if (lookAtPlayer)
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
     }
-   
+
     // Deactivates the collision check on the enemy's weapon
     public void Key_DeactivateMinionAttack()
     {
         weaponToEnable.SetActive(false);
-
+        _animator.SetBool("Attacking", false);
         //_canAttack = false;
         brain.SetBehaviour("Movement");
     }
