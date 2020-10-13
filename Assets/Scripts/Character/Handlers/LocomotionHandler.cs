@@ -231,6 +231,7 @@ public class LocomotionHandler : MonoBehaviour
     private float _tempPlayerAcceleration;
     private bool _resetPlayerAcceleration = false;
 
+  
 
     // Updates the slowdown
     public void UpdateSlowdownFSM()
@@ -252,6 +253,8 @@ public class LocomotionHandler : MonoBehaviour
     private void SlowdownPlayer()
     {
         _currentAcceleration = Mathf.SmoothDamp(_currentAcceleration, maxSlowAcceleration, ref _speedSmoothVelocity, timeToAcceleration);
+
+        
     }
 
     private void SpeedUpPlayer()
@@ -313,14 +316,8 @@ public class LocomotionHandler : MonoBehaviour
     {
         if (_inputManager.GetDashButtonPress() && _canDash && _playerHandler.GetCombatHandler().shieldState != CombatHandler.ShieldState.Shielding)
         {
-            _initialVelocity = _rigidbody.velocity;
-            _initialPosition = transform.position;
-            _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
             _animator.SetBool("Dash", true);
-            dashPE.Play();
-            dashSFX.Play();
-            _canDash = false;
-            StartCoroutine(CoolDownSequence());
+
         }
 
         if (!_canDash)
@@ -353,6 +350,17 @@ public class LocomotionHandler : MonoBehaviour
         _animator.SetBool("Dash", false);
         _canDash = true;
         _haveReset = false;
+    }
+
+    public void Key_Dash()
+    {
+            _initialVelocity = _rigidbody.velocity;
+            _initialPosition = transform.position;
+            _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
+            dashPE.Play();
+            dashSFX.Play();
+            _canDash = false;
+            StartCoroutine(CoolDownSequence());
     }
 
     #endregion

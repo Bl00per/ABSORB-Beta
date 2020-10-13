@@ -77,7 +77,7 @@ public class PlayerHandler : MonoBehaviour
         SetRespawnPosition(this._transform.position);
         foreach (SkinnedMeshRenderer mesh in abidaroMesh)
         {
-            mesh.enabled = true;
+           // mesh.enabled = true;
         }
         respawnParticle.SetActive(false);
     }
