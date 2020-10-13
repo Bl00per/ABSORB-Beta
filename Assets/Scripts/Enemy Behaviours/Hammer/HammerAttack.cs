@@ -8,13 +8,21 @@ public class HammerAttack : AIBehaviour
     public float movementSpeed = 10.0f;
     public float startAnimationDistance = 5.0f;
     public string swingAnimationName = "Attacking";
+    public float reparentVFXTime = 1.5f;
+    public ParticleSystem groundHitParticleSystem;
+    private Transform _psParent;
 
     private Animator _animator;
     private float _initialSpeed = 0.0f;
+    private Vector3 groundHitPSPos;
+    private Quaternion groundHitPSRot;
 
     private void Awake()
     {
         _animator = this.GetComponent<Animator>();
+        groundHitPSPos = groundHitParticleSystem.transform.localPosition;
+        groundHitPSRot = groundHitParticleSystem.transform.localRotation;
+        _psParent = groundHitParticleSystem.transform.parent;
     }
 
     private void Start()
@@ -57,6 +65,13 @@ public class HammerAttack : AIBehaviour
         brain.SetBehaviour("Movement");
     }
 
+    // Key Event: Used to unparent the VFX
+    private void Key_UnparentGroundSmashVFX()
+    {
+        groundHitParticleSystem.transform.SetParent(null);
+        StartCoroutine(ReparentGroundHitVFX());
+    }
+
     // Returns true if the player is moving towards the enemy, or if they aren't moving fast enough to avoid the attack.
     private bool DetermineAttackFromPlayerVelocity()
     {
@@ -69,6 +84,14 @@ public class HammerAttack : AIBehaviour
             float dot = Vector3.Dot(transform.forward, rbDir);
             return Vector3.Dot(transform.forward, rbDir) < 0.0F;
         }
+    }
+
+    private IEnumerator ReparentGroundHitVFX()
+    {
+        yield return new WaitForSeconds(reparentVFXTime);
+        groundHitParticleSystem.transform.SetParent(_psParent);
+        groundHitParticleSystem.transform.localPosition = groundHitPSPos;
+        groundHitParticleSystem.transform.localRotation = groundHitPSRot;
     }
 
     // [Header("References")]

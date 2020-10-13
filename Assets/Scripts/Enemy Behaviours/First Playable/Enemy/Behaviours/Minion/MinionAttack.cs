@@ -41,8 +41,6 @@ public class MinionAttack : AIBehaviour
  
     public override void OnStateEnter() 
     { 
-        enemyHandler.SetJustAttacked(true); 
-        StartCoroutine(enemyHandler.Coroutine_JustAttacked()); 
         _animator.SetBool("Attacking", true); 
     } 
  

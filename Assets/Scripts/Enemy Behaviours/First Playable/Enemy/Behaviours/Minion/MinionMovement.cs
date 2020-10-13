@@ -42,17 +42,16 @@ public class MinionMovement : AIBehaviour
         if (enemyHandler.GetJustAttacked())
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+            
             if (!_startedRetreat)
             {
                 Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * retreatDistance);
-                StartCoroutine(Retreat(retreatPosition, returnToAttackPosition, returnToInitialAngularSpeed));
+                StartCoroutine(Retreat(retreatPosition));
             }
         }
         else if (distance <= enterAttackStateDistance)
         {
             brain.SetBehaviour("Attack");
-            enemyHandler.SetJustAttacked(true);
-            StartCoroutine(enemyHandler.Coroutine_JustAttacked());
         }
     }
 
@@ -60,13 +59,13 @@ public class MinionMovement : AIBehaviour
 
     public override void OnStateFixedUpdate() { }
 
-    private IEnumerator Retreat(Vector3 position, float returnToPositionTimer, float returnToInitialAngularSpeedTimer)
+    private IEnumerator Retreat(Vector3 position)
     {
         _startedRetreat = true;
         brain.GetNavMeshAgent().angularSpeed = 0.0f;
-        yield return new WaitForSeconds(returnToPositionTimer);
-        OverrideDestination(position, 1.0f); ;
-        yield return new WaitForSeconds(returnToInitialAngularSpeedTimer);
+        yield return new WaitForSeconds(returnToAttackPosition);
+        OverrideDestination(position, 1.0f);
+        yield return new WaitForSeconds(returnToInitialAngularSpeed);
         brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
         _startedRetreat = false;
     }
