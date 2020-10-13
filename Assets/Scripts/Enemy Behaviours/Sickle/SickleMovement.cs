@@ -5,9 +5,13 @@ using UnityEngine;
 public class SickleMovement : AIBehaviour
 {
 
-    [Header("Properties")]
-    public float enterAttackStateDistance = 10.0f;
-    public float afterAttackSpeed = 7.5f;
+    [Header("Special Properties")]
+    public float specialEnterAttackStateDistance = 10.0f;
+    public float specialAfterAttackSpeed = 7.5f;
+
+    [Header("Elite Properties")]
+    public float eliteStartRetreatDistance = 10.0f;
+    public float eliteRetreatDistance = 10.0f;
 
     [Header("Timers")]
     public float returnToInitalSpeed = 1.0f;
@@ -32,9 +36,6 @@ public class SickleMovement : AIBehaviour
 
     public override void OnStateUpdate()
     {
-        // Storing the distance to preform multiple checks on
-        float distance = brain.GetDistanceToPlayer();
-
         // Checking if we should be locked onto the player or not...
         if (this.destinationLockedToPlayer)
             this.currentDestination = brain.PlayerTransform.position;
@@ -42,18 +43,16 @@ public class SickleMovement : AIBehaviour
         // Updating the target destination every frame
         brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
 
-        // Check if the enemy has just attacked, if they have then return to their previous position
-        if (enemyHandler.GetJustAttacked())
-        {
-            if (!_startedRetreat)
-                StartCoroutine(Retreat());
-        }
 
-        // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
-        else if (distance <= enterAttackStateDistance)
+        switch (enemyHandler.GetEnemyType())
         {
-            _attackPosition = transform.position;
-            brain.SetBehaviour("Attack");
+            case EnemyHandler.EnemyType.SPECIAL:
+                UpdateSpecial();
+                break;
+
+            case EnemyHandler.EnemyType.ELITE:
+                UpdateElite();
+                break;
         }
     }
 
@@ -61,13 +60,51 @@ public class SickleMovement : AIBehaviour
 
     public override void OnStateFixedUpdate() { }
 
-    private IEnumerator Retreat()
+    private IEnumerator ChangeSpeedAfterAttack()
     {
         _startedRetreat = true;
-        brain.GetNavMeshAgent().speed = afterAttackSpeed;
+        brain.GetNavMeshAgent().speed = specialAfterAttackSpeed;
         yield return new WaitForSeconds(returnToInitalSpeed);
         brain.GetNavMeshAgent().speed = _initialSpeed;
         _startedRetreat = false;
+    }
+
+    private void UpdateSpecial()
+    {
+        // Storing the distance to preform multiple checks on
+        float distance = brain.GetDistanceToPlayer();
+
+        // Check if the enemy has just attacked, if they have then return to their previous position
+        if (enemyHandler.GetJustAttacked())
+        {
+            if (!_startedRetreat)
+                StartCoroutine(ChangeSpeedAfterAttack());
+        }
+
+        // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
+        else if (distance <= specialEnterAttackStateDistance)
+        {
+            _attackPosition = transform.position;
+            brain.SetBehaviour("Attack");
+        }
+    }
+
+    private void UpdateElite()
+    {
+        // Storing the distance to preform multiple checks on
+        float distance = brain.GetDistanceToPlayer();
+
+        if (distance <= eliteStartRetreatDistance || enemyHandler.GetJustAttacked())
+        {
+            Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * eliteRetreatDistance);
+            OverrideDestination(retreatPosition, 1.0f);
+            return;
+        }
+        else if (distance <= specialEnterAttackStateDistance && !_startedRetreat)
+        {
+            _attackPosition = transform.position;
+            brain.SetBehaviour("Attack");
+        }
     }
 
     // [Header("Properties")]

@@ -295,6 +295,8 @@ public class EnemyHandler : MonoBehaviour
 
     public Rigidbody GetRigidbody() => _rigidbody;
 
+    public Animator GetAnimator() => _animator;
+
     public EnemyGroupHandler GetEnemyGroupHandler() => _groupHandler;
 
     public void SetEnemyGroupHandler(EnemyGroupHandler enemyGroupHandler) => _groupHandler = enemyGroupHandler;

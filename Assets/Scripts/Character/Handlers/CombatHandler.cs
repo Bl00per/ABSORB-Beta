@@ -35,6 +35,10 @@ public class CombatHandler : MonoBehaviour
     private Transform _transform;
     private Animator _animator;
     private Rigidbody _rb;
+    private bool _justUsedMechanic = false;
+    [Header("Enemy Attack Timers")]
+    public float primaryAttackWindow = 1.0f;
+    public float shieldAttackWindow = 0.5f;
 
     // Start is called before first frame
     private void Start()
@@ -80,6 +84,7 @@ public class CombatHandler : MonoBehaviour
     private bool _attacking;
     private Transform enemy;
     public GameObject lockOnGO;
+
     private void UpdateAttack()
     {
         EnemyDetector();
@@ -93,7 +98,6 @@ public class CombatHandler : MonoBehaviour
                 _comboStart = false;
                 _runAttackTimer = true;
                 ResetAttackTimer();
-
             }
         }
 
@@ -165,6 +169,7 @@ public class CombatHandler : MonoBehaviour
     {
         playerWeapon.enabled = false;
         playerWeaponColl.enabled = false;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableMEDIUMPlayerWeaponObject()
@@ -177,6 +182,7 @@ public class CombatHandler : MonoBehaviour
     {
         playerWeapon2.enabled = false;
         playerWeaponColl2.enabled = false;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableBIGPlayerWeaponObject()
@@ -189,6 +195,7 @@ public class CombatHandler : MonoBehaviour
     {
         playerWeapon3.enabled = false;
         playerWeaponColl3.enabled = false;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_PlayWeaponSound()
@@ -230,7 +237,7 @@ public class CombatHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();            
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
@@ -266,6 +273,8 @@ public class CombatHandler : MonoBehaviour
     // Updates the shields FSM
     private void UpdateShieldFSM()
     {
+        Debug.Log("Just used mechainc: " + _justUsedMechanic);
+
         switch (shieldState)
         {
             case ShieldState.Default:
@@ -302,11 +311,21 @@ public class CombatHandler : MonoBehaviour
         shieldCooldown -= Time.deltaTime;
         _animator.SetBool("Shield", false);
 
+        StartJustUsedMechanic(shieldAttackWindow);
         if (shieldCooldown <= 0)
         {
             shieldCooldown = _tempShieldCDTimer;
             shieldState = ShieldState.Default;
             _canShield = true;
+
+        }
+    }
+
+    public void StartJustUsedMechanic(float time)
+    {
+        if (!_justUsedMechanic)
+        {
+            StartCoroutine(Coroutine_JustUsedMechanic(time));
         }
     }
 
@@ -413,19 +432,13 @@ public class CombatHandler : MonoBehaviour
     }
 
     public void key_deathSFX1()
-
     {
-
         deathSFX1.Play();
-
     }
 
     public void key_deathSFX2()
-
     {
-
         deathSFX2.Play();
-
     }
 
     #endregion
@@ -439,5 +452,17 @@ public class CombatHandler : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public bool GetJustUsedMechanic()
+    {
+        return _justUsedMechanic;
+    }
+
+    public IEnumerator Coroutine_JustUsedMechanic(float time)
+    {
+        _justUsedMechanic = true;
+        yield return new WaitForSeconds(time);
+        _justUsedMechanic = false;
     }
 }

@@ -20,6 +20,7 @@ public class SickleAttack : AIBehaviour
     private void Start()
     {
         _initialSpeed = brain.GetNavMeshAgent().speed;
+        _animator = enemyHandler.GetAnimator();
     }
 
     public override void OnStateEnter()
@@ -30,15 +31,16 @@ public class SickleAttack : AIBehaviour
 
     public override void OnStateUpdate()
     {
-        // Setting the target destination
-        this.LockDestinationToPlayer(1.0f);
 
-        // Checking if the player is close enough to start the animation sequence
-        if (DetermineAttackFromPlayerVelocity())
+        switch (enemyHandler.GetEnemyType())
         {
-            float distance = brain.GetDistanceToPlayer();
-            if (distance <= startAnimationDistance)
-                _animator.SetBool(swingAnimationName, true);
+            case EnemyHandler.EnemyType.SPECIAL:
+                UpdateSpecial();
+                break;
+
+            case EnemyHandler.EnemyType.ELITE:
+                UpdateElite();
+                break;
         }
     }
 
@@ -55,7 +57,6 @@ public class SickleAttack : AIBehaviour
     {
         _animator.SetBool(swingAnimationName, false);
         brain.SetBehaviour("Movement");
-        
     }
 
     // Returns true if the player is moving towards the enemy, or if they aren't moving fast enough to avoid the attack.
@@ -70,6 +71,24 @@ public class SickleAttack : AIBehaviour
             float dot = Vector3.Dot(transform.forward, rbDir);
             return Vector3.Dot(transform.forward, rbDir) < 0.0F;
         }
+    }
+
+    private void UpdateSpecial()
+    {
+        // Setting the target destination
+        this.LockDestinationToPlayer(1.0f);
+
+        // Checking if the player is close enough to start the animation sequence
+        if (DetermineAttackFromPlayerVelocity())
+        {
+            float distance = brain.GetDistanceToPlayer();
+            if (distance <= startAnimationDistance)
+                _animator.SetBool(swingAnimationName, true);
+        }
+    }
+
+    private void UpdateElite()
+    {
     }
     // [Header("Properties")]
     // public string swingAnimationName = "Attacking";
