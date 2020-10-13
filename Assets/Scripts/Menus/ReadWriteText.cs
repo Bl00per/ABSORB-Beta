@@ -8,7 +8,7 @@ public class ReadWriteText : MonoBehaviour
 {
     [Header("Default Parameters")]
     [HideInInspector]
-    public float masterVolume = 10f, musicVolume = 10f, sfxVolume = 10f;
+    public float masterVolume = 0f, musicVolume = 10f, sfxVolume = 10f;
 
     void Awake()
     {
