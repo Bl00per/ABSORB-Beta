@@ -6,10 +6,11 @@ public class HammerMovement : AIBehaviour
 {
     [Header("Properties")]
     public float enterAttackStateDistance = 2.0f;
+    public float retreatDistance = 10.0f;
 
     [Header("Timers")]
     public float returnToAttackPosition = 1.0f;
-    public float returnToInitalAngularSpeed = 1.0f;
+    public float returnToInitialAngularSpeed = 1.0f;
 
     private Vector3 _attackPosition = Vector3.zero;
     private float _initialAngularSpeed = 0.0f;
@@ -31,22 +32,26 @@ public class HammerMovement : AIBehaviour
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
-        // Check if the enemy has just attacked, if they have then return to their previous position
+        // Checking if we should be locked onto the player or not...
+        if (this.destinationLockedToPlayer)
+            this.currentDestination = brain.PlayerTransform.position;
+
+        // Updating the target destination every frame
+        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
+
         if (enemyHandler.GetJustAttacked())
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
-            if(!_startedRetreat)
-                StartCoroutine(Retreat());
-            return;
+            
+            if (!_startedRetreat)
+            {
+                Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * retreatDistance);
+                StartCoroutine(Retreat(retreatPosition));
+            }
         }
-
-        // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
         else if (distance <= enterAttackStateDistance)
         {
-            _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
-            brain.GetHandler().SetJustAttacked(true);
-            StartCoroutine(brain.GetHandler().Coroutine_JustAttacked());
         }
     }
 
@@ -54,13 +59,13 @@ public class HammerMovement : AIBehaviour
 
     public override void OnStateFixedUpdate() { }
 
-    private IEnumerator Retreat()
+    private IEnumerator Retreat(Vector3 position)
     {
         _startedRetreat = true;
         brain.GetNavMeshAgent().angularSpeed = 0.0f;
         yield return new WaitForSeconds(returnToAttackPosition);
-        OverrideDestination(_attackPosition, 1.0f); ;
-        yield return new WaitForSeconds(returnToInitalAngularSpeed);
+        OverrideDestination(position, 1.0f);
+        yield return new WaitForSeconds(returnToInitialAngularSpeed);
         brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
         _startedRetreat = false;
     }

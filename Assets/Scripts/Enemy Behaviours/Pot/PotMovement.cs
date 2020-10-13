@@ -57,8 +57,6 @@ public class PotMovement : AIBehaviour
         {
             _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
-            enemyHandler.SetJustAttacked(true);
-            StartCoroutine(enemyHandler.Coroutine_JustAttacked());
         }
         // // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
         // if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
