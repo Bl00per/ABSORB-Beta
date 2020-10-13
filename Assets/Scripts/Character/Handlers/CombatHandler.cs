@@ -344,7 +344,7 @@ public class CombatHandler : MonoBehaviour
 
         if (activateSlowmo)
         {
-            _mixer.SetFloat("MasterPitch", 0.3f);
+            _mixer.SetFloat("MasterPitch", 0.5f);
             currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, tweenEase.Evaluate(Time.time));
             Time.timeScale = currentTimeScale;
         }

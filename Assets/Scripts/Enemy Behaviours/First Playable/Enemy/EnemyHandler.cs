@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 public class EnemyHandler : MonoBehaviour
@@ -93,6 +94,13 @@ public class EnemyHandler : MonoBehaviour
     {
         // Getting the player handler component
         _playerHandler = _aiBrain.PlayerTransform.GetComponent<PlayerHandler>();
+
+        currentTimeScale = Time.timeScale;
+    }
+
+    public void Update()
+    {
+        UpdateSlowMo();
     }
 
     // Currently just destroying the enemy if the player attacks them
@@ -299,31 +307,35 @@ public class EnemyHandler : MonoBehaviour
     private float currentTimeScale;
     private float defaultTimeScale = 1.0f;
     private bool activateSlowmo = false;
+    public AudioMixer _mixer;
 
-    private void Update()
+    public void UpdateSlowMo()
     {
         tempSlowMoPercentage = slowMotionPercentage / 100.0f;
 
         if (activateSlowmo)
         {
-            currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, 0.2f);
+            _mixer.SetFloat("MasterPitch", 0.5f);
+            currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, tweenEase.Evaluate(Time.time));
             Time.timeScale = currentTimeScale;
         }
         else if (!activateSlowmo && currentTimeScale < defaultTimeScale)
         {
+            _mixer.SetFloat("MasterPitch", 1);
+            //Debug.Log(_mixer.GetFloat("MasterPitch",))
             currentTimeScale = Mathf.Lerp(currentTimeScale, defaultTimeScale, 0.2f);
             Time.timeScale = currentTimeScale;
         }
     }
 
-    public bool Key_ActivateSlowMotion()
+    public void Key_ActivateSlowMotion()
     {
-        return activateSlowmo = true;
+      activateSlowmo = true;
     }
 
-    public bool Key_DeactivateSlowMotion()
+    public void Key_DeactivateSlowMotion()
     {
-        return activateSlowmo = false;
+      activateSlowmo = false;
     }
 
     #endregion
