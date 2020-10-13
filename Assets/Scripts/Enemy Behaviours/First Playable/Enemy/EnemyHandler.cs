@@ -289,6 +289,45 @@ public class EnemyHandler : MonoBehaviour
         _justAttacked = false;
     }
 
+    #region SlowMotion
+
+    [Header("Slow Motion Attributes")]
+    [Range(1, 100)]
+    public int slowMotionPercentage = 50;
+    public AnimationCurve tweenEase;
+    private float tempSlowMoPercentage = 0.0f;
+    private float currentTimeScale;
+    private float defaultTimeScale = 1.0f;
+    private bool activateSlowmo = false;
+
+    private void Update()
+    {
+        tempSlowMoPercentage = slowMotionPercentage / 100.0f;
+
+        if (activateSlowmo)
+        {
+            currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, 0.2f);
+            Time.timeScale = currentTimeScale;
+        }
+        else if (!activateSlowmo && currentTimeScale < defaultTimeScale)
+        {
+            currentTimeScale = Mathf.Lerp(currentTimeScale, defaultTimeScale, 0.2f);
+            Time.timeScale = currentTimeScale;
+        }
+    }
+
+    public bool Key_ActivateSlowMotion()
+    {
+        return activateSlowmo = true;
+    }
+
+    public bool Key_DeactivateSlowMotion()
+    {
+        return activateSlowmo = false;
+    }
+
+    #endregion
+
     public EnemyType GetEnemyType() => typeOfEnemy;
 
     public AbilityHandler.AbilityType GetAbilityType() => typeOfAbility;
