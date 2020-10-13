@@ -1493,6 +1493,32 @@ MonoBehaviour:
   baseDamage: 5
   attackCooldown: 1
   printHealthStats: 0
+  slowMotionPercentage: 20
+  tweenEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mixer: {fileID: 24100000, guid: a866300788c228548b9e48e2c5a1839b, type: 2}
 --- !u!114 &6809976860378941603
 MonoBehaviour:
   m_ObjectHideFlags: 0
