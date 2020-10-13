@@ -102,7 +102,7 @@ public class AIBrain : MonoBehaviour
         _lastStateID = _currentBehaviourID;
 
         // Checking if the current state we are about to leave is the attack state
-        if (_currentBehaviourID == "Attack")
+        if (_lastStateID == "Attack")
         {
             // Setting the just attacked bool to true, and setting it false on a coroutine 
             _handler.SetJustAttacked(true);

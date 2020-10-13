@@ -98,8 +98,11 @@ public class EnemyHandler : MonoBehaviour
     // Currently just destroying the enemy if the player attacks them
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("PlayerMelee") && other.gameObject.layer == LayerMask.NameToLayer("PlayerWeapon"))
-            TakeDamage(_playerHandler.GetPrimaryAttackDamage());
+        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerWeapon"))
+        {
+            if (other.gameObject.CompareTag("PlayerMelee"))
+                TakeDamage(_playerHandler.GetPrimaryAttackDamage());
+        }
     }
 
     // Makes the enemy take damage
