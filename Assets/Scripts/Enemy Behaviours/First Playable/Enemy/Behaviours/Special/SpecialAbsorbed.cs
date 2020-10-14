@@ -56,7 +56,7 @@ public class SpecialAbsorbed : AIBehaviour
         _cutOutTimer = cutoffMax;
         _enabled = true;
         //_playerAbilityManager.playerForceField.SetActive(true);
-
+        enemyHandler.Key_DeactivateSlowMotion();
         absorbEnemySoundEffect.Play();
         absorbSoundEffect.Play();
         absorbParticleEffect.Play();

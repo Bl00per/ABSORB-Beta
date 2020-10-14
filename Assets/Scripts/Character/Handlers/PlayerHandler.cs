@@ -35,6 +35,7 @@ public class PlayerHandler : MonoBehaviour
     private LocomotionHandler _locomotionHandler;
     private CombatHandler _combatHandler;
     private InputManager _inputManager;
+    private SlowMotionManager _slowMotionManager;
     private CameraManager _cameraManager;
     private SimpleCameraShakeInCinemachine _simpleCameraShake;
     private CheckPoint _checkpoints;
@@ -64,6 +65,7 @@ public class PlayerHandler : MonoBehaviour
         _combatHandler = this.GetComponent<CombatHandler>();
         _inputManager = FindObjectOfType<InputManager>();
         _cameraManager = FindObjectOfType<CameraManager>();
+        _slowMotionManager = FindObjectOfType<SlowMotionManager>();
         _simpleCameraShake = FindObjectOfType<SimpleCameraShakeInCinemachine>();
         _checkpoints = FindObjectOfType<CheckPoint>();
         _capsule = GetComponent<CapsuleCollider>();
@@ -261,6 +263,11 @@ public class PlayerHandler : MonoBehaviour
         return _combatHandler;
     }
 
+    public SlowMotionManager GetSlowMotionManager()
+    {
+        return _slowMotionManager;
+    }
+
     public CheckPoint GetCheckPoint()
     {
         return _checkpoints;
@@ -298,18 +305,12 @@ public class PlayerHandler : MonoBehaviour
     [HideInInspector]
     public bool shieldGrowing;
     public void Key_ShieldGrow()
-
     {
-
         shieldGrowing = true;
-
     }
 
     public void Key_ShieldShrink()
-
     {
-
         shieldGrowing = false;
-
     }
 }
