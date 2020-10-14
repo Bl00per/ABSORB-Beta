@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class SickleAttack : AIBehaviour
 {
-    [Header("Properties")]
-    public float movementSpeed = 10.0f;
-    public float startAnimationDistance = 5.0f;
+    [Header("Overall Properties")]
     public string swingAnimationName = "Attacking";
+
+    [Header("Special Properties")]
+    public float specialMovementSpeed = 10.0f;
+    public float specialStartAnimationDistance = 5.0f;
+
+    [Header("Elite Properties")]
+    public float eliteMovementSpeed = 10.0f;            // Speed when preparing to dash
+    public float eliteDashMovementSpeed = 40.0f;        // Speed of the dash
+    public float eliteDashDistance = 10.0f;             // Distance the enemy will move past the player
+    public float eliteStartAnimationDistance = 5.0f;    // Distance which the enemy will start the attack animation
 
     private Animator _animator;
     private float _initialSpeed = 0.0f;
@@ -25,13 +33,21 @@ public class SickleAttack : AIBehaviour
 
     public override void OnStateEnter()
     {
-        // Setting the movement speed
-        brain.GetNavMeshAgent().speed = movementSpeed;
+        switch (enemyHandler.GetEnemyType())
+        {
+            case EnemyHandler.EnemyType.SPECIAL:
+                // Setting the movement speed
+                brain.GetNavMeshAgent().speed = specialMovementSpeed;
+                break;
+
+            case EnemyHandler.EnemyType.ELITE:
+                brain.GetNavMeshAgent().speed = eliteMovementSpeed;
+                break;
+        }
     }
 
     public override void OnStateUpdate()
     {
-
         switch (enemyHandler.GetEnemyType())
         {
             case EnemyHandler.EnemyType.SPECIAL:
@@ -82,67 +98,18 @@ public class SickleAttack : AIBehaviour
         if (DetermineAttackFromPlayerVelocity())
         {
             float distance = brain.GetDistanceToPlayer();
-            if (distance <= startAnimationDistance)
+            if (distance <= specialStartAnimationDistance)
                 _animator.SetBool(swingAnimationName, true);
         }
     }
 
     private void UpdateElite()
     {
+        // The elite attack is going to dash across the player and attack them when they get close enough,
+        // So, step by step how we should implement it will be something like this
+
+        // 3) When the elite is close enough to the player, they will enter there attack animation and look at the player
+
+        // 4) After attacking, the enemy will enter back into there movement script and continuing avoiding until' there attack cooldown has expired
     }
-    // [Header("Properties")]
-    // public string swingAnimationName = "Attacking";
-    // public int amountOfAttacks = 4;
-    // public float speedMultiplier = 1.5f;
-    // public float cancelAttackDistance = 3.0f;
-
-    // private int _attackIndex = 0;
-    // private float _defaultSpeed = 1.0f;
-
-    // private Animator _animator;
-    // private float _initialSpeed = 20.0f;
-
-    // private void Awake()
-    // {
-    //     _animator = this.GetComponent<Animator>();
-    //     _defaultSpeed = _animator.GetFloat("attackSpeed");
-    // }
-
-    // private void Start()
-    // {
-    //     _initialSpeed = brain.GetNavMeshAgent().speed;
-    // }
-
-    // public override void OnStateEnter()
-    // {
-    //     // Set the attacking bool to true
-    //     _animator.SetBool(swingAnimationName, true);
-    // }
-
-    // public override void OnStateUpdate() {}
-
-    // public override void OnStateFixedUpdate() {}
-
-    // public override void OnStateExit()
-    // {
-    //     brain.GetNavMeshAgent().speed = _initialSpeed;
-    // }
-
-    // private void Key_DeactivateSwingAnimation()
-    // {
-    //     if(_attackIndex < amountOfAttacks && brain.GetDistanceToPlayer() <= cancelAttackDistance)
-    //     {
-    //         _animator.SetBool(swingAnimationName, true);
-    //         _animator.SetFloat("attackSpeed", _animator.GetFloat("attackSpeed") * speedMultiplier);
-    //         _attackIndex++;
-    //     }
-    //     else
-    //     {
-    //         _animator.SetBool(swingAnimationName, false);
-    //         _animator.SetFloat("attackSpeed", _defaultSpeed);
-    //         brain.GetNavMeshAgent().isStopped = false;
-    //         brain.SetBehaviour("Movement");
-    //         _attackIndex = 0;
-    //     }
-    // }
 }

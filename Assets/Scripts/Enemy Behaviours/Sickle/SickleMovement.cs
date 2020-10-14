@@ -19,11 +19,14 @@ public class SickleMovement : AIBehaviour
     private Vector3 _attackPosition = Vector3.zero;
     private float _initialSpeed = 0.0f;
     private bool _startedRetreat = false;
+    private CombatHandler _combatHandler;
 
     private void Start()
     {
         // Storing the initial angular speed of the agent
         _initialSpeed = brain.GetNavMeshAgent().speed;
+
+        _combatHandler = brain.PlayerTransform.GetComponent<CombatHandler>();
     }
 
     public override void OnStateEnter()
@@ -100,7 +103,7 @@ public class SickleMovement : AIBehaviour
             OverrideDestination(retreatPosition, 1.0f);
             return;
         }
-        else if (distance <= specialEnterAttackStateDistance && !_startedRetreat)
+        else if (_combatHandler.GetJustUsedMechanic())
         {
             _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
