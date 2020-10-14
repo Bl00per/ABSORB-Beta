@@ -5435,8 +5435,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae98f145f1a396144a660ca142603451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterAttackStateDistance: 10
-  afterAttackSpeed: 7.5
+  specialEnterAttackStateDistance: 10
+  specialAfterAttackSpeed: 7.5
+  eliteStartRetreatDistance: 10
+  eliteRetreatDistance: 10
+  attackChance: 0.199
   returnToInitalSpeed: 1
 --- !u!114 &2030620166790689653
 MonoBehaviour:
@@ -5450,9 +5453,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6614b8cd57fdcb14a9d6eb88ed76cce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  startAnimationDistance: 5
   swingAnimationName: Attacking
+  specialMovementSpeed: 10
+  specialStartAnimationDistance: 5
+  eliteMovementSpeed: 24
+  eliteDashMovementSpeed: 35
+  eliteStartDashDistance: 23
+  eliteDashDistance: 8
+  eliteStartAnimationDistance: 22
+  eliteDashOffsetMultiplier: 1.5
 --- !u!1 &2460242229771355228
 GameObject:
   m_ObjectHideFlags: 0
