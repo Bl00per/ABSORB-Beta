@@ -12,11 +12,12 @@ public class SickleMovement : AIBehaviour
     [Header("Elite Properties")]
     public float eliteStartRetreatDistance = 10.0f;
     public float eliteRetreatDistance = 10.0f;
+    [Range(0, 1)]
+    public float attackChance = 1.0f;
 
     [Header("Timers")]
     public float returnToInitalSpeed = 1.0f;
 
-    private Vector3 _attackPosition = Vector3.zero;
     private float _initialSpeed = 0.0f;
     private bool _startedRetreat = false;
     private CombatHandler _combatHandler;
@@ -87,7 +88,6 @@ public class SickleMovement : AIBehaviour
         // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
         else if (distance <= specialEnterAttackStateDistance)
         {
-            _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
         }
     }
@@ -105,8 +105,8 @@ public class SickleMovement : AIBehaviour
         }
         else if (_combatHandler.GetJustUsedMechanic())
         {
-            _attackPosition = transform.position;
-            brain.SetBehaviour("Attack");
+            if (Random.value <= attackChance)
+                brain.SetBehaviour("Attack"); 
         }
     }
 

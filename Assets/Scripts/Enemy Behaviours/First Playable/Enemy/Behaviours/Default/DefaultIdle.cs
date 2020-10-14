@@ -14,7 +14,10 @@ public class DefaultIdle : AIBehaviour
     public float maxY = 10.0f;
     public float autoDetectionRadius = 7.5f;
 
-    public override void OnStateEnter() { }
+    public override void OnStateEnter() 
+    {
+        enemyHandler.DeactiveWeaponCollider();
+    }
     public override void OnStateExit() { }
     public override void OnStateFixedUpdate() { }
 
