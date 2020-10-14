@@ -15,6 +15,10 @@ public class AbilityHandler : MonoBehaviour
         POT,
     }
 
+    [Header("Enemy Attack Window Time")]
+    // Time that the enemy can choose to attack the player after using an ability
+    public float enemyAttackWindowTime = 2.0f;
+
     [Header("Parried Check Properties")]
     public float parriedCastRadius = 5.0f;
 
@@ -56,7 +60,7 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
-    // Called on initialise
+    // Called before first frame
     private void Start()
     {
         // Getting the references out of the player handler
@@ -87,7 +91,10 @@ public class AbilityHandler : MonoBehaviour
             if (_inputManager.GetSpecialAttackButtonPress() && !_isAbosrbing)
             {
                 if (!_abilities[(int)_currentAbility].IsActive())
+                {
                     _abilities[(int)_currentAbility].Activate();
+                    _combatHandler.StartJustUsedMechanic(enemyAttackWindowTime);
+                }
             }
         }
     }
