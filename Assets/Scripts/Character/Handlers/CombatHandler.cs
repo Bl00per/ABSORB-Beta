@@ -30,6 +30,7 @@ public class CombatHandler : MonoBehaviour
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
     private PlayerHandler _playerHandler;
+    private SlowMotionManager _slowMoManager;
     private InputManager _inputManager;
     private Rigidbody _rigidbody;
     private Transform _transform;
@@ -45,6 +46,7 @@ public class CombatHandler : MonoBehaviour
         _transform = _playerHandler.GetTransform();
         _animator = _playerHandler.GetAnimator();
         _inputManager = _playerHandler.GetInputManager();
+        _slowMoManager = _playerHandler.GetSlowMotionManager();
         _rb = this.GetComponent<Rigidbody>();
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
@@ -54,8 +56,6 @@ public class CombatHandler : MonoBehaviour
         //_tempShieldTimer = shieldTimer;
         _tempShieldCDTimer = shieldCooldown;
 
-        currentTimeScale = Time.timeScale;
-
         enemy = null;
     }
 
@@ -64,7 +64,6 @@ public class CombatHandler : MonoBehaviour
     {
         UpdateShieldFSM();
         UpdateAttack();
-        UpdateSlowMo();
         UpdateDeath();
     }
 
@@ -230,7 +229,7 @@ public class CombatHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();            
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
@@ -329,42 +328,14 @@ public class CombatHandler : MonoBehaviour
 
     #region SlowMotion
 
-    [Header("Slow Motion Attributes")]
-    [Range(1, 100)]
-    public int slowMotionPercentage = 50;
-    public AnimationCurve tweenEase;
-    private float tempSlowMoPercentage = 0.0f;
-    private float currentTimeScale;
-    private float defaultTimeScale = 1.0f;
-    private bool activateSlowmo = false;
-    public AudioMixer _mixer;
-    private void UpdateSlowMo()
+    public void Key_ActivateSlowMotion()
     {
-        tempSlowMoPercentage = slowMotionPercentage / 100.0f;
-
-        if (activateSlowmo)
-        {
-            _mixer.SetFloat("MasterPitch", 0.5f);
-            currentTimeScale = Mathf.Lerp(currentTimeScale, tempSlowMoPercentage, tweenEase.Evaluate(Time.time));
-            Time.timeScale = currentTimeScale;
-        }
-        else if (!activateSlowmo && currentTimeScale < defaultTimeScale)
-        {
-            _mixer.SetFloat("MasterPitch", 1);
-            //Debug.Log(_mixer.GetFloat("MasterPitch",))
-            currentTimeScale = Mathf.Lerp(currentTimeScale, defaultTimeScale, 0.2f);
-            Time.timeScale = currentTimeScale;
-        }
+        _slowMoManager.ActivateSlowMotion();
     }
 
-    public bool Key_ActivateSlowMotion()
+    public void Key_DeactivateSlowMotion()
     {
-        return activateSlowmo = true;
-    }
-
-    public bool Key_DeactivateSlowMotion()
-    {
-        return activateSlowmo = false;
+        _slowMoManager.DeactivateSlowMotion();
     }
 
     #endregion

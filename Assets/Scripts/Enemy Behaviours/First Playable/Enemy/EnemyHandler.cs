@@ -57,6 +57,7 @@ public class EnemyHandler : MonoBehaviour
 
     private SpecialParried _specialParried = null;
     private PlayerHandler _playerHandler;
+    private SlowMotionManager _slowMoManager;
     private EnemyGroupHandler _groupHandler = null;
     private AIBrain _aiBrain;
     private Rigidbody _rigidbody;
@@ -80,7 +81,6 @@ public class EnemyHandler : MonoBehaviour
         _navMeshAgent = this.GetComponent<NavMeshAgent>();
         _animator = this.GetComponent<Animator>();
 
-
         // Getting the special parried script if this enemy is a special
         if (typeOfEnemy == EnemyType.SPECIAL)
             _specialParried = this.GetComponent<SpecialParried>();
@@ -94,13 +94,9 @@ public class EnemyHandler : MonoBehaviour
     {
         // Getting the player handler component
         _playerHandler = _aiBrain.PlayerTransform.GetComponent<PlayerHandler>();
+        _slowMoManager = _playerHandler.GetSlowMotionManager();
 
         currentTimeScale = Time.timeScale;
-    }
-
-    public void Update()
-    {
-        UpdateSlowMo();
     }
 
     // Currently just destroying the enemy if the player attacks them
@@ -330,12 +326,12 @@ public class EnemyHandler : MonoBehaviour
 
     public void Key_ActivateSlowMotion()
     {
-      activateSlowmo = true;
+        _slowMoManager.ActivateSlowMotion();
     }
 
     public void Key_DeactivateSlowMotion()
     {
-      activateSlowmo = false;
+        _slowMoManager.DeactivateSlowMotion();
     }
 
     #endregion
