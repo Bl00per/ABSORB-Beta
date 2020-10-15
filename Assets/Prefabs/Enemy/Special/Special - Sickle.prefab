@@ -419,7 +419,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8368722655750445499, guid: c0f6033ae86870e41b5a6a42215cd6c5, type: 3}
+  - {fileID: 2100000, guid: 2ae5ade98b68dc8479ab8f1f83226f42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1044,6 +1044,14 @@ MonoBehaviour:
   baseDamage: 4
   attackCooldown: 1
   printHealthStats: 0
+  slowMotionPercentage: 50
+  tweenEase:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mixer: {fileID: 0}
 --- !u!114 &5919911638438754536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,8 +1136,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae98f145f1a396144a660ca142603451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterAttackStateDistance: 10
-  afterAttackSpeed: 7.5
+  specialEnterAttackStateDistance: 10
+  specialAfterAttackSpeed: 7.5
+  eliteStartRetreatDistance: 10
+  eliteRetreatDistance: 10
+  attackChance: 1
   returnToInitalSpeed: 1
 --- !u!114 &5919911638438754550
 MonoBehaviour:
@@ -1143,9 +1154,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6614b8cd57fdcb14a9d6eb88ed76cce5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 10
-  startAnimationDistance: 5
   swingAnimationName: Attacking
+  specialMovementSpeed: 10
+  specialStartAnimationDistance: 5
+  eliteMovementSpeed: 10
+  eliteDashMovementSpeed: 40
+  eliteStartDashDistance: 10
+  eliteDashDistance: 10
+  eliteStartAnimationDistance: 5
+  eliteDashOffsetMultiplier: 1.5
 --- !u!114 &3047529433226205307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,9 +1191,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efcc8fd570dffcc4baf53fee535bf148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodyMaterial: {fileID: 2100000, guid: 0973a830ec1f21442a4d6365ffee1adc, type: 2}
+  bodyMaterial: {fileID: 2100000, guid: 2ae5ade98b68dc8479ab8f1f83226f42, type: 2}
   bodyRenderer: {fileID: 5155732770910948835}
-  weaponMaterial: {fileID: 2100000, guid: 0973a830ec1f21442a4d6365ffee1adc, type: 2}
+  weaponMaterial: {fileID: 2100000, guid: 2ae5ade98b68dc8479ab8f1f83226f42, type: 2}
   weaponRenderer: {fileID: 8463304746536548090}
   absorbGameObject: {fileID: 4939768445616452343}
   absorbParticleEffect: {fileID: 4939768445801076973}
@@ -2135,7 +2152,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8368722655750445499, guid: c0f6033ae86870e41b5a6a42215cd6c5, type: 3}
+  - {fileID: 2100000, guid: 2ae5ade98b68dc8479ab8f1f83226f42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
