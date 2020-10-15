@@ -14,7 +14,12 @@ public class EliteProjectile : MonoBehaviour
 
     [Header("Properties")]
     public Vector3 directionOffset = Vector3.zero;
+    public Vector3 minOrbSize;
+    public Vector3 maxOrbSize;
     public float effectTime = 2.0f;
+    public Transform projectileStartPoint;
+    public Collider _collider;
+    public Renderer _renderer;
 
     private Rigidbody _rb;
     private Vector3 _direction = Vector3.zero;
@@ -36,6 +41,7 @@ public class EliteProjectile : MonoBehaviour
     // Sets up the direction for the projectile
     public void InitialiseProjectile(EnemyHandler enemyHandler, Transform playerTransform, Transform projectileStartPoint, float speed, float lifeTime, float damage)
     {
+        _collider.enabled = true;
         transform.position = projectileStartPoint.position;
         transform.rotation = projectileStartPoint.rotation;
         _enemyHandler = enemyHandler;
@@ -58,8 +64,12 @@ public class EliteProjectile : MonoBehaviour
     // Gets called every frame
     private void Update()
     {
+        if (this.transform.localScale.x <= maxOrbSize.x)
+            this.transform.localScale += this.transform.localScale * Time.deltaTime * 2;
+
         if (_isActive)
             _rb.MovePosition(transform.position + _direction * _speed * Time.deltaTime);
+
     }
 
     // Returns the damage of this projectile
@@ -82,31 +92,45 @@ public class EliteProjectile : MonoBehaviour
             _enemyHandler.GetBrain().SetBehaviour("Parried");
             waterParryEffect.Play();
             waterParryAudio.Play();
-            waterHitEffectGO.transform.SetParent(null);
+   
         }
-
+       
         _isActive = false;
+        _collider.enabled = false;
+        _renderer.enabled = false;
+        waterHitEffectGO.transform.SetParent(null);
         waterHitEffect.Play();
-        waterHitEffect.gameObject.transform.SetParent(null);
-        Cleanup();
+        waterHitAudio.Play();
+        StartCoroutine(Cleanup());
     }
 
     public EnemyHandler GetHandler()
     {
         return _enemyHandler;
     }
+    public IEnumerator Cleanup()
+    {
+        yield return new WaitForSeconds(effectTime);
+
+        this.transform.localScale = minOrbSize;
+        waterHitEffectGO.transform.SetParent(this.gameObject.transform);      
+        waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        waterHitEffectGO.transform.position = this.transform.position;
+        _renderer.enabled = true;
+        this.gameObject.SetActive(false);
+    }
 
     public IEnumerator LifeTimer()
     {
         yield return new WaitForSeconds(_lifeTime);
-        Destroy(this.gameObject);
+
+        this.transform.localScale = minOrbSize;
+        waterHitEffectGO.transform.position = this.transform.position;
+        waterHitEffectGO.transform.SetParent(this.gameObject.transform);
+        waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        _renderer.enabled = true;
+        this.gameObject.SetActive(false);
     }
 
-    public void Cleanup()
-    {
-        Destroy(this.gameObject,0.1f);
-        Destroy(waterParryEffect.gameObject, effectTime);
-        Destroy(waterHitEffectGO, effectTime);
-        
-    }
+
 }

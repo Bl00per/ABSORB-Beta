@@ -7,7 +7,9 @@ public class AbilityPot : Ability
     [Header("References")]
     public GameObject potAim;
     public GameObject potOrbObject;
+    public Collider potCollider;
     public ParticleSystem waterHit;
+    public AudioSource chargingAudio;
     public Animator playerAnimator;
     public Camera mainCamera;
 
@@ -42,13 +44,21 @@ public class AbilityPot : Ability
     public override void Activate()
     {
         _aimActive = false;
-        potOrbObject.SetActive(true);
         playerAnimator.SetBool("Pot", true);
-        _orbAnimator.SetBool("Attack", true);
     }
+    public void Key_ActivateOrbAbility()
+    {
+        potOrbObject.SetActive(true);
+        _orbAnimator.SetBool("Attack", true);
 
+    }   
+    public void Key_ActivateOrbChargeAudio()
+    {
+        chargingAudio.Play();
+    }
     public void Key_ActivateOrbHitVFX()
     {
+        potCollider.enabled = true;
         _orbAnimator.enabled = false;
         waterHit.Play();
         _waterHitAudio.Play();
@@ -58,6 +68,7 @@ public class AbilityPot : Ability
 
     public void Key_DeactivatePotAbility()
     {
+        potCollider.enabled = false;
         _orbAnimator.enabled = true;
         playerAnimator.SetBool("Pot", false);
         _orbAnimator.SetBool("Attack", false);
