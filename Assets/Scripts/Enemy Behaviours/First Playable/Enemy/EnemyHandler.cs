@@ -99,6 +99,11 @@ public class EnemyHandler : MonoBehaviour
         currentTimeScale = Time.timeScale;
     }
 
+    public void Update()
+    {
+        UpdateSlowMo();
+    }
+
     // Currently just destroying the enemy if the player attacks them
     private void OnTriggerEnter(Collider other)
     {
@@ -243,6 +248,7 @@ public class EnemyHandler : MonoBehaviour
             _animator.enabled = false;
             _navMeshAgent.enabled = false;
             weaponMeshRenderer.enabled = false;
+            weaponCollider.enabled = false;
             _isFunctional = false;
         }
     }

@@ -272,7 +272,7 @@ public class CombatHandler : MonoBehaviour
     // Updates the shields FSM
     private void UpdateShieldFSM()
     {
-        Debug.Log("Just used mechainc: " + _justUsedMechanic);
+        // Debug.Log("Just used mechainc: " + _justUsedMechanic);
 
         switch (shieldState)
         {
@@ -295,6 +295,7 @@ public class CombatHandler : MonoBehaviour
         {
             shieldState = ShieldState.Shielding;
             _animator.SetBool("Shield", true);
+            StartJustUsedMechanic(shieldAttackWindow);
         }
     }
 
@@ -310,7 +311,7 @@ public class CombatHandler : MonoBehaviour
         shieldCooldown -= Time.deltaTime;
         _animator.SetBool("Shield", false);
 
-        StartJustUsedMechanic(shieldAttackWindow);
+        //StartJustUsedMechanic(shieldAttackWindow);
         if (shieldCooldown <= 0)
         {
             shieldCooldown = _tempShieldCDTimer;
