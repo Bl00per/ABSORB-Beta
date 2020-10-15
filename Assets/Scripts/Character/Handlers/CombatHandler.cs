@@ -91,6 +91,7 @@ public class CombatHandler : MonoBehaviour
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
             {
+               
                 _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
