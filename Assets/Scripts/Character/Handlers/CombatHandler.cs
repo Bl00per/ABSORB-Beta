@@ -235,7 +235,7 @@ public class CombatHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("EnemyWeapon"))
+        if (other.gameObject.CompareTag("EnemyWeapon")|| other.gameObject.CompareTag("EnemyProjectile"))
         {
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
