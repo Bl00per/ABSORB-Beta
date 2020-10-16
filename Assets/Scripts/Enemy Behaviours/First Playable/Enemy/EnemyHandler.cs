@@ -189,13 +189,15 @@ public class EnemyHandler : MonoBehaviour
     // Activates the weapons collider
     public void ActivateWeaponCollider()
     {
-        weaponCollider.enabled = true;
+        if(weaponCollider != null)
+            weaponCollider.enabled = true;
     }
 
     // Deactivates the weapons collider
     public void DeactiveWeaponCollider()
     {
-        weaponCollider.enabled = false;
+        if(weaponCollider != null)
+            weaponCollider.enabled = false;
     }
 
     public void key_PlayAttackVFX()

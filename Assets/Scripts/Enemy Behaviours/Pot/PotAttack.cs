@@ -28,7 +28,18 @@ public class PotAttack : AIBehaviour
     {
         _animator.SetBool("Attacking", true);
 
-        enemyHandler.GetBrain().GetNavMeshAgent().isStopped = true;
+        switch (enemyHandler.GetEnemyType())
+        {
+            case EnemyHandler.EnemyType.ELITE:
+                brain.SetBehaviour("Movement");
+                break;
+
+            case EnemyHandler.EnemyType.SPECIAL:
+                enemyHandler.GetBrain().GetNavMeshAgent().isStopped = true;
+                break;
+        }
+
+
         /*        waterFireEffect.Play();
                 EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
                 eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
@@ -37,7 +48,16 @@ public class PotAttack : AIBehaviour
 
     public override void OnStateExit()
     {
-        enemyHandler.GetBrain().GetNavMeshAgent().isStopped = false;
+        switch (enemyHandler.GetEnemyType())
+        {
+            case EnemyHandler.EnemyType.ELITE:
+                break;
+
+            case EnemyHandler.EnemyType.SPECIAL:
+                enemyHandler.GetBrain().GetNavMeshAgent().isStopped = false;
+                break;
+        }
+
     }
 
     public override void OnStateFixedUpdate() { }
