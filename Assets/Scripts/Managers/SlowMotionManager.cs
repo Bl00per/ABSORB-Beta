@@ -47,13 +47,16 @@ public class SlowMotionManager : MonoBehaviour
         }
     }
 
-    public void ActivateSlowMotion()
+    //
+    public void ActivateSlowMotion(int percentage = 50)
     {
+        slowMotionPercentage = percentage;
         slowState = SlowMotionState.Slowing;
     }
 
     public void DeactivateSlowMotion()
     {
+        slowMotionPercentage = 50;
         slowState = SlowMotionState.Speeding;
     }
 }
