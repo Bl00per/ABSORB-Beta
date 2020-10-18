@@ -26,6 +26,12 @@ public class AbilityHandler : MonoBehaviour
     public List<SkinnedMeshRenderer> abilityArms = new List<SkinnedMeshRenderer>();
     private int _abilityArmIndex = 0;
 
+    [Header("Abidaro Color/Intensity")]
+    public Renderer abidaroMesh;
+    public Color @default = new Color(93, 41, 191, 255), hammerColor = new Color(209, 186, 25, 255), sickleColor = new Color(194, 9, 0, 255), potColor = new Color(0, 171, 205, 255);
+    public float colorChangeTime = 2f;
+    public float abilityIntensity = 5f;
+
     [Header("Debug Options")]
     public AbilityType startingAbility = AbilityType.NONE;
 
@@ -37,13 +43,18 @@ public class AbilityHandler : MonoBehaviour
     private LocomotionHandler _locomotionHanlder;
     private CombatHandler _combatHandler;
     private Animator _animator;
+    private Material material;
     private bool _isAbosrbing = false;
+    private bool colorChange = false;
+    private Color nextColor;
 
     // Called on initialise
     private void Awake()
     {
         // Getting the player handler
         _playerHandler = this.GetComponent<PlayerHandler>();
+
+        material = abidaroMesh.material;
 
         // Assign all the abilites
         _abilities = new Ability[(int)AbilityType.POT + 1];
@@ -97,6 +108,8 @@ public class AbilityHandler : MonoBehaviour
                 }
             }
         }
+
+        //ColorLerpUpdate();
     }
 
     // Gets called every frame we don't have an ability
@@ -164,22 +177,69 @@ public class AbilityHandler : MonoBehaviour
         {
             case AbilityType.NONE:
                 abilityArms[_abilityArmIndex].enabled = false;
+                ColorLerp(AbilityType.NONE, @default * abilityIntensity);
                 break;
 
             case AbilityType.SICKLE:
                 _abilityArmIndex = 0;
                 abilityArms[_abilityArmIndex].enabled = true;
+                ColorLerp(AbilityType.SICKLE, sickleColor * abilityIntensity);
                 break;
 
             case AbilityType.HAMMER:
                 _abilityArmIndex = 1;
                 abilityArms[_abilityArmIndex].enabled = true;
+                ColorLerp(AbilityType.HAMMER, hammerColor * abilityIntensity);
                 break;
 
             case AbilityType.POT:
-                abilityArms[_abilityArmIndex].enabled = true;
                 _abilityArmIndex = 2;
+                abilityArms[_abilityArmIndex].enabled = true;
+                ColorLerp(AbilityType.POT, potColor * abilityIntensity);
                 break;
+        }
+    }
+
+    // Start a couroutine based on which color abilty and pass in the color to change over to it
+    private void ColorLerp(AbilityType ability, Color toColor)
+    {
+        colorChange = true;
+        switch (ability)
+        {
+            case AbilityType.NONE:
+                StartCoroutine(ColorLerpUpdate(toColor));
+                break;
+
+            case AbilityType.SICKLE:
+                StartCoroutine(ColorLerpUpdate(toColor));
+                break;
+
+            case AbilityType.HAMMER:
+                StartCoroutine(ColorLerpUpdate(toColor));
+                break;
+
+            case AbilityType.POT:
+                StartCoroutine(ColorLerpUpdate(toColor));
+                break;
+        }
+    }
+
+    private IEnumerator ColorLerpUpdate(Color nextColor)
+    {
+        if (colorChange)
+        {
+            // Get the current color for the lerp
+            Color currentColor = material.GetColor("_EmissionColor");
+            float elapsedTime = 0f;
+
+            while (elapsedTime < colorChangeTime)
+            {
+                Color lerpedColor = Color.Lerp(currentColor, nextColor, (elapsedTime / colorChangeTime));
+                material.SetColor("_EmissionColor", lerpedColor);
+                elapsedTime += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+            colorChange = false;
         }
     }
 
