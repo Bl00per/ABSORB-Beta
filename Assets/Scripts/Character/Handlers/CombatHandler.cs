@@ -249,11 +249,19 @@ public class CombatHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon") || other.gameObject.CompareTag("EnemyProjectile"))
         {
-            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
+            EnemyWeapon weapon = other.gameObject.GetComponent<EnemyWeapon>();
+            EnemyHandler enemy = weapon.GetEnemyHandler();
+
+            // CHECK IF SHIELD IS DEFAULT, BUT ALL THE COMPONENTS ARE ENABLED:
+            // if they are, set the shield state to sheilding. Something must be conflicting and causing a bug.
+
+
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
                 enemy.weaponCollider.enabled = false;
+
+                //Debug.Log($"Player took damage! Shield state was: {shieldState}");
             }
         }
     }
