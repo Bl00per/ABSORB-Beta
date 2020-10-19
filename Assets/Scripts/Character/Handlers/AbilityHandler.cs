@@ -246,6 +246,27 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    public Color GetCurrentColor()
+    {
+        switch (_currentAbility)
+        {
+            case AbilityType.NONE:
+                return @default;
+
+            case AbilityType.SICKLE:
+                return sickleColor;
+
+            case AbilityType.HAMMER:
+                return hammerColor;
+
+            case AbilityType.POT:
+                return potColor;
+                
+            default:
+                return @default;
+        }
+    }
+
     // Returns the closest parried enemy to the player
     public EnemyHandler GetClosestParriedEnemy()
     {

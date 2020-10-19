@@ -30,6 +30,7 @@ public class CombatHandler : MonoBehaviour
     public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
+
     private PlayerHandler _playerHandler;
     private SlowMotionManager _slowMoManager;
     private InputManager _inputManager;
@@ -37,7 +38,9 @@ public class CombatHandler : MonoBehaviour
     private Transform _transform;
     private Animator _animator;
     private Rigidbody _rb;
+    private AbilityHandler _abilityHandler;
     private bool _justUsedMechanic = false;
+    private Renderer _bodyRenderer;
     [Header("Enemy Attack Timers")]
     public float primaryAttackWindow = 1.0f;
     public float shieldAttackWindow = 0.5f;
@@ -52,6 +55,8 @@ public class CombatHandler : MonoBehaviour
         _animator = _playerHandler.GetAnimator();
         _inputManager = _playerHandler.GetInputManager();
         _slowMoManager = _playerHandler.GetSlowMotionManager();
+        _abilityHandler = this.GetComponent<AbilityHandler>();
+        _bodyRenderer = _abilityHandler.abidaroMesh;
         _rb = this.GetComponent<Rigidbody>();
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
@@ -70,6 +75,7 @@ public class CombatHandler : MonoBehaviour
         UpdateShieldFSM();
         UpdateAttack();
         UpdateDeath();
+        UpdatePlayerEmission();
     }
 
     #region Attacking 
@@ -92,7 +98,7 @@ public class CombatHandler : MonoBehaviour
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
             {
-               
+
                 _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
@@ -241,7 +247,7 @@ public class CombatHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("EnemyWeapon")|| other.gameObject.CompareTag("EnemyProjectile"))
+        if (other.gameObject.CompareTag("EnemyWeapon") || other.gameObject.CompareTag("EnemyProjectile"))
         {
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
@@ -250,6 +256,13 @@ public class CombatHandler : MonoBehaviour
                 enemy.weaponCollider.enabled = false;
             }
         }
+    }
+
+    private void UpdatePlayerEmission()
+    {
+        // Lower the emission intensity when the player takes damage
+        _bodyRenderer.material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
+        ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
     }
 
     #endregion
