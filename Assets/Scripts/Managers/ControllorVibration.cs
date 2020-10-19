@@ -5,7 +5,13 @@ using XInputDotNetPure;
 public class ControllorVibration : MonoBehaviour
 {
     public static PlayerIndex _playerIndex;
-    public static bool controllorVibration;
+    public static bool controllorVibration = true;
+
+
+    public void VibrationCheck(bool check)
+    {
+        controllorVibration =! controllorVibration; 
+    }
 
     public static IEnumerator Vibrate(float leftMotor, float rightMotor, float Time)
     {

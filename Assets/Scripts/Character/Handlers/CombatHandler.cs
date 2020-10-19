@@ -83,7 +83,7 @@ public class CombatHandler : MonoBehaviour
     private bool _comboStart = true;
     private bool _attacking;
     private Transform enemy;
-    public GameObject lockOnGO;
+    //public GameObject lockOnGO;
 
     private void UpdateAttack()
     {
@@ -91,8 +91,7 @@ public class CombatHandler : MonoBehaviour
         if (_comboStart)
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
-            {
-               
+            {                
                 _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
@@ -120,8 +119,8 @@ public class CombatHandler : MonoBehaviour
         {
             if (enemy != null) //if an enemy is within range
             {
-                lockOnGO.transform.position = enemy.position;
-                lockOnGO.SetActive(true);
+               // lockOnGO.transform.position = enemy.position;
+               // lockOnGO.SetActive(true);
 
                 Vector3 direction = enemy.transform.position - _rb.transform.position;
                 direction.y = 0;
@@ -130,12 +129,12 @@ public class CombatHandler : MonoBehaviour
             }
             else // if an enemy is not in range
             {
-                lockOnGO.SetActive(false);
+               // lockOnGO.SetActive(false);
             }
         }
         else // if the player is not attacking
         {
-            lockOnGO.SetActive(false);
+            //lockOnGO.SetActive(false);
         }
     }
 
@@ -235,6 +234,15 @@ public class CombatHandler : MonoBehaviour
         shieldSFX.Play();
     }
 
+    public void key_SmallVibrate()
+    {
+        StartCoroutine(ControllorVibration.Vibrate(.2f, .2f, .2f));
+    }
+    public void key_LargeVibrate()
+    {
+        StartCoroutine(ControllorVibration.Vibrate(1f, 1f, .4f));
+    }
+
     #endregion
 
     #region Take Damage
@@ -248,6 +256,7 @@ public class CombatHandler : MonoBehaviour
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
                 enemy.weaponCollider.enabled = false;
+                StartCoroutine(ControllorVibration.Vibrate(.5f, .5f, .1f));
             }
         }
     }

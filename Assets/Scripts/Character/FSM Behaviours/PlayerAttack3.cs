@@ -20,6 +20,7 @@ public class PlayerAttack3 : StateMachineBehaviour
 
         // Setting the current state within the player handler
         _playerHandler.SetState(PlayerHandler.PlayerAnimatorState.ATTACK);
+        
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
