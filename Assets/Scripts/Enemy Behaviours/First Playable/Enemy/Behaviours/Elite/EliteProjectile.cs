@@ -64,6 +64,17 @@ public class EliteProjectile : MonoBehaviour
     // Gets called every frame
     private void Update()
     {
+        if (_enemyHandler != null && !_enemyHandler.IsAlive())
+        {
+            this.transform.localScale = minOrbSize;
+            waterHitEffectGO.transform.position = this.transform.position;
+            waterHitEffectGO.transform.SetParent(this.gameObject.transform);
+            waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            _renderer.enabled = true;
+            this.gameObject.SetActive(false);
+        }
+
+
         if (this.transform.localScale.x <= maxOrbSize.x)
             this.transform.localScale += this.transform.localScale * Time.deltaTime * 2;
 
@@ -92,9 +103,9 @@ public class EliteProjectile : MonoBehaviour
             _enemyHandler.GetBrain().SetBehaviour("Parried");
             waterParryEffect.Play();
             waterParryAudio.Play();
-   
+
         }
-       
+
         _isActive = false;
         _collider.enabled = false;
         _renderer.enabled = false;
@@ -113,7 +124,7 @@ public class EliteProjectile : MonoBehaviour
         yield return new WaitForSeconds(effectTime);
 
         this.transform.localScale = minOrbSize;
-        waterHitEffectGO.transform.SetParent(this.gameObject.transform);      
+        waterHitEffectGO.transform.SetParent(this.gameObject.transform);
         waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         waterHitEffectGO.transform.position = this.transform.position;
         _renderer.enabled = true;

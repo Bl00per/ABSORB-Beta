@@ -10,7 +10,9 @@ public class PotAttack : AIBehaviour
     public float projectileSpeed = 150.0f;
     public float projectileLifeTime = 4.0f;
     public float projectileDamage = 10.0f;
-    public float dashCancelRange = 10.0f;
+
+    [Header("Special Properties")]
+    public float retreatFromPlayerTime = 2.0f;
 
     [Header("References")]
     public GameObject projectilePrefab;
@@ -18,16 +20,18 @@ public class PotAttack : AIBehaviour
     public ParticleSystem chargingEffect;
 
     private Animator _animator;
+    private PotMovement _potMovement;
+    private bool _startedRetreatTimer = false;
 
     public void Awake()
     {
         _animator = this.GetComponent<Animator>();
+        _potMovement = this.GetComponent<PotMovement>();
     }
 
     public override void OnStateEnter()
     {
         _animator.SetBool("Attacking", true);
-
         switch (enemyHandler.GetEnemyType())
         {
             case EnemyHandler.EnemyType.ELITE:
@@ -48,6 +52,7 @@ public class PotAttack : AIBehaviour
 
     public override void OnStateExit()
     {
+        _animator.SetBool("Attacking", false);
         switch (enemyHandler.GetEnemyType())
         {
             case EnemyHandler.EnemyType.ELITE:
@@ -71,11 +76,33 @@ public class PotAttack : AIBehaviour
         //     return;
         // }
 
+        if (brain.GetDistanceToPlayer() <= _potMovement.enterAttackStateDistance + 1.0f)
+        {
+            switch (enemyHandler.GetEnemyType())
+            {
+                case EnemyHandler.EnemyType.ELITE:
+                    brain.SetBehaviour("Movement");
+                    break;
+
+                case EnemyHandler.EnemyType.SPECIAL:
+                    if (!_startedRetreatTimer)
+                        StartCoroutine(RetreatFromPlayer());
+                    break;
+            }
+            return;
+        }
+
         // Rotate to face direction
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), turnSpeed);
 
     }
-
+    public IEnumerator RetreatFromPlayer()
+    {
+        _startedRetreatTimer = true;
+        yield return new WaitForSeconds(retreatFromPlayerTime);
+        brain.SetBehaviour("Movement");
+        _startedRetreatTimer = false;
+    }
 
     public void key_ProjectileCharge()
     {
@@ -84,8 +111,8 @@ public class PotAttack : AIBehaviour
         projectilePrefab.transform.position = projectileStartPoint.position;
         projectilePrefab.transform.SetParent(this.gameObject.transform);
         projectilePrefab.SetActive(true);
-        
     }
+
     public void key_FireProjectile()
     {
         _animator.SetBool("Attacking", false);
@@ -94,6 +121,7 @@ public class PotAttack : AIBehaviour
         projectilePrefab.transform.SetParent(null);
         StartCoroutine(JustFiredTimer());
     }
+
     public IEnumerator JustFiredTimer()
     {
         yield return new WaitForSecondsRealtime(justFiredProjectileTimer);

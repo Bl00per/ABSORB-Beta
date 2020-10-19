@@ -138,9 +138,11 @@ public class AbilityHandler : MonoBehaviour
                     _combatHandler.SetCanShield(false);
                 }
 
+                // Add health of enemy abosrb
+
                 // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
-                enemy.GetEnemyGroupHandler()?.Remove(enemy);
+                //enemy.GetEnemyGroupHandler()?.Remove(enemy);
                 SetAbility(enemy.GetAbilityType());
             }
         }
@@ -263,6 +265,20 @@ public class AbilityHandler : MonoBehaviour
         if (_sortedHitList.Count <= 0)
             return null;
 
+        // Creating some local variables
+        EnemyHandler enemyHandler;
+        AbsorbInteractable absorbInteractable;
+
+        // If there is only one enemy within the list, return that enemy
+        if (_sortedHitList.Count == 1)
+        {
+            if (_sortedHitList[0].transform.TryGetComponent(out enemyHandler))
+            {
+                if (enemyHandler.IsParried())
+                    return enemyHandler;
+            }
+        }
+
         // Sorting list based on distance
         _sortedHitList.Sort((h1, h2) => Vector3.Distance(h1.transform.position, transform.position)
                              .CompareTo(Vector3.Distance(h2.transform.position, transform.position)));
@@ -271,8 +287,6 @@ public class AbilityHandler : MonoBehaviour
         for (int i = 0; i < _sortedHitList.Count; ++i)
         {
             //EnemyHandler enemyHandler = _sortedHitList[i].transform.GetComponent<EnemyHandler>();
-            EnemyHandler enemyHandler;
-            AbsorbInteractable absorbInteractable;
             if (_sortedHitList[i].transform.TryGetComponent(out enemyHandler))
             {
                 if (enemyHandler.IsParried())
