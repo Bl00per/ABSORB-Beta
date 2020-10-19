@@ -7,13 +7,10 @@ public class PotMovement : AIBehaviour
     [Header("Properties")]
     public float enterAttackStateDistance = 10.0f;
     public float retreatFromPlayerDistance = 7.0f;
-    public float retreatDistance = 6.0f;
 
     [Header("Timers")]
-    public float returnToAttackPosition = 1.0f;
+    public float retreatFromPlayerTimer = 0.0f;
     public float returnToInitialAngularSpeed = 1.0f;
-
-    private Vector3 _attackPosition = Vector3.zero;
     private float _initialAngularSpeed = 0.0f;
     private bool _startedRetreat = false;
 
@@ -33,28 +30,33 @@ public class PotMovement : AIBehaviour
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
+        Debug.Log(GetRetreatDistance());
+
         // Checking if we should be locked onto the player or not...
         if (this.destinationLockedToPlayer)
             this.currentDestination = brain.PlayerTransform.position;
 
         // Updating the target destination every frame
         brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
-        
-        if (distance <= retreatFromPlayerDistance)
-        {
-            Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * enterAttackStateDistance);
-            OverrideDestination(retreatPosition, 1.0f);
-            return;
-        }
-        else if (enemyHandler.GetJustAttacked())
+
+        // if (distance <= retreatFromPlayerDistance)
+        // {
+        //     Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * enterAttackStateDistance);
+        //     OverrideDestination(retreatPosition, 1.0f);
+        //     return;
+        // }
+        /* else */
+        if (enemyHandler.GetJustAttacked() || distance <= retreatFromPlayerDistance)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
             if (!_startedRetreat)
-                StartCoroutine(Retreat(_attackPosition, returnToAttackPosition, returnToInitialAngularSpeed));
+            {
+                Vector3 retreatPosition = transform.position - (-brain.GetDirectionToPlayer() * GetRetreatDistance());
+                StartCoroutine(Retreat(retreatPosition, retreatFromPlayerTimer, returnToInitialAngularSpeed));
+            }
         }
         else if (distance <= enterAttackStateDistance && !_startedRetreat)
         {
-            _attackPosition = transform.position;
             brain.SetBehaviour("Attack");
         }
         // // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
@@ -83,6 +85,11 @@ public class PotMovement : AIBehaviour
         yield return new WaitForSeconds(returnToInitialAngularSpeedTimer);
         brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
         _startedRetreat = false;
+    }
+
+    public float GetRetreatDistance()
+    {
+        return brain.GetDistanceToPlayer() - enterAttackStateDistance;
     }
 
     // [Header("Properties")]
