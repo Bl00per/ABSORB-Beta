@@ -18,6 +18,11 @@ public class MainMenu : MonoBehaviour
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
+    [Header("Sensitivity Sliders")]
+    public Slider sensitivityXSlider;
+    public Slider sensitivityYSlider;
+    public Text sensitivityMultiplierTextX;
+    public Text sensitivityMultiplierTextY;
     [Header("BUTTONS")]
     public GameObject mainMenuFirstSelectedButton;
     public GameObject settingsFirstSelectedButton;
@@ -27,12 +32,17 @@ public class MainMenu : MonoBehaviour
 
     private PlayerHandler _playerHandler;
     private LocomotionHandler _locomotionHandler;
+    private CameraManager _cameraManager;
     private CombatHandler _combatHandler;
     private InputManager _inputManager;
     private ReadWriteText _readWrite;
-    private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null;
+    private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null, _sensXSliderFill = null, _sensYSliderFill = null;
     [HideInInspector]
     public bool inMainMenu = true;
+    private float cameraSensX = 0f;     // Keep track of current sensitivity
+    private float cameraSensY = 0f;
+    private float defaultSensX = 0f;    // For referencing to when setting sensitivity values
+    private float defaultSensY = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +52,7 @@ public class MainMenu : MonoBehaviour
         _playerHandler = player.GetComponent<PlayerHandler>();
         _locomotionHandler = _playerHandler.GetLocomotionHandler();
         _combatHandler = _playerHandler.GetCombatHandler();
+        _cameraManager = _playerHandler.GetCameraManager();
         _readWrite = GetComponent<ReadWriteText>();
         _inputManager = FindObjectOfType<InputManager>();
         inMainMenu = true;
@@ -52,9 +63,18 @@ public class MainMenu : MonoBehaviour
         // Set the play button as the first selected object
         EventSystem.current.SetSelectedGameObject(mainMenuFirstSelectedButton);
 
+        // Update this if we have 2 different camera speed values
+        defaultSensX = _cameraManager.mouseCamera.m_XAxis.m_MaxSpeed;
+        defaultSensY = _cameraManager.mouseCamera.m_YAxis.m_MaxSpeed;
+        // If you exit in and out of settings the camera speeds will be set to zero if this isnt here
+        cameraSensX = defaultSensX;
+        cameraSensY = defaultSensY;
+
         _masterSliderFill = masterVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
         _musicSliderFill = musicVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
         _sfxSliderFill = sfxVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
+        _sensXSliderFill = sensitivityXSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
+        _sensYSliderFill = sensitivityYSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
 
         // FOR DEBUG PURPOSES ONLY TO SKIP MENU
         if (!disableMenu)
@@ -81,20 +101,30 @@ public class MainMenu : MonoBehaviour
             {
                 GameObject temp = EventSystem.current.currentSelectedGameObject;
                 // I can't use a switch statement for this, I really tried. Forgive me
-                if (temp == masterVolumeSlider.gameObject)
+                if (temp == masterVolumeSlider.gameObject)  // Master Volume Slider
                     _masterSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _masterSliderFill.color = Color.white;
 
-                if (temp == musicVolumeSlider.gameObject)
+                if (temp == musicVolumeSlider.gameObject)   // Music Volume Slider
                     _musicSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _musicSliderFill.color = Color.white;
 
-                if (temp == sfxVolumeSlider.gameObject)
+                if (temp == sfxVolumeSlider.gameObject)     // SFX Volume Slider
                     _sfxSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _sfxSliderFill.color = Color.white;
+
+                if (temp == sensitivityXSlider.gameObject)  // Sensitivity X Slider
+                    _sensXSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _sensXSliderFill.color = Color.white;
+
+                if (temp == sensitivityYSlider.gameObject)  // Sensitivity Y Slider
+                    _sensYSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _sensYSliderFill.color = Color.white;
             }
         }
     }
@@ -110,7 +140,7 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
         //UnityEditor.EditorApplication.ExitPlaymode();
-       
+
     }
 
     // Displays the settings menu
@@ -161,14 +191,20 @@ public class MainMenu : MonoBehaviour
     private void SetSettingsOnStart()
     {
         /* Volume Sliders */
-        masterVolumeSlider.value = _readWrite.masterVolume;  // Master
+        masterVolumeSlider.value = _readWrite.masterVolume;     // Master
         audioMixer.SetFloat("Master", masterVolumeSlider.value);
 
-        musicVolumeSlider.value = _readWrite.musicVolume;    // Music
+        musicVolumeSlider.value = _readWrite.musicVolume;       // Music
         audioMixer.SetFloat("Music", musicVolumeSlider.value);
 
-        sfxVolumeSlider.value = _readWrite.sfxVolume;        // SFX
+        sfxVolumeSlider.value = _readWrite.sfxVolume;           // SFX
         audioMixer.SetFloat("SFX", sfxVolumeSlider.value);
+
+        sensitivityXSlider.value = _readWrite.sensitivityX;     // Sensitivity X
+        sensitivityMultiplierTextX.text = (1 + (sensitivityXSlider.value / 10)).ToString("0.0");
+
+        sensitivityYSlider.value = _readWrite.sensitivityY;     // Sensitivity Y
+        sensitivityMultiplierTextY.text = (1 + (sensitivityYSlider.value / 10)).ToString("0.0");
     }
 
     // Save all the settings values upon exiting the settings menu
@@ -177,6 +213,8 @@ public class MainMenu : MonoBehaviour
         _readWrite.masterVolume = masterVolumeSlider.value;
         _readWrite.musicVolume = musicVolumeSlider.value;
         _readWrite.sfxVolume = sfxVolumeSlider.value;
+        _readWrite.sensitivityX = sensitivityXSlider.value;
+        _readWrite.sensitivityY = sensitivityYSlider.value;
         _readWrite.OverwriteData();
     }
 
@@ -220,5 +258,32 @@ public class MainMenu : MonoBehaviour
             audioMixer.SetFloat("SFX", -80f);    // Mute the volume 
         else
             audioMixer.SetFloat("SFX", level);
+    }
+
+    // Sets the X Speed multiplier of the cameras
+    public void SetCameraSensX(float multiplier)
+    {
+        cameraSensX = defaultSensX * (1 + (multiplier / 10));
+        cameraSensX = defaultSensX * (1 + (multiplier / 10));
+        sensitivityMultiplierTextX.text = (1 + (multiplier / 10)).ToString("0.0");
+    }
+
+    // Sets the Y Speed multiplier of the cameras
+    public void SetCameraSensY(float multiplier)
+    {
+        cameraSensY = defaultSensY * (1 + (multiplier / 10));
+        cameraSensY = defaultSensY * (1 + (multiplier / 10));
+        sensitivityMultiplierTextY.text = (1 + (multiplier / 10)).ToString("0.0");
+    }
+
+    private void SetCameraSpeeds()
+    {
+        // Mouse Camera
+        _cameraManager.mouseCamera.m_XAxis.m_MaxSpeed = cameraSensX;
+        _cameraManager.mouseCamera.m_YAxis.m_MaxSpeed = cameraSensY;
+
+        // Controller Camera
+        _cameraManager.controllerCamera.m_XAxis.m_MaxSpeed = cameraSensX;
+        _cameraManager.controllerCamera.m_YAxis.m_MaxSpeed = cameraSensY;
     }
 }

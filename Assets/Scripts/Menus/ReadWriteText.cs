@@ -8,7 +8,7 @@ public class ReadWriteText : MonoBehaviour
 {
     [Header("Default Parameters")]
     [HideInInspector]
-    public float masterVolume = 0f, musicVolume = 10f, sfxVolume = 10f;
+    public float masterVolume = 0f, musicVolume = 10f, sfxVolume = 10f, sensitivityX = 0, sensitivityY = 0;
 
     void Awake()
     {
@@ -17,6 +17,8 @@ public class ReadWriteText : MonoBehaviour
             masterVolume = 10f;
             musicVolume = 10f;
             sfxVolume = 10f;
+            sensitivityX = 0;
+            sensitivityY = 0;
             CreateFile();
         }
         else
@@ -32,7 +34,9 @@ public class ReadWriteText : MonoBehaviour
         {
             m_masterVolume = masterVolume,
             m_musicVolume = musicVolume,
-            m_sfxVolume = sfxVolume
+            m_sfxVolume = sfxVolume,
+            m_sensitivityX = sensitivityX,
+            m_sensitivityY = sensitivityY
         };
 
         bf.Serialize(file, data);
@@ -56,6 +60,8 @@ public class ReadWriteText : MonoBehaviour
             masterVolume = data.m_masterVolume;
             musicVolume = data.m_musicVolume;
             sfxVolume = data.m_sfxVolume;
+            sensitivityX = data.m_sensitivityX;
+            sensitivityY = data.m_sensitivityY;
             //Debug.Log("File Read");
             file.Close();
         }
@@ -70,7 +76,9 @@ public class ReadWriteText : MonoBehaviour
         {
             m_masterVolume = masterVolume,
             m_musicVolume = musicVolume,
-            m_sfxVolume = sfxVolume
+            m_sfxVolume = sfxVolume,
+            m_sensitivityX = sensitivityX,
+            m_sensitivityY = sensitivityY
         };
 
         bf.Serialize(file, data);
@@ -81,6 +89,6 @@ public class ReadWriteText : MonoBehaviour
     [System.Serializable]
     public class GameData
     {
-        public float m_masterVolume = 10f, m_musicVolume = 10f, m_sfxVolume = 10f;
+        public float m_masterVolume = 10f, m_musicVolume = 10f, m_sfxVolume = 10f, m_sensitivityX, m_sensitivityY;
     }
 }
