@@ -24,6 +24,7 @@ public class AbilityPot : Ability
 
     private void Awake()
     {
+        _typeOfAbility = AbilityHandler.AbilityType.POT;
         _impactTrigger = potAim.GetComponent<Trigger>();
         _orbAnimator = potAim.GetComponent<Animator>();
         _waterHitAudio = waterHit.GetComponent<AudioSource>();

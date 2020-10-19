@@ -79,14 +79,16 @@ public class ObjectPooler : MonoBehaviour
         // If the enemy is in the active list
         if (this.GetListStatus(enemyHandler))
         {
-            enemyHandler.SetFunctional(false);
+            if(enemyHandler.GetFunctional())
+                enemyHandler.SetFunctional(false);
             _activeEnemies.Remove(enemyHandler);
             _inactiveEnemies.Add(enemyHandler);
         }
         // If the enemy is in the inactive list
         else
         {
-            enemyHandler.SetFunctional(true);
+           if(!enemyHandler.GetFunctional())
+                enemyHandler.SetFunctional(true);
             _inactiveEnemies.Remove(enemyHandler);
             _activeEnemies.Add(enemyHandler);
         }
@@ -167,7 +169,9 @@ public class ObjectPooler : MonoBehaviour
         {
             _respawnQueue.Remove(handler);
             _activeEnemies.Add(handler);
-            handler.SetFunctional(true);
+
+            if(!handler.GetFunctional())
+                handler.SetFunctional(true);
         }
     }
 

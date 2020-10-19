@@ -18,5 +18,7 @@ public abstract class Ability : MonoBehaviour
     public abstract void OnEnter();
     public abstract void OnExit();
     public abstract void Activate();
+    protected AbilityHandler.AbilityType _typeOfAbility;
     public bool IsActive() => active;
+    public AbilityHandler.AbilityType GetAbilityType() => _typeOfAbility;
 }
