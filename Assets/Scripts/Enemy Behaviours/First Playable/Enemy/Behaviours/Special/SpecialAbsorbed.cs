@@ -52,7 +52,7 @@ public class SpecialAbsorbed : AIBehaviour
 
     public override void OnStateEnter()
     {
-        _animator.enabled = false;
+        //_animator.enabled = false;
         _cutOutTimer = cutoffMax;
         _enabled = true;
         //_playerAbilityManager.playerForceField.SetActive(true);
