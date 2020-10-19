@@ -6,7 +6,7 @@ public class EnemyWeapon : MonoBehaviour
 {
     private EnemyHandler _enemyHandler;
 
-    private void Awake()
+    private void Start()
     {
         _enemyHandler = this.GetComponentInParent<EnemyHandler>();
     }

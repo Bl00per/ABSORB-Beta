@@ -23,6 +23,7 @@ public class AbilityHammer : Ability
 
     private void Awake()
     {
+        _typeOfAbility = AbilityHandler.AbilityType.HAMMER;
         _playerHandler = this.GetComponent<PlayerHandler>();
         _groundSmashParent = hammerGameObject.transform.parent;
         _groundSmashPosition = groundSmashTransform.position;

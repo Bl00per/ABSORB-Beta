@@ -109,13 +109,36 @@ public class EnemyHandler : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerWeapon"))
         {
-            if (other.gameObject.CompareTag("PlayerMelee"))
+            if (other.gameObject.CompareTag("PlayerMelee") && typeOfEnemy != EnemyType.ELITE)
+            {
                 TakeDamage(_playerHandler.GetPrimaryAttackDamage());
+            }
+            else if (other.gameObject.CompareTag("Ability"))
+            {
+                Ability usedAbility = null;
+                if (other.transform.TryGetComponent(out usedAbility))
+                {
+                    switch (typeOfEnemy)
+                    {
+                        case EnemyType.MINION:
+                            TakeDamage(usedAbility.damageToMinion, usedAbility.GetAbilityType());
+                            break;
+
+                        case EnemyType.SPECIAL:
+                            TakeDamage(usedAbility.damageToSpecial, usedAbility.GetAbilityType());
+                            break;
+
+                        case EnemyType.ELITE:
+                            TakeDamage(usedAbility.damageToElite, usedAbility.GetAbilityType());
+                            break;
+                    }
+                }
+            }
         }
     }
 
     // Makes the enemy take damage
-    public void TakeDamage(float damage, AbilityHandler.AbilityType e_Ability = AbilityHandler.AbilityType.NONE)
+    public void TakeDamage(float damage, AbilityHandler.AbilityType eAbility = AbilityHandler.AbilityType.NONE)
     {
         // Subtracting the damage dealt by the player from the current health of this enemy
         _currentHealth -= damage;
@@ -129,7 +152,7 @@ public class EnemyHandler : MonoBehaviour
         }
 
         // If the type of enemy isn't an elite or the player used the hammer ability; stagger this enemy
-        if (typeOfEnemy != EnemyType.ELITE || e_Ability == AbilityHandler.AbilityType.HAMMER)
+        if (typeOfEnemy != EnemyType.ELITE || eAbility != AbilityHandler.AbilityType.NONE)
             _aiBrain.SetBehaviour("Stagger");
 
         // Playing damage VFX
@@ -189,14 +212,14 @@ public class EnemyHandler : MonoBehaviour
     // Activates the weapons collider
     public void ActivateWeaponCollider()
     {
-        if(weaponCollider != null)
+        if (weaponCollider != null)
             weaponCollider.enabled = true;
     }
 
     // Deactivates the weapons collider
     public void DeactiveWeaponCollider()
     {
-        if(weaponCollider != null)
+        if (weaponCollider != null)
             weaponCollider.enabled = false;
     }
 
@@ -253,19 +276,24 @@ public class EnemyHandler : MonoBehaviour
             weaponCollider.enabled = false;
             _isFunctional = false;
         }
+
+        //Debug.Log($"Set functional: {value} -> On enemy: {gameObject.name}");
     }
 
     // Kills the enemy
     public void Kill()
     {
-        // Disabling functional components of enemy
-        SetFunctional(false);
+        // // Disabling functional components of enemy
+        // SetFunctional(false);
 
         // Playing death VFX
         PlayDeathFX();
         EnemyDetection.enemies.Clear();
         // Removes the group control over the enemy
-        _groupHandler?.Remove(this);
+        if (_groupHandler != null)
+            _groupHandler.Remove(this); // Group handler handles the SetFunctionl call
+        else
+            SetFunctional(false);
     }
 
     private void PlayDeathFX()

@@ -14580,9 +14580,9 @@ GameObject:
   - component: {fileID: 1404943356144390452}
   - component: {fileID: 2652768737778146961}
   - component: {fileID: 230932992428075611}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Elite_Body_001
-  m_TagString: Untagged
+  m_TagString: EnemyElite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
@@ -14595,7 +14595,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744173048157195150}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.54, z: 0}
+  m_LocalPosition: {x: 0, y: 3.373, z: 0}
   m_LocalScale: {x: 1, y: 1.0648, z: 1}
   m_Children:
   - {fileID: 8778779367682011159}
@@ -14670,9 +14670,9 @@ GameObject:
   - component: {fileID: 2447262687008383898}
   - component: {fileID: 2447262687008383899}
   - component: {fileID: 462111778196226373}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Elite - Hammer
-  m_TagString: EnemyWeapon
+  m_TagString: EnemyElite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
@@ -14825,6 +14825,14 @@ MonoBehaviour:
   baseDamage: 10
   attackCooldown: 1
   printHealthStats: 0
+  slowMotionPercentage: 50
+  tweenEase:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mixer: {fileID: 0}
 --- !u!114 &2447262687008383907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15006,9 +15014,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2447262688246808193}
   - component: {fileID: 1027267711457889550}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: EnemyElite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 0
@@ -34618,7 +34626,8 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6854882521320812650, guid: 70c3e11c1e9fd28408795d3f3ded207f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 70c3e11c1e9fd28408795d3f3ded207f, type: 3}
 --- !u!4 &8778779367682011159 stripped
 Transform:
