@@ -99,7 +99,7 @@ public class CombatHandler : MonoBehaviour
         if (_comboStart)
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
-            {                
+            {
                 _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
@@ -127,8 +127,8 @@ public class CombatHandler : MonoBehaviour
         {
             if (enemy != null) //if an enemy is within range
             {
-               // lockOnGO.transform.position = enemy.position;
-               // lockOnGO.SetActive(true);
+                // lockOnGO.transform.position = enemy.position;
+                // lockOnGO.SetActive(true);
 
                 Vector3 direction = enemy.transform.position - _rb.transform.position;
                 direction.y = 0;
@@ -137,7 +137,7 @@ public class CombatHandler : MonoBehaviour
             }
             else // if an enemy is not in range
             {
-               // lockOnGO.SetActive(false);
+                // lockOnGO.SetActive(false);
             }
         }
         else // if the player is not attacking
@@ -280,9 +280,13 @@ public class CombatHandler : MonoBehaviour
         // Lower the emission intensity when the player takes damage
         _bodyRenderer.material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
         ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
+
         float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
-        _cameraManager.SetVignetteIntensity(temp);
-        Debug.Log("Intensity = " + temp);
+        // When you gain max health again, makes it so temp isnt negative
+        if (temp <= 0)
+            _cameraManager.SetVignetteIntensity(0f);
+        else
+            _cameraManager.SetVignetteIntensity(temp);
     }
 
     #endregion
@@ -455,7 +459,7 @@ public class CombatHandler : MonoBehaviour
     public void key_deathSFX2()
     {
         deathSFX2.Play();
-    }   
+    }
     public void key_deathPE()
     {
         deathPE.Play();

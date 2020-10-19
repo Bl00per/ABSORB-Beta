@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 277089500304401458}
   - component: {fileID: 277089500304401459}
+  - component: {fileID: 1224229780}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -44,14 +45,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: 0
+  checkForInputTime: 0.1
   cinemachine: {fileID: 0}
   attackXboxKey: 2
+  altAttackXboxKey: 0
   attackKey: 323
   splAttackXboxKey: 9
   splAttackKey: 324
   shieldXboxKey: 8
+  altShieldXboxKey: 0
   shieldKey: 32
   dashXboxKey: 3
   dashKey: 304
   pauseXboxKey: 4
   pauseKey: 27
+--- !u!114 &1224229780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277089500304401456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a242af7258d1cde4a8e1a2825e01f70e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

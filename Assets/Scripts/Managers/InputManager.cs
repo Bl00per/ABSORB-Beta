@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Attack Button")]
     public XboxButton attackXboxKey;
+    public XboxButton altAttackXboxKey;
     public KeyCode attackKey;
 
     [Header("Special Attack Button")]
@@ -25,6 +26,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Shield Button")]
     public XboxButton shieldXboxKey;
+    public XboxButton altShieldXboxKey;
     public KeyCode shieldKey;
 
     [Header("Dash Button")]
@@ -197,7 +199,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(attackXboxKey, XboxController.First) : Input.GetKeyDown(attackKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(attackXboxKey, XboxController.First) || XCI.GetButtonDown(altAttackXboxKey, XboxController.First)) : Input.GetKeyDown(attackKey);
         }
         else
             return false;
@@ -219,7 +221,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(shieldXboxKey, XboxController.First) : Input.GetKeyDown(shieldKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(shieldXboxKey, XboxController.First) || XCI.GetButtonDown(altShieldXboxKey, XboxController.First)) : Input.GetKeyDown(shieldKey);
         }
         else
             return false;
@@ -234,6 +236,16 @@ public class InputManager : MonoBehaviour
         }
         else
             return false;
+    }
+
+    public bool GetLeftTriggerDown()
+    {
+        return false;
+    }
+
+    public bool GetRightTriggerDown()
+    {
+        return false;
     }
 
     // Check for Pause button press
