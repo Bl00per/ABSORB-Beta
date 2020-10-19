@@ -30,7 +30,10 @@ public class CheckPoint : MonoBehaviour
         {
             Debug.Log("Player walked through trigger");
             _playerHandler.SetRespawnPosition(this.spawnPosition.position);
-           // other.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePositionY;
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            //rb.constraints = RigidbodyConstraints.None;
+
+
         }
     }
 
