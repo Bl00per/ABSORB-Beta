@@ -21,6 +21,7 @@ public class PlayerHandler : MonoBehaviour
     public int primaryAttackDamage = 25;
     public float respawnFlyingTime = 5.0f;
     public float respawnFlyingOffset = 20.0f;
+    [SerializeField]
     private int _currentHealth = 100;
 
     // References
