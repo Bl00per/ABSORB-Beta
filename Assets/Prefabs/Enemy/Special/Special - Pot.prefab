@@ -616,7 +616,7 @@ MonoBehaviour:
   lockState: 0
   stateReturnName: Idle
   maxIntensity: 2
-  flickerSpeed: 5
+  flickerSpeed: 2
 --- !u!114 &7111692533800034911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2670,12 +2670,12 @@ PrefabInstance:
     - target: {fileID: 8798653982838523641, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 0.12
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8798653982838523641, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.32
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 8798653982838523641, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
@@ -3111,6 +3111,16 @@ PrefabInstance:
         type: 3}
       propertyPath: TrailModule.dieWithParticles
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8798653982852693177, guid: aecc222313ba5394db83900e4a7187cb,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.339
+      objectReference: {fileID: 0}
+    - target: {fileID: 8798653982852693177, guid: aecc222313ba5394db83900e4a7187cb,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.106
       objectReference: {fileID: 0}
     - target: {fileID: 8798653982852875259, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}

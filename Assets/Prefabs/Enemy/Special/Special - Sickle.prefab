@@ -1182,7 +1182,7 @@ MonoBehaviour:
   lockState: 0
   stateReturnName: Idle
   maxIntensity: 2
-  flickerSpeed: 5
+  flickerSpeed: 2
 --- !u!114 &3047529433226205306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2724,6 +2724,11 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8798653982838615959, guid: aecc222313ba5394db83900e4a7187cb,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1bd483ac1fbe894468833724102334ca, type: 2}
     - target: {fileID: 8798653982852875259, guid: aecc222313ba5394db83900e4a7187cb,
         type: 3}
       propertyPath: m_Layer
