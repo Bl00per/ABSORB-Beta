@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class CameraManager : MonoBehaviour
 {
@@ -11,6 +13,12 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook mouseCamera;
     public CinemachineVirtualCamera deathCamera;
 
+    [HideInInspector]
+    public Camera mainCamera;
+    [HideInInspector]
+    public Volume cameraVolume;
+    [HideInInspector]
+    public Vignette vignette;
     private bool _controllerUpdated = false;
     private PauseMenu _pauseMenu;
 
@@ -33,6 +41,9 @@ public class CameraManager : MonoBehaviour
         else if (!inputManager.GetIsUsingController())
             SetMouseCamera();
 
+        mainCamera = Camera.main;
+        cameraVolume = mainCamera.GetComponent<Volume>();
+        cameraVolume.profile.TryGet(out vignette);
         _controllerUpdated = inputManager.GetIsUsingController();
         deathCamera.Priority = 0;
 
@@ -137,5 +148,15 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook GetMouseCamera()
     {
         return mouseCamera;
+    }
+
+    public float GetVignetteIntensity()
+    {
+        return vignette.intensity.value;
+    }
+
+    public float SetVignetteIntensity(float intensity)
+    {
+        return vignette.intensity.value = intensity;
     }
 }

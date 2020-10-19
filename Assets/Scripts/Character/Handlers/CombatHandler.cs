@@ -39,6 +39,7 @@ public class CombatHandler : MonoBehaviour
     private Animator _animator;
     private Rigidbody _rb;
     private AbilityHandler _abilityHandler;
+    private CameraManager _cameraManager;
     private bool _justUsedMechanic = false;
     private Renderer _bodyRenderer;
     [Header("Enemy Attack Timers")]
@@ -56,6 +57,7 @@ public class CombatHandler : MonoBehaviour
         _inputManager = _playerHandler.GetInputManager();
         _slowMoManager = _playerHandler.GetSlowMotionManager();
         _abilityHandler = this.GetComponent<AbilityHandler>();
+        _cameraManager = _playerHandler.GetCameraManager();
         _bodyRenderer = _abilityHandler.abidaroMesh;
         _rb = this.GetComponent<Rigidbody>();
         // Make sure the shield sphere is turned off by default
@@ -278,6 +280,9 @@ public class CombatHandler : MonoBehaviour
         // Lower the emission intensity when the player takes damage
         _bodyRenderer.material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
         ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
+        float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
+        _cameraManager.SetVignetteIntensity(temp);
+        Debug.Log("Intensity = " + temp);
     }
 
     #endregion
