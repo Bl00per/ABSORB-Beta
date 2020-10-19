@@ -17,12 +17,12 @@ public class PlayerHandler : MonoBehaviour
 
     // Attributes
     [Header("Attributes")]
-    public int maxHealth = 100;
+    public float maxHealth = 100;
     public int primaryAttackDamage = 25;
     public float respawnFlyingTime = 5.0f;
     public float respawnFlyingOffset = 20.0f;
     [SerializeField]
-    private int _currentHealth = 100;
+    private float _currentHealth = 100;
 
     // References
     [Header("References")]
@@ -200,7 +200,7 @@ public class PlayerHandler : MonoBehaviour
         return isAlive = aliveState;
     }
 
-    public int GetCurrentHealth()
+    public float GetCurrentHealth()
     {
         return _currentHealth;
     }

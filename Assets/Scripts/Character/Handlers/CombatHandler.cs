@@ -280,8 +280,8 @@ public class CombatHandler : MonoBehaviour
         // Lower the emission intensity when the player takes damage
         _bodyRenderer.material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
         ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
-        float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
-        _cameraManager.SetVignetteIntensity(temp);
+        float temp = (_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth);
+        _cameraManager.SetVignetteIntensity(Mathf.InverseLerp(1, 0, temp));
         Debug.Log("Intensity = " + temp);
     }
 
