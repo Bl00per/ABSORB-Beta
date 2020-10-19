@@ -179,25 +179,26 @@ public class AbilityHandler : MonoBehaviour
         {
             case AbilityType.NONE:
                 abilityArms[_abilityArmIndex].enabled = false;
-                ColorLerp(AbilityType.NONE, @default * abilityIntensity);
+                // Set intensity based on how much hp the player has (e.g. (5 / 100) = 0.05 * 50hp = 2.5 = half intensity)
+                ColorLerp(AbilityType.NONE, @default * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.SICKLE:
                 _abilityArmIndex = 0;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.SICKLE, sickleColor * abilityIntensity);
+                ColorLerp(AbilityType.SICKLE, sickleColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.HAMMER:
                 _abilityArmIndex = 1;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.HAMMER, hammerColor * abilityIntensity);
+                ColorLerp(AbilityType.HAMMER, hammerColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.POT:
                 _abilityArmIndex = 2;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.POT, potColor * abilityIntensity);
+                ColorLerp(AbilityType.POT, potColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
         }
     }

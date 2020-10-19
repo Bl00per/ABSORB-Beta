@@ -25,6 +25,7 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
+    public ParticleSystem weaponSummonPE;
     [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
     public bool debugDeath = false;
     [Header("Body")]
@@ -208,6 +209,11 @@ public class CombatHandler : MonoBehaviour
         if (weaponPE != null)
             weaponPE.Play();
     }
+    public void Key_PlayWeaponSummonPE()
+    {
+        if (weaponSummonPE != null)
+            weaponSummonPE.Play();
+    }
 
     public void Key_SetAttack1Bool()
     {
@@ -365,6 +371,7 @@ public class CombatHandler : MonoBehaviour
     [Header("Death Attributes")]
     public AudioSource deathSFX1;
     public AudioSource deathSFX2;
+    public ParticleSystem deathPE;
     public float timeTillRespawn = 3.0f;
     private bool _respawning = false;
 
@@ -415,6 +422,10 @@ public class CombatHandler : MonoBehaviour
     public void key_deathSFX2()
     {
         deathSFX2.Play();
+    }   
+    public void key_deathPE()
+    {
+        deathPE.Play();
     }
 
     #endregion
