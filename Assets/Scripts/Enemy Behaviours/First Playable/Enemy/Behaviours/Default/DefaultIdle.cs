@@ -16,7 +16,7 @@ public class DefaultIdle : AIBehaviour
 
     public override void OnStateEnter() 
     {
-        enemyHandler.DeactiveWeaponCollider();
+        //enemyHandler.DeactiveWeaponCollider();
     }
     public override void OnStateExit() { }
     public override void OnStateFixedUpdate() { }

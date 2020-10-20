@@ -5301,7 +5301,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.5
-  m_Speed: 18
+  m_Speed: 10
   m_Acceleration: 200
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -5365,6 +5365,7 @@ MonoBehaviour:
   overallFXTime: 1
   bodyMeshRenderer:
   - {fileID: 105399401614012020}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 5593004704644753513}
   weaponCollider: {fileID: 3416644066943524673}
   attackSFX: {fileID: 5101747599924072480}
@@ -5442,7 +5443,7 @@ MonoBehaviour:
   specialAfterAttackSpeed: 7.5
   eliteStartRetreatDistance: 10
   eliteRetreatDistance: 10
-  attackChance: 0.199
+  attackChance: 0.5
   returnToInitalSpeed: 1
 --- !u!114 &2030620166790689653
 MonoBehaviour:
@@ -5459,12 +5460,12 @@ MonoBehaviour:
   swingAnimationName: Attacking
   specialMovementSpeed: 10
   specialStartAnimationDistance: 5
-  eliteMovementSpeed: 24
-  eliteDashMovementSpeed: 35
-  eliteStartDashDistance: 23
+  eliteMovementSpeed: 20
+  eliteDashMovementSpeed: 25
+  eliteStartDashDistance: 25
   eliteDashDistance: 8
-  eliteStartAnimationDistance: 22
-  eliteDashOffsetMultiplier: 1.5
+  eliteStartAnimationDistance: 25
+  eliteDashOffsetMultiplier: 2
 --- !u!1 &2460242229771355228
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class ShieldSphere : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-
+            Debug.Log(other.gameObject.name);
             // Get enemy handler out of the enemy weapon
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
 
