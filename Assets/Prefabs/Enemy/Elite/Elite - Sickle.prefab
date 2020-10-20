@@ -5360,6 +5360,8 @@ MonoBehaviour:
   deathSound: {fileID: 4788096869313371681}
   deathSoundLength: 2
   deathParticleEffect: {fileID: 3459858793647471222}
+  reviveSound: {fileID: 0}
+  reviveVFX: {fileID: 0}
   overallFXTime: 1
   bodyMeshRenderer:
   - {fileID: 105399401614012020}
@@ -5372,6 +5374,7 @@ MonoBehaviour:
   maxHealth: 150
   baseDamage: 10
   attackCooldown: 1
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 50
   tweenEase:
@@ -5765,6 +5768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyHandler: {fileID: 1776927510589967920}
 --- !u!164 &370802618
 AudioReverbFilter:
   m_ObjectHideFlags: 0
