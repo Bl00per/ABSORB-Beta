@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1646105798487817265}
   - component: {fileID: 3547943468842305787}
   - component: {fileID: 3332265756479776586}
+  - component: {fileID: 5129430080414495177}
   m_Layer: 0
   m_Name: Environment_MediumConsole_Mesh_low
   m_TagString: Untagged
@@ -94,3 +95,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 7723511682887710002, guid: a2510efe24c08704281864ca314fd8ad, type: 3}
+--- !u!208 &5129430080414495177
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3043359921038747950}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.008, y: 2.167, z: 1.5300001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.004, y: 0.008, z: -0.001}
+  m_TimeToStationary: 0.5
