@@ -268,10 +268,13 @@ public class CombatHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon") || other.gameObject.CompareTag("EnemyProjectile"))
         {
+            // Get enemy handler out of the enemy weapon
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
 
-            // CHECK IF SHIELD IS DEFAULT, BUT ALL THE COMPONENTS ARE ENABLED:
-            // if they are, set the shield state to sheilding. Something must be conflicting and causing a bug.
+            // // If shield state default but the components are enabled, then we exit this function
+            // if (shieldState == ShieldState.Default && (shieldSphereCollider.enabled || shieldMeshRenderer.enabled))
+            //     return;
+
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
