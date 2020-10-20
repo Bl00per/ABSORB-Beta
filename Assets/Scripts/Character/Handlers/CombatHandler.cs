@@ -334,7 +334,7 @@ public class CombatHandler : MonoBehaviour
     private void EnableShield()
     {
         // When the player hits the shield key
-        if (_inputManager.GetShieldButtonPress() && _comboStart)
+        if (_inputManager.GetShieldButtonPress()) //&& _comboStart)
         {
             shieldState = ShieldState.Shielding;
             _animator.SetBool("Shield", true);
