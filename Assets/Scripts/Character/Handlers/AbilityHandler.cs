@@ -346,6 +346,7 @@ public class AbilityHandler : MonoBehaviour
                     _animator.SetBool("Absorb", true);
                     _playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
                     absorbInteractable.Activate();
+                    _combatHandler.HealOvertime(healthFromAbsorb, healthFromAbosrbDuration);
                 }
                 return null;
             }
