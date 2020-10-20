@@ -27,7 +27,7 @@ public class AbilityHandler : MonoBehaviour
     private int _abilityArmIndex = 0;
 
     [Header("Abidaro Color/Intensity")]
-    public Renderer abidaroMesh;
+    public Renderer[] abidaroMesh;
     public Color @default = new Color(93, 41, 191, 255), hammerColor = new Color(209, 186, 25, 255), sickleColor = new Color(194, 9, 0, 255), potColor = new Color(0, 171, 205, 255);
     public float colorChangeTime = 2f;
     public float abilityIntensity = 5f;
@@ -43,10 +43,11 @@ public class AbilityHandler : MonoBehaviour
     private LocomotionHandler _locomotionHanlder;
     private CombatHandler _combatHandler;
     private Animator _animator;
-    private Material material;
+    //[SerializeField]
+    public Material[] _material;
     private bool _isAbosrbing = false;
-    private bool colorChange = false;
-    private Color nextColor;
+    private bool _colorChange = false;
+    private Color _nextColor;
 
     // Called on initialise
     private void Awake()
@@ -54,7 +55,13 @@ public class AbilityHandler : MonoBehaviour
         // Getting the player handler
         _playerHandler = this.GetComponent<PlayerHandler>();
 
-        material = abidaroMesh.material;
+        // Set the array size of the materials
+        _material = new Material[abidaroMesh.Length];
+
+        for (int i = 0; i < abidaroMesh.Length; i++)
+        {
+            _material[i] = abidaroMesh[i].material;
+        }
 
         // Assign all the abilites
         _abilities = new Ability[(int)AbilityType.POT + 1];
@@ -205,7 +212,7 @@ public class AbilityHandler : MonoBehaviour
     // Start a couroutine based on which color abilty and pass in the color to change over to it
     private void ColorLerp(AbilityType ability, Color toColor)
     {
-        colorChange = true;
+        _colorChange = true;
         switch (ability)
         {
             case AbilityType.NONE:
@@ -228,20 +235,29 @@ public class AbilityHandler : MonoBehaviour
 
     private IEnumerator ColorLerpUpdate(Color nextColor)
     {
-        if (colorChange)
+        if (_colorChange)
         {
             // Get the current color for the lerp
-            Color currentColor = material.GetColor("_EmissionColor");
+            Color[] currentColor = new Color[_material.Length];
+
+            for (int i = 0; i < currentColor.Length; i++)
+            {
+                currentColor[i] = _material[i].GetColor("_EmissionColor");
+            }
             float elapsedTime = 0f;
 
             while (elapsedTime < colorChangeTime)
             {
-                Color lerpedColor = Color.Lerp(currentColor, nextColor, (elapsedTime / colorChangeTime));
-                material.SetColor("_EmissionColor", lerpedColor);
+                for (int i = 0; i < currentColor.Length; i++)
+                {
+                    Color lerpedColor = Color.Lerp(currentColor[i], nextColor, (elapsedTime / colorChangeTime));
+                    _material[i].SetColor("_EmissionColor", lerpedColor);
+                }
+
                 elapsedTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
-            colorChange = false;
+            _colorChange = false;
         }
     }
 
@@ -260,10 +276,15 @@ public class AbilityHandler : MonoBehaviour
 
             case AbilityType.POT:
                 return potColor;
-                
+
             default:
                 return @default;
         }
+    }
+
+    public bool GetColorChange()
+    {
+        return _colorChange;
     }
 
     // Returns the closest parried enemy to the player
