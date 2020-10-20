@@ -57,7 +57,9 @@ public class GroupCombat : GroupState
             //Vector3 position = GetPassivePosition(aiBrain.PlayerTransform.position, Random.Range(returnToPassiveRadiusMin, returnToPassiveRadiusMax));
 
             // Moving enemy to a new passive position
-            aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, aiBrain.PlayerTransform.position, i), 1.0f);
+            //aiBrain.GetAIBehaviour("Movement").OverrideDestination(position, 1.0f);
+            if(aiBrain.GetHandler().GetEnemyType() == EnemyHandler.EnemyType.MINION)
+                aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(aiBrain, aiBrain.transform.position, i), 1.0f);
         }
     }
 
@@ -135,7 +137,7 @@ public class GroupCombat : GroupState
     public Vector3 GetPositionAroundPoint(AIBrain enemy, Vector3 position, int index)
     {
         float degreesPerIndex = 360f / this.enemyGroupHandler.GetEnemies().Count;
-        var offset = new Vector3(0f, 0f, circleRadius);
+        var offset = new Vector3(0f, 0f, enemy.GetNavMeshAgent().stoppingDistance);
         return position + (Quaternion.Euler(new Vector3(0f, degreesPerIndex * index, 0f)) * offset);
     }
 }
