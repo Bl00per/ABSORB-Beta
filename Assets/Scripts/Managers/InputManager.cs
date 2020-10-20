@@ -10,8 +10,11 @@ public class InputManager : MonoBehaviour
       _inputManager = FindObjectOfType<InputManager>();
     */
 
+    [Header("Properties")]
     public XboxController controller;
     public float checkForInputTime = 0.1f;
+    [Range(0, 1)]
+    public float triggerDeadZone = 0.1F;
     [HideInInspector]
     public CinemachineFreeLook cinemachine;
 
@@ -210,7 +213,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(splAttackXboxKey, XboxController.First) : Input.GetKeyDown(splAttackKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(splAttackXboxKey, XboxController.First) || GetRightTriggerDown()) : Input.GetKeyDown(splAttackKey);
         }
         else
             return false;
@@ -232,7 +235,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(dashXboxKey, XboxController.First) : Input.GetKeyDown(dashKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(dashXboxKey, XboxController.First) || GetLeftTriggerDown()) : Input.GetKeyDown(dashKey);
         }
         else
             return false;
@@ -240,12 +243,12 @@ public class InputManager : MonoBehaviour
 
     public bool GetLeftTriggerDown()
     {
-        return false;
+        return XCI.GetAxis(XboxAxis.LeftTrigger, XboxController.First) > triggerDeadZone;
     }
 
     public bool GetRightTriggerDown()
     {
-        return false;
+        return XCI.GetAxis(XboxAxis.RightTrigger, XboxController.First) > triggerDeadZone;
     }
 
     // Check for Pause button press
