@@ -30,6 +30,9 @@ public class CombatHandler : MonoBehaviour
     public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
+    [Header("Enemy Attack Timers")]
+    public float primaryAttackWindow = 1.0f;
+    public float shieldAttackWindow = 0.5f;
 
     private PlayerHandler _playerHandler;
     private SlowMotionManager _slowMoManager;
@@ -42,9 +45,10 @@ public class CombatHandler : MonoBehaviour
     private CameraManager _cameraManager;
     private bool _justUsedMechanic = false;
     private Renderer _bodyRenderer;
-    [Header("Enemy Attack Timers")]
-    public float primaryAttackWindow = 1.0f;
-    public float shieldAttackWindow = 0.5f;
+    private bool _healingPlayer = false;
+    private float _healthToHealTo = 0.0f;
+    private float _healthLerpDuration = 1.0f;
+    private float _healthTimeElapsed = 0.0f;
 
     // Start is called before first frame
     private void Start()
@@ -78,6 +82,7 @@ public class CombatHandler : MonoBehaviour
         UpdateAttack();
         UpdateDeath();
         UpdatePlayerEmission();
+        UpdateHeal();
     }
 
     #region Attacking 
@@ -253,7 +258,7 @@ public class CombatHandler : MonoBehaviour
 
     #endregion
 
-    #region Take Damage
+    #region Health Modifiers
 
     private void OnTriggerEnter(Collider other)
     {
@@ -286,6 +291,47 @@ public class CombatHandler : MonoBehaviour
             _cameraManager.SetVignetteIntensity(0f);
         else
             _cameraManager.SetVignetteIntensity(temp);
+    }
+
+    // Adds value onto health overtime
+    public void HealOvertime(float value, float duration)
+    {
+        _healthLerpDuration = duration;
+        _healthToHealTo = 0.0f;
+        _healthToHealTo += _playerHandler.GetCurrentHealth() + value; //60
+        _healingPlayer = true;
+    }
+
+    // Lerps the health from current to the new health
+    private void UpdateHeal()
+    {
+        // Only heal the player if the HealOvertime(f) function has been set
+        if (_healingPlayer)
+        {
+            // Grabbing the health from the player
+            float health = _playerHandler.GetCurrentHealth(); // 40.20
+
+            // Linearly interpolating the current health to the "health to heal to" property
+            health = Mathf.Lerp(health, _healthToHealTo, 0.5F / _healthLerpDuration);
+
+            // Checking if health is above out maximum health before setting it to the player
+            if (health > _healthToHealTo - 0.1F)
+            {
+                health = _healthToHealTo;
+                _healingPlayer = false;
+            }
+
+            // Checking if health is above out maximum health before setting it to the player
+            if (health > _playerHandler.GetMaxHealth() - 0.1F)
+            {
+                health = _playerHandler.GetMaxHealth();
+                _healingPlayer = false;
+            }
+
+            _playerHandler.SetCurrentHealth(health); // 40.20
+
+            //Debug.Log(_playerHandler.GetCurrentHealth());
+        }
     }
 
     #endregion
@@ -480,6 +526,11 @@ public class CombatHandler : MonoBehaviour
     public bool GetJustUsedMechanic()
     {
         return _justUsedMechanic;
+    }
+
+    public bool GetIsHealing()
+    {
+        return _healingPlayer;
     }
 
     public IEnumerator Coroutine_JustUsedMechanic(float time)

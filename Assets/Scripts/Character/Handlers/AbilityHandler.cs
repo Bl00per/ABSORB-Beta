@@ -15,6 +15,10 @@ public class AbilityHandler : MonoBehaviour
         POT,
     }
 
+    [Header("Properties")]
+    public float healthFromAbsorb = 20.0f;
+    public float healthFromAbosrbDuration = 5.0f;
+
     [Header("Enemy Attack Window Time")]
     // Time that the enemy can choose to attack the player after using an ability
     public float enemyAttackWindowTime = 2.0f;
@@ -141,6 +145,7 @@ public class AbilityHandler : MonoBehaviour
 
                 // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
+                _combatHandler.HealOvertime(healthFromAbsorb, healthFromAbosrbDuration);
                 //enemy.GetEnemyGroupHandler()?.Remove(enemy);
                 SetAbility(enemy.GetAbilityType());
             }
@@ -335,4 +340,10 @@ public class AbilityHandler : MonoBehaviour
 
     // Returns the current ability base class
     public Ability GetCurrentAbility() => _abilities[(int)_currentAbility];
+
+    // Gets absorbing
+    public bool GetIsAbsorbing()
+    {
+        return _isAbosrbing;
+    }
 }
