@@ -7,6 +7,13 @@ public class ControllorVibration : MonoBehaviour
     public static PlayerIndex _playerIndex;
     public static bool controllorVibration = true;
 
+    static private InputManager _inputManager;
+
+    void Start()
+    {
+        _inputManager = FindObjectOfType<InputManager>();
+    }
+
 
     public void VibrationCheck(bool check)
     {
@@ -15,7 +22,7 @@ public class ControllorVibration : MonoBehaviour
 
     public static IEnumerator Vibrate(float leftMotor, float rightMotor, float Time)
     {
-        if (controllorVibration)
+        if (/* controllorVibration */_inputManager.GetIsUsingController())
         {
             GamePad.SetVibration(_playerIndex, leftMotor, rightMotor);
 
