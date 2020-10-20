@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+
 public class CombatHandler : MonoBehaviour
 {
     /*
@@ -30,6 +31,9 @@ public class CombatHandler : MonoBehaviour
     public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
+    [Header("Enemy Attack Timers")]
+    public float primaryAttackWindow = 1.0f;
+    public float shieldAttackWindow = 0.5f;
 
     private PlayerHandler _playerHandler;
     private SlowMotionManager _slowMoManager;
@@ -41,10 +45,9 @@ public class CombatHandler : MonoBehaviour
     private AbilityHandler _abilityHandler;
     private CameraManager _cameraManager;
     private bool _justUsedMechanic = false;
-    private Renderer _bodyRenderer;
-    [Header("Enemy Attack Timers")]
-    public float primaryAttackWindow = 1.0f;
-    public float shieldAttackWindow = 0.5f;
+    [SerializeField]
+    private Renderer[] _bodyRenderer;
+    private float _localPlayerHP;
 
     // Start is called before first frame
     private void Start()
@@ -58,15 +61,17 @@ public class CombatHandler : MonoBehaviour
         _slowMoManager = _playerHandler.GetSlowMotionManager();
         _abilityHandler = this.GetComponent<AbilityHandler>();
         _cameraManager = _playerHandler.GetCameraManager();
-        _bodyRenderer = _abilityHandler.abidaroMesh;
         _rb = this.GetComponent<Rigidbody>();
+        _bodyRenderer = new Renderer[_abilityHandler.abidaroMesh.Length];
+        _bodyRenderer = _abilityHandler.abidaroMesh;
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
         shieldState = ShieldState.Default;
 
         // Set temp timers
-        //_tempShieldTimer = shieldTimer;
         _tempShieldCDTimer = shieldCooldown;
+
+        _localPlayerHP = _playerHandler.GetCurrentHealth();
 
         enemy = null;
     }
@@ -263,8 +268,6 @@ public class CombatHandler : MonoBehaviour
 
             // CHECK IF SHIELD IS DEFAULT, BUT ALL THE COMPONENTS ARE ENABLED:
             // if they are, set the shield state to sheilding. Something must be conflicting and causing a bug.
-
-
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
@@ -274,14 +277,33 @@ public class CombatHandler : MonoBehaviour
         }
     }
 
+    // Check for when the player health decreases
+    private bool PlayerHealthUpdated()
+    {
+        if (_localPlayerHP != _playerHandler.GetCurrentHealth())
+        {
+            _localPlayerHP = _playerHandler.GetCurrentHealth();
+            return true;
+        }
+        else
+            return false;
+    }
+
     private void UpdatePlayerEmission()
     {
         // Lower the emission intensity when the player takes damage
-        _bodyRenderer.material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
-        ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
+        if (!_abilityHandler.GetColorChange() && PlayerHealthUpdated())
+        {
+            for (int i = 0; i < _bodyRenderer.Length; i++)
+            {
+                _bodyRenderer[i].material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
+                ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
+            }
+            Debug.Log("Emission decreased");
+        }
 
         float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
-        // When you gain max health again, makes it so temp isnt negative
+        // When you gain max health again, makes it so isn't doesn't read temp when it's negative
         if (temp <= 0)
             _cameraManager.SetVignetteIntensity(0f);
         else
@@ -293,14 +315,11 @@ public class CombatHandler : MonoBehaviour
     #region Shield
     // Attributes
     [Header("Timers", order = 0)]
-    // [Range(0.1f, 5f)]
-    // public float shieldTimer = 1.0f;
     [Range(0.1f, 5f)]
     public float shieldCooldown = 1.0f;
     private bool _canShield = true;
 
     // Properties
-    //private float _tempShieldTimer;
     private float _tempShieldCDTimer;
 
     public enum ShieldState
@@ -381,11 +400,6 @@ public class CombatHandler : MonoBehaviour
     {
         return _canShield;
     }
-
-    // public float GetMaxShieldTimer()
-    // {
-    //     return _tempShieldTimer;
-    // }
 
     #endregion
 
