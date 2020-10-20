@@ -26,9 +26,9 @@ public class SpecialAbsorbed : AIBehaviour
 
     private bool _enabled = false;
     private float _cutOutTimer = 0.0f;
-    private float _cutOffTimer = 0.0f;
-    private float _defaultCutOut = 0.0f;
-    private float _defaultCutOff = 0.0f;
+    // private float _cutOffTimer = 0.0f;
+    // private float _defaultCutOut = 0.0f;
+    // private float _defaultCutOff = 0.0f;
 
     private void Awake()
     {
@@ -52,7 +52,7 @@ public class SpecialAbsorbed : AIBehaviour
 
     public override void OnStateEnter()
     {
-        _animator.enabled = false;
+        //_animator.enabled = false;
         _cutOutTimer = cutoffMax;
         _enabled = true;
         //_playerAbilityManager.playerForceField.SetActive(true);

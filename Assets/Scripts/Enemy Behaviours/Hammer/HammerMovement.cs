@@ -6,7 +6,7 @@ public class HammerMovement : AIBehaviour
 {
     [Header("Properties")]
     public float enterAttackStateDistance = 2.0f;
-    public float retreatDistance = 10.0f;
+    // public float retreatDistance = 10.0f;
 
     [Header("Timers")]
     public float returnToAttackPosition = 1.0f;
@@ -15,6 +15,7 @@ public class HammerMovement : AIBehaviour
     private Vector3 _attackPosition = Vector3.zero;
     private float _initialAngularSpeed = 0.0f;
     private bool _startedRetreat = false;
+    private bool _hasAttacked = false;
 
     private void Start()
     {
@@ -42,20 +43,34 @@ public class HammerMovement : AIBehaviour
         if (enemyHandler.GetJustAttacked())
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
-            
+
             if (!_startedRetreat)
             {
-                Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * retreatDistance);
+                Vector3 retreatPosition = transform.position - (-brain.GetDirectionToPlayer() * GetRetreatDistance());
                 StartCoroutine(Retreat(retreatPosition));
             }
         }
         else if (distance <= enterAttackStateDistance)
         {
             brain.SetBehaviour("Attack");
+            _hasAttacked = true;
+        }
+        else if (_hasAttacked)
+        {
+            if (enemyHandler.GetPlayerHandler().GetIsAlive())
+            {
+                this.LockDestinationToPlayer(1.0f);
+            }
+            else
+            {
+                _hasAttacked = false;
+            }
         }
     }
 
-    public override void OnStateExit() { }
+    public override void OnStateExit()
+    {
+    }
 
     public override void OnStateFixedUpdate() { }
 
@@ -68,6 +83,11 @@ public class HammerMovement : AIBehaviour
         yield return new WaitForSeconds(returnToInitialAngularSpeed);
         brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
         _startedRetreat = false;
+    }
+
+    public float GetRetreatDistance()
+    {
+        return brain.GetDistanceToPlayer() - enterAttackStateDistance;
     }
 
     // [Header("Properties")]

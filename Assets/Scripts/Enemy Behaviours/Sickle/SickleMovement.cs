@@ -34,7 +34,7 @@ public class SickleMovement : AIBehaviour
     {
         brain.GetNavMeshAgent().speed = _initialSpeed;
 
-        if (brain.GetLastStateID() == "Attack")
+        if (brain.GetLastStateID() == "Attack" && enemyHandler.GetPlayerHandler().GetIsAlive())
             this.LockDestinationToPlayer(1.0f);
     }
 
@@ -46,7 +46,6 @@ public class SickleMovement : AIBehaviour
 
         // Updating the target destination every frame
         brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
-
 
         switch (enemyHandler.GetEnemyType())
         {

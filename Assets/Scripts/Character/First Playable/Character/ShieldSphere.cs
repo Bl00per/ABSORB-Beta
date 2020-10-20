@@ -10,7 +10,10 @@ public class ShieldSphere : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon"))
         {
-            EnemyHandler enemy = other.GetComponentInParent<EnemyHandler>();
+
+            // Get enemy handler out of the enemy weapon
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
+
             enemy.PlayHitParryEffect();
             if (enemy.GetEnemyType() == EnemyHandler.EnemyType.SPECIAL)
             {

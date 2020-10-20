@@ -10,13 +10,17 @@ public class InputManager : MonoBehaviour
       _inputManager = FindObjectOfType<InputManager>();
     */
 
+    [Header("Properties")]
     public XboxController controller;
     public float checkForInputTime = 0.1f;
+    [Range(0, 1)]
+    public float triggerDeadZone = 0.1F;
     [HideInInspector]
     public CinemachineFreeLook cinemachine;
 
     [Header("Attack Button")]
     public XboxButton attackXboxKey;
+    public XboxButton altAttackXboxKey;
     public KeyCode attackKey;
 
     [Header("Special Attack Button")]
@@ -25,6 +29,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Shield Button")]
     public XboxButton shieldXboxKey;
+    public XboxButton altShieldXboxKey;
     public KeyCode shieldKey;
 
     [Header("Dash Button")]
@@ -197,7 +202,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(attackXboxKey, XboxController.First) : Input.GetKeyDown(attackKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(attackXboxKey, XboxController.First) || XCI.GetButtonDown(altAttackXboxKey, XboxController.First)) : Input.GetKeyDown(attackKey);
         }
         else
             return false;
@@ -208,7 +213,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(splAttackXboxKey, XboxController.First) : Input.GetKeyDown(splAttackKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(splAttackXboxKey, XboxController.First) || GetRightTriggerDown()) : Input.GetKeyDown(splAttackKey);
         }
         else
             return false;
@@ -219,7 +224,7 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(shieldXboxKey, XboxController.First) : Input.GetKeyDown(shieldKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(shieldXboxKey, XboxController.First) || XCI.GetButtonDown(altShieldXboxKey, XboxController.First)) : Input.GetKeyDown(shieldKey);
         }
         else
             return false;
@@ -230,10 +235,20 @@ public class InputManager : MonoBehaviour
     {
         if (!GetInputDisabled())
         {
-            return (_isUsingController) ? XCI.GetButtonDown(dashXboxKey, XboxController.First) : Input.GetKeyDown(dashKey);
+            return (_isUsingController) ? (XCI.GetButtonDown(dashXboxKey, XboxController.First) || GetLeftTriggerDown()) : Input.GetKeyDown(dashKey);
         }
         else
             return false;
+    }
+
+    public bool GetLeftTriggerDown()
+    {
+        return XCI.GetAxis(XboxAxis.LeftTrigger, XboxController.First) > triggerDeadZone;
+    }
+
+    public bool GetRightTriggerDown()
+    {
+        return XCI.GetAxis(XboxAxis.RightTrigger, XboxController.First) > triggerDeadZone;
     }
 
     // Check for Pause button press

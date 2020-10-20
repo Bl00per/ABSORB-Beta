@@ -17,11 +17,13 @@ public class PlayerHandler : MonoBehaviour
 
     // Attributes
     [Header("Attributes")]
-    public int maxHealth = 100;
+    public float maxHealth = 100;
+    public float healthOvertimeRespawnDuration = 10.0f;
     public int primaryAttackDamage = 25;
     public float respawnFlyingTime = 5.0f;
     public float respawnFlyingOffset = 20.0f;
-    private int _currentHealth = 100;
+    [SerializeField]
+    private float _currentHealth = 100;
 
     // References
     [Header("References")]
@@ -41,10 +43,10 @@ public class PlayerHandler : MonoBehaviour
     private CheckPoint _checkpoints;
     private Vector3 _respawnPosition;
     private CapsuleCollider _capsule;
-    private float offset = 10.0f;
     private float _checkPointYLevel;
     private float _playerYLevel;
     private int _defaultDamage;
+    private AbilityHandler _abilityHandler;
 
     Vector3 point = Vector3.zero;
     Vector3 point2 = Vector3.zero;
@@ -63,13 +65,14 @@ public class PlayerHandler : MonoBehaviour
         _transform = this.GetComponent<Transform>();
         _locomotionHandler = this.GetComponent<LocomotionHandler>();
         _combatHandler = this.GetComponent<CombatHandler>();
+        _abilityHandler = this.GetComponent<AbilityHandler>();
         _inputManager = FindObjectOfType<InputManager>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _slowMotionManager = FindObjectOfType<SlowMotionManager>();
         _simpleCameraShake = FindObjectOfType<SimpleCameraShakeInCinemachine>();
         _checkpoints = FindObjectOfType<CheckPoint>();
         _capsule = GetComponent<CapsuleCollider>();
-        _currentHealth = maxHealth;
+        //_currentHealth = maxHealth;
         _defaultDamage = primaryAttackDamage;
     }
 
@@ -89,9 +92,9 @@ public class PlayerHandler : MonoBehaviour
     public void RespawnPlayer()
     {
         isAlive = true;
-        _currentHealth = maxHealth;
+        _currentHealth = 1.0f;
+        //_combatHandler.HealOvertime(maxHealth);
         StartCoroutine(MoveOverSeconds(this.gameObject, GetRespawnPosition(), respawnFlyingOffset, respawnFlyingTime));
-        //_transform.rotation = GetRespawnPosition().rotation;
     }
 
     // Move the player back to checkpoint position over a certain number of seconds
@@ -126,31 +129,6 @@ public class PlayerHandler : MonoBehaviour
         objectToMove.transform.position = end;
     }
 
-    // Get a mid point between two positions
-    private Vector3 GetPoint(Vector3 object1, Vector3 object2)
-    {
-        //get the positions of our transforms
-        Vector3 pos1 = object1;
-        Vector3 pos2 = object2;
-
-        //get the direction between the two transforms -->
-        Vector3 dir = (pos2 - pos1).normalized;
-
-        //get a direction that crosses our [dir] direction
-        //NOTE! : this can be any of a buhgillion directions that cross our [dir] in 3D space
-        //To alter which direction we're crossing in, assign another directional value to the 2nd parameter
-        Vector3 perpDir = Vector3.Cross(dir, Vector3.right);
-
-        //get our midway point
-        Vector3 midPoint = (pos1 + pos2) / 2f;
-
-        //get the offset point
-        //This is the point you're looking for.
-        Vector3 offsetPoint = midPoint + (perpDir * offset);
-
-        return offsetPoint;
-    }
-
     private void DisableReferences()
     {
         foreach (SkinnedMeshRenderer mesh in abidaroMesh)
@@ -178,6 +156,8 @@ public class PlayerHandler : MonoBehaviour
         _rigidbody.useGravity = true;
         _inputManager.EnableInput();
         _cameraManager.EnableCameraMovement(); // TEMPORARY FOR NOW
+        
+        _combatHandler.HealOvertime(maxHealth, healthOvertimeRespawnDuration);
     }
 
     #endregion
@@ -199,7 +179,7 @@ public class PlayerHandler : MonoBehaviour
         return isAlive = aliveState;
     }
 
-    public int GetCurrentHealth()
+    public float GetCurrentHealth()
     {
         return _currentHealth;
     }
@@ -207,6 +187,9 @@ public class PlayerHandler : MonoBehaviour
     // Return the amount of damage the player should take
     public float TakeDamage(int damageAmount)
     {
+        if(_abilityHandler.GetIsAbsorbing() || _combatHandler.GetIsHealing())
+            return 0.0f;
+
         hitParticleSystem.Play();
         hitSFX.Play();
         _simpleCameraShake.Key_Shake_DAF("0.4|1.0|2.0");
@@ -280,14 +263,22 @@ public class PlayerHandler : MonoBehaviour
 
     public Vector3 SetRespawnPosition(Vector3 checkpointPosition)
     {
-        // Debug.Log("Set new respawn position at: (" + checkpointPosition.x + ", " +
-        // checkpointPosition.y + ", " + checkpointPosition.z + ")");
         return _respawnPosition = checkpointPosition;
     }
 
     public int GetPrimaryAttackDamage()
     {
         return primaryAttackDamage;
+    }
+
+    public void SetCurrentHealth(float newHealth)
+    {
+        _currentHealth = newHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     public void SetPrimaryAttackDamage(int newDamage)
@@ -299,6 +290,8 @@ public class PlayerHandler : MonoBehaviour
     {
         primaryAttackDamage = _defaultDamage;
     }
+
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
 
     #endregion
 

@@ -10233,6 +10233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyHandler: {fileID: 8055600569947426383}
 --- !u!137 &3593453364837397834
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -10713,6 +10714,14 @@ MonoBehaviour:
   baseDamage: 2
   attackCooldown: 1
   printHealthStats: 0
+  slowMotionPercentage: 50
+  tweenEase:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mixer: {fileID: 0}
 --- !u!114 &4165402235293637483
 MonoBehaviour:
   m_ObjectHideFlags: 0

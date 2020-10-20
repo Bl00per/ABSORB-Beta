@@ -5,15 +5,19 @@ using UnityEngine;
 public class GroupChase : GroupState
 {
     [Header("Combat Transition Properties")]
-    public float CoMDistanceFromPlayer = 10.0f;
+    public float distanceToEnterCombat = 10.0f;
     public float returnToWanderDistance = 12.0f;
+    private List<EnemyHandler> _unitSlots = new List<EnemyHandler>();
 
-    public override void OnStateEnter() { }
+    public override void OnStateEnter()
+    {
+        UpdateUnitSlots();
+    }
 
     public override void OnStateUpdate()
     {
         // If the group is too far from the player, enter back into chase state
-        if(enemyGroupHandler.GetCOMDistanceFromPlayer() >= returnToWanderDistance)
+        if (!playerHandler.GetIsAlive())
         {
             enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
             return;
@@ -23,20 +27,20 @@ public class GroupChase : GroupState
         this.enemyGroupHandler.SetTargetDestination(enemyGroupHandler.playerTransform.position);
         this.enemyGroupHandler.UpdateAllFlockDestinations();
 
-        //Debug.Log(Vector3.Distance(this.enemyGroupHandler.GetCenterOfMass(), this.enemyGroupHandler.playerTransform.position));
+        // Check the distance from the closet enemy to the player
+        if (Vector3.Distance(_unitSlots[0].transform.position, this.enemyGroupHandler.playerTransform.position) < distanceToEnterCombat)
+            this.enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.COMBAT);
+    }
 
-        // Check the distance between the group and the player; entering the combat state if close enough
+    // Adds the active group of enemies into the unit slots
+    private void UpdateUnitSlots()
+    {
+        _unitSlots.Clear();
+        _unitSlots.AddRange(enemyGroupHandler.GetObjectPooler().GetActiveEnemyList());
 
-        if (enemyGroupHandler.GetEnemies().Count == 1)
-        {
-            if (Vector3.Distance(enemyGroupHandler.GetEnemy(0).transform.position, this.enemyGroupHandler.playerTransform.position) < CoMDistanceFromPlayer)
-                this.enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.COMBAT);
-        }
-        else
-        {
-            if (Vector3.Distance(this.enemyGroupHandler.GetCenterOfMass(), this.enemyGroupHandler.playerTransform.position) < CoMDistanceFromPlayer)
-                this.enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.COMBAT);
-        }
+        // Sorting the list; using a lambda function to compare the distance to the player
+        _unitSlots.Sort((u1, u2) => u1.GetBrain().GetDistanceToPlayer().
+                          CompareTo(u2.GetBrain().GetDistanceToPlayer()));
     }
 
     public override void OnStateFixedUpdate() { }

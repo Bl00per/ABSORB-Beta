@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8986742229313089359}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 57, y: 0, z: 11.5}
+  m_LocalPosition: {x: 49.8, y: 0, z: 20.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8986742230674938590}
@@ -172,10 +172,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
-  enemyRespawnList: 0000000001000000
+  enemyRespawnList: 000000000100000002000000
   spawnerActive: 1
-  spawnTime: 1
-  findOffScreenSpawnPoint: 0
+  spawnTime: 3
+  findOffScreenSpawnPoint: 1
   onScreenSpawnPoint: {fileID: 8986742230383172415}
   finalEnemy: {fileID: 0}
   spawnerPositions:
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
-  engagementDistance: 10
+  engagementDistance: 15
   debugCurrentState: 0
 --- !u!114 &8986742230317161230
 MonoBehaviour:
@@ -214,7 +214,7 @@ MonoBehaviour:
   seperationFactor: 0
   alignmentFactor: 0
   moveDistance: 0
-  wanderRadiusCenter: {fileID: 0}
+  wanderRadiusCenter: {fileID: 8383093848399518174}
   updatePathTime: 2
   wanderRadius: 15
 --- !u!114 &8986742230317161231
@@ -229,11 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d20ce5ab4eede1140994bc4a60df9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coherenceFactor: 0.1
-  seperationFactor: 0.5
-  alignmentFactor: 5
+  coherenceFactor: 0.4
+  seperationFactor: 1
+  alignmentFactor: 10
   moveDistance: 1000
-  CoMDistanceFromPlayer: 8
+  distanceToEnterCombat: 10
   returnToWanderDistance: 12
 --- !u!114 &8986742230317161264
 MonoBehaviour:
@@ -247,14 +247,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c81c20cef2623a446bc08ce97647de52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coherenceFactor: 0
+  coherenceFactor: 1
   seperationFactor: 0
-  alignmentFactor: 0
-  moveDistance: 0
+  alignmentFactor: 0.5
+  moveDistance: 10
   returnToChaseDistance: 12
   queueTime: 1
-  returnToPassiveRadiusMin: 10
-  returnToPassiveRadiusMax: 15
+  circleRadius: 7.5
 --- !u!114 &8986742230317161265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +294,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8986742230383172384}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.8, y: 0, z: 10.5}
+  m_LocalPosition: {x: 1.8, y: 0, z: 33.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8986742230674938590}
@@ -388,7 +387,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8986742230444478826}
   m_LocalRotation: {x: -0, y: -0.9659252, z: -0, w: 0.25882143}
-  m_LocalPosition: {x: 56, y: 0, z: 68.5}
+  m_LocalPosition: {x: 48.2, y: 0, z: 49.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8986742230674938590}
@@ -452,7 +451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8986742230896857706}
   m_LocalRotation: {x: -0, y: 0.9914446, z: -0, w: 0.13052888}
-  m_LocalPosition: {x: 4, y: 0, z: 65.3}
+  m_LocalPosition: {x: 16.1, y: 0, z: 59.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8986742230674938590}

@@ -14,6 +14,7 @@ public class AbilitySickle : Ability
 
     public void Awake()
     {
+        _typeOfAbility = AbilityHandler.AbilityType.SICKLE;
         _playerHandler = this.GetComponent<PlayerHandler>();
     }
 

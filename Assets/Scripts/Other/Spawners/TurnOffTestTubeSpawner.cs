@@ -15,7 +15,7 @@ public class TurnOffTestTubeSpawner : MonoBehaviour
 
     private void Update()
     {
-        if(_abilityHandler.GetCurrentAbility() == AbilityHandler.AbilityType.NONE)
+        if(_abilityHandler.GetCurrentAbilityType() == AbilityHandler.AbilityType.NONE)
             _objectPooler.spawnerActive = true;
         else
             _objectPooler.spawnerActive = false;

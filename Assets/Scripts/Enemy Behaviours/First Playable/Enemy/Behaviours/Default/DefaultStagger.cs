@@ -9,17 +9,38 @@ public class DefaultStagger : AIBehaviour
 
     private bool _isStaggered = false;
 
-    public override void OnStateEnter() 
+    public override void OnStateEnter()
     {
-        if(!_isStaggered)
+
+        if(enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        {
+            enemyHandler.GetAnimator().SetBool("Stagger", true);
+            //Debug.Log("stagger -> true");
+        }
+
+        if (enemyHandler.GetFunctional())
+            brain.GetNavMeshAgent().isStopped = true;
+            
+        if (!_isStaggered)
             StartCoroutine(StaggerSequence());
     }
 
-    public override void OnStateExit(){}
+    public override void OnStateExit()
+    {
+        
+        if(enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        {
+            enemyHandler.GetAnimator().SetBool("Stagger", false);
+        }
 
-    public override void OnStateFixedUpdate() {}
 
-    public override void OnStateUpdate() {}
+        if (enemyHandler.GetFunctional())
+            brain.GetNavMeshAgent().isStopped = false;
+    }
+
+    public override void OnStateFixedUpdate() { }
+
+    public override void OnStateUpdate() { }
 
     private IEnumerator StaggerSequence()
     {

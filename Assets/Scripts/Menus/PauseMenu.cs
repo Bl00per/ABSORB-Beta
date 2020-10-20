@@ -16,6 +16,11 @@ public class PauseMenu : MonoBehaviour
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
+    [Header("Sensitivity Sliders")]
+    public Slider sensitivityXSlider;
+    public Slider sensitivityYSlider;
+    public Text sensitivityMultiplierTextX;
+    public Text sensitivityMultiplierTextY;
     [Header("BUTTONS")]
     public GameObject pauseFirstSelectedButton;
     public GameObject settingFirstSelectedButton;
@@ -31,8 +36,12 @@ public class PauseMenu : MonoBehaviour
     private AudioMixer _audioMixer;
     private bool Paused;
     private MainMenu _mainMenu;
-    private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null;
+    private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null, _sensXSliderFill = null, _sensYSliderFill = null;
     private GameObject _quitPopupFirstSelectedButton;
+    private float cameraSensX = 0f;     // Keep track of current sensitivity
+    private float cameraSensY = 0f;
+    private float defaultSensX = 0f;    // For referencing to when setting sensitivity values
+    private float defaultSensY = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -51,11 +60,20 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
+        // Update this if we have 2 different camera speed values
+        defaultSensX = _cameraManager.mouseCamera.m_XAxis.m_MaxSpeed;
+        defaultSensY = _cameraManager.mouseCamera.m_YAxis.m_MaxSpeed;
+        // If you exit in and out of settings the camera speeds will be set to zero if this isnt here
+        cameraSensX = defaultSensX;
+        cameraSensY = defaultSensY;
+
         // This is so I don't have to assign every single fill
         // The fact you can't even change the highlight to be the fill instead of the handle is the bane of my existence
         _masterSliderFill = masterVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
         _musicSliderFill = musicVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
         _sfxSliderFill = sfxVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
+        _sensXSliderFill = sensitivityXSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
+        _sensYSliderFill = sensitivityYSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -81,26 +99,32 @@ public class PauseMenu : MonoBehaviour
             {
                 GameObject temp = EventSystem.current.currentSelectedGameObject;
                 // I can't use a switch statement for this, I really tried. Forgive me
-                if (temp == masterVolumeSlider.gameObject)
+                if (temp == masterVolumeSlider.gameObject)  // Master Volume Slider
                     _masterSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _masterSliderFill.color = Color.white;
 
-                if (temp == musicVolumeSlider.gameObject)
+                if (temp == musicVolumeSlider.gameObject)   // Music Volume Slider
                     _musicSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _musicSliderFill.color = Color.white;
 
-                if (temp == sfxVolumeSlider.gameObject)
+                if (temp == sfxVolumeSlider.gameObject)     // SFX Volume Slider
                     _sfxSliderFill.color = new Vector4(213f, 0, 217f, 255f);
                 else
                     _sfxSliderFill.color = Color.white;
+
+                if (temp == sensitivityXSlider.gameObject)  // Sensitivity X Slider
+                    _sensXSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _sensXSliderFill.color = Color.white;
+
+                if (temp == sensitivityYSlider.gameObject)  // Sensitivity Y Slider
+                    _sensYSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                else
+                    _sensYSliderFill.color = Color.white;
             }
         }
-        // else if (controllerDisconnectedPopup.activeInHierarchy && _inputManager.GetControllerConnected())
-        // {
-        //     ControllerReconnected();
-        // }
     }
 
     #region Pause Menu Functions
@@ -115,6 +139,7 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _cameraManager.EnableCameraMovement();
+            SetCameraSpeeds();
         }
         else // Game is paused
         {
@@ -212,6 +237,10 @@ public class PauseMenu : MonoBehaviour
         masterVolumeSlider.value = _readWrite.masterVolume;
         musicVolumeSlider.value = _readWrite.musicVolume;
         sfxVolumeSlider.value = _readWrite.sfxVolume;
+        sensitivityXSlider.value = _readWrite.sensitivityX;
+        sensitivityYSlider.value = _readWrite.sensitivityY;
+        sensitivityMultiplierTextX.text = (1 + (sensitivityXSlider.value / 10)).ToString("0.0");
+        sensitivityMultiplierTextY.text = (1 + (sensitivityYSlider.value / 10)).ToString("0.0");
     }
 
     // Save all the settings values upon exiting the settings menu
@@ -220,6 +249,8 @@ public class PauseMenu : MonoBehaviour
         _readWrite.masterVolume = masterVolumeSlider.value;
         _readWrite.musicVolume = musicVolumeSlider.value;
         _readWrite.sfxVolume = sfxVolumeSlider.value;
+        _readWrite.sensitivityX = sensitivityXSlider.value;
+        _readWrite.sensitivityY = sensitivityYSlider.value;
         _readWrite.OverwriteData();
     }
 
@@ -250,6 +281,33 @@ public class PauseMenu : MonoBehaviour
             _audioMixer.SetFloat("SFX", -80f);    // Mute the volume 
         else
             _audioMixer.SetFloat("SFX", level);
+    }
+
+    // Sets the X Speed multiplier of the cameras
+    public void SetCameraSensX(float multiplier)
+    {
+        cameraSensX = defaultSensX * (1 + (multiplier / 10));
+        cameraSensX = defaultSensX * (1 + (multiplier / 10));
+        sensitivityMultiplierTextX.text = (1 + (multiplier / 10)).ToString("0.0");
+    }
+
+    // Sets the Y Speed multiplier of the cameras
+    public void SetCameraSensY(float multiplier)
+    {
+        cameraSensY = defaultSensY * (1 + (multiplier / 10));
+        cameraSensY = defaultSensY * (1 + (multiplier / 10));
+        sensitivityMultiplierTextY.text = (1 + (multiplier / 10)).ToString("0.0");
+    }
+
+    private void SetCameraSpeeds()
+    {
+        // Mouse Camera
+        _cameraManager.mouseCamera.m_XAxis.m_MaxSpeed = cameraSensX;
+        _cameraManager.mouseCamera.m_YAxis.m_MaxSpeed = cameraSensY;
+
+        // Controller Camera
+        _cameraManager.controllerCamera.m_XAxis.m_MaxSpeed = cameraSensX;
+        _cameraManager.controllerCamera.m_YAxis.m_MaxSpeed = cameraSensY;
     }
 
     #endregion

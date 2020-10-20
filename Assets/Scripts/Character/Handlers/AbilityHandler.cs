@@ -15,6 +15,10 @@ public class AbilityHandler : MonoBehaviour
         POT,
     }
 
+    [Header("Properties")]
+    public float healthFromAbsorb = 20.0f;
+    public float healthFromAbosrbDuration = 5.0f;
+
     [Header("Enemy Attack Window Time")]
     // Time that the enemy can choose to attack the player after using an ability
     public float enemyAttackWindowTime = 2.0f;
@@ -27,7 +31,7 @@ public class AbilityHandler : MonoBehaviour
     private int _abilityArmIndex = 0;
 
     [Header("Abidaro Color/Intensity")]
-    public Renderer abidaroMesh;
+    public Renderer[] abidaroMesh;
     public Color @default = new Color(93, 41, 191, 255), hammerColor = new Color(209, 186, 25, 255), sickleColor = new Color(194, 9, 0, 255), potColor = new Color(0, 171, 205, 255);
     public float colorChangeTime = 2f;
     public float abilityIntensity = 5f;
@@ -43,10 +47,10 @@ public class AbilityHandler : MonoBehaviour
     private LocomotionHandler _locomotionHanlder;
     private CombatHandler _combatHandler;
     private Animator _animator;
-    private Material material;
+    private Material[] _material;
     private bool _isAbosrbing = false;
-    private bool colorChange = false;
-    private Color nextColor;
+    private bool _colorChange = false;
+    private Color _nextColor;
 
     // Called on initialise
     private void Awake()
@@ -54,7 +58,13 @@ public class AbilityHandler : MonoBehaviour
         // Getting the player handler
         _playerHandler = this.GetComponent<PlayerHandler>();
 
-        material = abidaroMesh.material;
+        // Set the array size of the materials
+        _material = new Material[abidaroMesh.Length];
+
+        for (int i = 0; i < abidaroMesh.Length; i++)
+        {
+            _material[i] = abidaroMesh[i].material;
+        }
 
         // Assign all the abilites
         _abilities = new Ability[(int)AbilityType.POT + 1];
@@ -104,12 +114,9 @@ public class AbilityHandler : MonoBehaviour
                 if (!_abilities[(int)_currentAbility].IsActive())
                 {
                     _abilities[(int)_currentAbility].Activate();
-                    _combatHandler.StartJustUsedMechanic(enemyAttackWindowTime);
                 }
             }
         }
-
-        //ColorLerpUpdate();
     }
 
     // Gets called every frame we don't have an ability
@@ -138,9 +145,12 @@ public class AbilityHandler : MonoBehaviour
                     _combatHandler.SetCanShield(false);
                 }
 
+                // Add health of enemy abosrb
+
                 // Absorb enemies ability
                 enemy.GetBrain().SetBehaviour("Absorbed");
-                enemy.GetEnemyGroupHandler()?.Remove(enemy);
+                _combatHandler.HealOvertime(healthFromAbsorb, healthFromAbosrbDuration);
+                //enemy.GetEnemyGroupHandler()?.Remove(enemy);
                 SetAbility(enemy.GetAbilityType());
             }
         }
@@ -177,25 +187,26 @@ public class AbilityHandler : MonoBehaviour
         {
             case AbilityType.NONE:
                 abilityArms[_abilityArmIndex].enabled = false;
-                ColorLerp(AbilityType.NONE, @default * abilityIntensity);
+                // Set intensity based on how much hp the player has (e.g. (5 / 100) = 0.05 * 50hp = 2.5 = half intensity)
+                ColorLerp(AbilityType.NONE, @default * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.SICKLE:
                 _abilityArmIndex = 0;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.SICKLE, sickleColor * abilityIntensity);
+                ColorLerp(AbilityType.SICKLE, sickleColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.HAMMER:
                 _abilityArmIndex = 1;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.HAMMER, hammerColor * abilityIntensity);
+                ColorLerp(AbilityType.HAMMER, hammerColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
 
             case AbilityType.POT:
                 _abilityArmIndex = 2;
                 abilityArms[_abilityArmIndex].enabled = true;
-                ColorLerp(AbilityType.POT, potColor * abilityIntensity);
+                ColorLerp(AbilityType.POT, potColor * ((abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
                 break;
         }
     }
@@ -203,7 +214,7 @@ public class AbilityHandler : MonoBehaviour
     // Start a couroutine based on which color abilty and pass in the color to change over to it
     private void ColorLerp(AbilityType ability, Color toColor)
     {
-        colorChange = true;
+        _colorChange = true;
         switch (ability)
         {
             case AbilityType.NONE:
@@ -224,23 +235,60 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    // Change the material color and emission over time
     private IEnumerator ColorLerpUpdate(Color nextColor)
     {
-        if (colorChange)
+        if (_colorChange)
         {
             // Get the current color for the lerp
-            Color currentColor = material.GetColor("_EmissionColor");
+            Color[] currentColor = new Color[_material.Length];
+
+            for (int i = 0; i < currentColor.Length; i++)
+            {
+                currentColor[i] = _material[i].GetColor("_EmissionColor");
+            }
             float elapsedTime = 0f;
 
             while (elapsedTime < colorChangeTime)
             {
-                Color lerpedColor = Color.Lerp(currentColor, nextColor, (elapsedTime / colorChangeTime));
-                material.SetColor("_EmissionColor", lerpedColor);
+                for (int i = 0; i < currentColor.Length; i++)
+                {
+                    Color lerpedColor = Color.Lerp(currentColor[i], nextColor, (elapsedTime / colorChangeTime));
+                    _material[i].SetColor("_EmissionColor", lerpedColor);
+                }
+
                 elapsedTime += Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
-            colorChange = false;
+            _colorChange = false;
         }
+    }
+
+    // Return the current color based on the ability
+    public Color GetCurrentColor()
+    {
+        switch (_currentAbility)
+        {
+            case AbilityType.NONE:
+                return @default;
+
+            case AbilityType.SICKLE:
+                return sickleColor;
+
+            case AbilityType.HAMMER:
+                return hammerColor;
+
+            case AbilityType.POT:
+                return potColor;
+
+            default:
+                return @default;
+        }
+    }
+
+    public bool GetColorChange()
+    {
+        return _colorChange;
     }
 
     // Returns the closest parried enemy to the player
@@ -263,6 +311,20 @@ public class AbilityHandler : MonoBehaviour
         if (_sortedHitList.Count <= 0)
             return null;
 
+        // Creating some local variables
+        EnemyHandler enemyHandler;
+        AbsorbInteractable absorbInteractable;
+
+        // If there is only one enemy within the list, return that enemy
+        if (_sortedHitList.Count == 1)
+        {
+            if (_sortedHitList[0].transform.TryGetComponent(out enemyHandler))
+            {
+                if (enemyHandler.IsParried())
+                    return enemyHandler;
+            }
+        }
+
         // Sorting list based on distance
         _sortedHitList.Sort((h1, h2) => Vector3.Distance(h1.transform.position, transform.position)
                              .CompareTo(Vector3.Distance(h2.transform.position, transform.position)));
@@ -271,8 +333,6 @@ public class AbilityHandler : MonoBehaviour
         for (int i = 0; i < _sortedHitList.Count; ++i)
         {
             //EnemyHandler enemyHandler = _sortedHitList[i].transform.GetComponent<EnemyHandler>();
-            EnemyHandler enemyHandler;
-            AbsorbInteractable absorbInteractable;
             if (_sortedHitList[i].transform.TryGetComponent(out enemyHandler))
             {
                 if (enemyHandler.IsParried())
@@ -286,6 +346,7 @@ public class AbilityHandler : MonoBehaviour
                     _animator.SetBool("Absorb", true);
                     _playerHandler.GetLocomotionHandler().Key_ActivateSlowdown();
                     absorbInteractable.Activate();
+                    _combatHandler.HealOvertime(healthFromAbsorb, healthFromAbosrbDuration);
                 }
                 return null;
             }
@@ -296,5 +357,14 @@ public class AbilityHandler : MonoBehaviour
     }
 
     // Returns the current ability enum
-    public AbilityType GetCurrentAbility() => _currentAbility;
+    public AbilityType GetCurrentAbilityType() => _currentAbility;
+
+    // Returns the current ability base class
+    public Ability GetCurrentAbility() => _abilities[(int)_currentAbility];
+
+    // Gets absorbing
+    public bool GetIsAbsorbing()
+    {
+        return _isAbosrbing;
+    }
 }

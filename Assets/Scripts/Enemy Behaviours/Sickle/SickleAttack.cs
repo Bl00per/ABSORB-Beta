@@ -150,7 +150,10 @@ public class SickleAttack : AIBehaviour
             // Move towards player if not dashing or within start dash distance
             else
             {
-                this.LockDestinationToPlayer(1.0f);
+                if(enemyHandler.GetPlayerHandler().GetIsAlive())
+                    this.LockDestinationToPlayer(1.0f);
+                else
+                    brain.SetBehaviour("Movement");
             }
         }
         // If they are dashing

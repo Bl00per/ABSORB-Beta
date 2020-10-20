@@ -9,6 +9,7 @@ public class AbsorbInteractable : MonoBehaviour
     public Animator animator;
     public Light lightComponent;
     public LightFlicker flicker;
+    public CombatHandler combatHandler;
     public GameObject particleEffect;
     private bool _isAbsorbable = true;
 
@@ -23,6 +24,7 @@ public class AbsorbInteractable : MonoBehaviour
         animator.SetBool("DoorTriggered", true);
         boxCollider.enabled = false;
         _isAbsorbable = false;
+        combatHandler.HealOvertime(100f, 50f);
         StartCoroutine(ParticleEffectTime());
     }
 

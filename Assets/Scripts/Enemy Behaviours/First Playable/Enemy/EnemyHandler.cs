@@ -32,11 +32,16 @@ public class EnemyHandler : MonoBehaviour
     public float deathSoundLength = 2.0f;
     public ParticleSystem deathParticleEffect;
 
+    [Header("Revive FX")]
+    public AudioSource reviveSound;
+    public ParticleSystem reviveVFX;
+
     [Header("Overall FX Properties")]
     public float overallFXTime = 1.0f;
 
     [Header("References")]
     public Renderer[] bodyMeshRenderer;
+    public float abilityIntensity = 1.0f;
     public Renderer weaponMeshRenderer;
     public Collider weaponCollider;
     public AudioSource attackSFX;
@@ -48,6 +53,7 @@ public class EnemyHandler : MonoBehaviour
     public float maxHealth = 100.0f;
     public int baseDamage = 10;
     public float attackCooldown = 1.0f;
+    public float moveDetection = 0.5F;
     private float _currentHealth = 0.0f;
     private bool _isAlive = true;
 
@@ -68,6 +74,7 @@ public class EnemyHandler : MonoBehaviour
     private bool _justAttacked = false;
     private Vector3 _hitParryPosition = Vector3.zero;
     private Quaternion _hitParryRotation = Quaternion.identity;
+    private Color[] _emissionColor;
 
     private void Awake()
     {
@@ -88,6 +95,18 @@ public class EnemyHandler : MonoBehaviour
         // Get the particle parent
         if (hasParryEffect)
             _parryParticleParent = parryEffect.transform.parent;
+
+        _emissionColor = new Color[bodyMeshRenderer.Length];
+
+        for (int i = 0; i < bodyMeshRenderer.Length; ++i)
+        {
+            // Lower the emission intensity when the player takes damage
+            Material copy = bodyMeshRenderer[i].material;
+            bodyMeshRenderer[i].material = Instantiate(copy);
+            _emissionColor[i] = bodyMeshRenderer[i].material.GetColor("_EmissionColor");
+        }
+
+
     }
 
     private void Start()
@@ -101,21 +120,76 @@ public class EnemyHandler : MonoBehaviour
 
     public void Update()
     {
+        if (typeOfEnemy == EnemyType.ELITE)
+        {
+            if (_aiBrain.GetNavMeshAgent().velocity.magnitude > moveDetection)
+            {
+                _animator.SetBool("Moving", true);
+            }
+            else
+            {
+                _animator.SetBool("Moving", false);
+            }
+        }
+
+
         UpdateSlowMo();
+        UpdateEnemyEmission();
     }
 
-    // Currently just destroying the enemy if the player attacks them
+    private void UpdateEnemyEmission()
+    {
+        if (IsParried())
+            return;
+            
+        for (int i = 0; i < bodyMeshRenderer.Length; ++i)
+        {
+            // Lower the emission intensity when the player takes damage
+            bodyMeshRenderer[i].material.SetColor("_EmissionColor", _emissionColor[i] *
+            ((abilityIntensity / maxHealth) * _currentHealth));
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerWeapon"))
         {
-            if (other.gameObject.CompareTag("PlayerMelee"))
+            // if melee attack
+            if ((other.gameObject.CompareTag("PlayerMelee") && typeOfEnemy != EnemyType.ELITE) || _aiBrain.GetCurrentBehaviour() == "Stagger")
+            {
                 TakeDamage(_playerHandler.GetPrimaryAttackDamage());
+            }
+
+            // if ability attack
+            else if (other.gameObject.CompareTag("Ability"))
+            {
+                Ability usedAbility = _playerHandler.GetAbilityHandler().GetCurrentAbility();
+                TakeDamage(GetDamageToEnemyType(usedAbility), usedAbility.GetAbilityType());
+            }
         }
     }
 
+    // Returns the damage that corrosonds with the used ability
+    public float GetDamageToEnemyType(Ability ability)
+    {
+        switch (typeOfEnemy)
+        {
+            case EnemyType.MINION:
+                return ability.damageToMinion;
+
+            case EnemyType.SPECIAL:
+                return ability.damageToSpecial;
+
+            case EnemyType.ELITE:
+                return ability.damageToElite;
+        }
+
+        Debug.LogError("Enemy type invalid -> GetDamageToEnemyType()");
+        return -1.0f;
+    }
+
     // Makes the enemy take damage
-    public void TakeDamage(float damage, AbilityHandler.AbilityType e_Ability = AbilityHandler.AbilityType.NONE)
+    public void TakeDamage(float damage, AbilityHandler.AbilityType eAbility = AbilityHandler.AbilityType.NONE)
     {
         // Subtracting the damage dealt by the player from the current health of this enemy
         _currentHealth -= damage;
@@ -129,7 +203,7 @@ public class EnemyHandler : MonoBehaviour
         }
 
         // If the type of enemy isn't an elite or the player used the hammer ability; stagger this enemy
-        if (typeOfEnemy != EnemyType.ELITE || e_Ability == AbilityHandler.AbilityType.HAMMER)
+        if (typeOfEnemy == EnemyType.ELITE || eAbility != AbilityHandler.AbilityType.NONE)
             _aiBrain.SetBehaviour("Stagger");
 
         // Playing damage VFX
@@ -189,14 +263,14 @@ public class EnemyHandler : MonoBehaviour
     // Activates the weapons collider
     public void ActivateWeaponCollider()
     {
-        if(weaponCollider != null)
+        if (weaponCollider != null)
             weaponCollider.enabled = true;
     }
 
     // Deactivates the weapons collider
     public void DeactiveWeaponCollider()
     {
-        if(weaponCollider != null)
+        if (weaponCollider != null)
             weaponCollider.enabled = false;
     }
 
@@ -223,6 +297,12 @@ public class EnemyHandler : MonoBehaviour
         if (value)
         {
             // Enabling all functional components
+            if (reviveVFX != null && reviveSound != null)
+            {
+                reviveSound.Play();
+                reviveVFX.Play();
+            }
+
             _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
@@ -235,6 +315,7 @@ public class EnemyHandler : MonoBehaviour
             _navMeshAgent.enabled = true;
             weaponMeshRenderer.enabled = true;
             _isFunctional = true;
+            //_aiBrain.GetNavMeshAgent().isStopped = false;
         }
         else
         {
@@ -252,20 +333,26 @@ public class EnemyHandler : MonoBehaviour
             weaponMeshRenderer.enabled = false;
             weaponCollider.enabled = false;
             _isFunctional = false;
+            //_aiBrain.GetNavMeshAgent().isStopped = true;
         }
+
+        //Debug.Log($"Set functional: {value} -> On enemy: {gameObject.name}");
     }
 
     // Kills the enemy
     public void Kill()
     {
-        // Disabling functional components of enemy
-        SetFunctional(false);
+        // // Disabling functional components of enemy
+        // SetFunctional(false);
 
         // Playing death VFX
         PlayDeathFX();
         EnemyDetection.enemies.Clear();
         // Removes the group control over the enemy
-        _groupHandler?.Remove(this);
+        if (_groupHandler != null)
+            _groupHandler.Remove(this); // Group handler handles the SetFunctionl call
+        else
+            SetFunctional(false);
     }
 
     private void PlayDeathFX()

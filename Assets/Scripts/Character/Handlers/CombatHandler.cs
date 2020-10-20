@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
+
 public class CombatHandler : MonoBehaviour
 {
     /*
@@ -25,10 +25,15 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
+    public ParticleSystem weaponSummonPE;
     [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
     public bool debugDeath = false;
     [Header("Body")]
     public SkinnedMeshRenderer playerShader;
+    [Header("Enemy Attack Timers")]
+    public float primaryAttackWindow = 1.0f;
+    public float shieldAttackWindow = 0.5f;
+
     private PlayerHandler _playerHandler;
     private SlowMotionManager _slowMoManager;
     private InputManager _inputManager;
@@ -36,10 +41,15 @@ public class CombatHandler : MonoBehaviour
     private Transform _transform;
     private Animator _animator;
     private Rigidbody _rb;
+    private AbilityHandler _abilityHandler;
+    private CameraManager _cameraManager;
     private bool _justUsedMechanic = false;
-    [Header("Enemy Attack Timers")]
-    public float primaryAttackWindow = 1.0f;
-    public float shieldAttackWindow = 0.5f;
+    private bool _healingPlayer = false;
+    private float _healthToHealTo = 0.0f;
+    private float _healthLerpDuration = 1.0f;
+    private float _healthTimeElapsed = 0.0f;
+    private Renderer[] _bodyRenderer;
+    private float _localPlayerHP;
 
     // Start is called before first frame
     private void Start()
@@ -51,14 +61,20 @@ public class CombatHandler : MonoBehaviour
         _animator = _playerHandler.GetAnimator();
         _inputManager = _playerHandler.GetInputManager();
         _slowMoManager = _playerHandler.GetSlowMotionManager();
+        _abilityHandler = this.GetComponent<AbilityHandler>();
+        _cameraManager = _playerHandler.GetCameraManager();
         _rb = this.GetComponent<Rigidbody>();
+        _bodyRenderer = new Renderer[_abilityHandler.abidaroMesh.Length];
+        _bodyRenderer = _abilityHandler.abidaroMesh;
+
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
         shieldState = ShieldState.Default;
-
         // Set temp timers
-        //_tempShieldTimer = shieldTimer;
         _tempShieldCDTimer = shieldCooldown;
+
+        // Set the local hp at that start = 100f
+        _localPlayerHP = _playerHandler.GetCurrentHealth();
 
         enemy = null;
     }
@@ -69,6 +85,8 @@ public class CombatHandler : MonoBehaviour
         UpdateShieldFSM();
         UpdateAttack();
         UpdateDeath();
+        UpdatePlayerEmission();
+        UpdateHeal();
     }
 
     #region Attacking 
@@ -82,7 +100,7 @@ public class CombatHandler : MonoBehaviour
     private bool _comboStart = true;
     private bool _attacking;
     private Transform enemy;
-    public GameObject lockOnGO;
+    //public GameObject lockOnGO;
 
     private void UpdateAttack()
     {
@@ -91,7 +109,6 @@ public class CombatHandler : MonoBehaviour
         {
             if (_inputManager.GetAttackButtonPress() && shieldState != ShieldState.Shielding && _comboStart)
             {
-               
                 _attacking = true;
                 _animator.SetBool("Attack1", true);
                 _animator.SetInteger("ComboNo.", 1);
@@ -119,8 +136,8 @@ public class CombatHandler : MonoBehaviour
         {
             if (enemy != null) //if an enemy is within range
             {
-                lockOnGO.transform.position = enemy.position;
-                lockOnGO.SetActive(true);
+                // lockOnGO.transform.position = enemy.position;
+                // lockOnGO.SetActive(true);
 
                 Vector3 direction = enemy.transform.position - _rb.transform.position;
                 direction.y = 0;
@@ -129,12 +146,12 @@ public class CombatHandler : MonoBehaviour
             }
             else // if an enemy is not in range
             {
-                lockOnGO.SetActive(false);
+                // lockOnGO.SetActive(false);
             }
         }
         else // if the player is not attacking
         {
-            lockOnGO.SetActive(false);
+            //lockOnGO.SetActive(false);
         }
     }
 
@@ -163,39 +180,39 @@ public class CombatHandler : MonoBehaviour
     {
         playerWeapon.enabled = true;
         playerWeaponColl.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableWeaponObject()
     {
         playerWeapon.enabled = false;
         playerWeaponColl.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableMEDIUMPlayerWeaponObject()
     {
         playerWeapon2.enabled = true;
         playerWeaponColl2.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableMEDIUMWeaponObject()
     {
         playerWeapon2.enabled = false;
         playerWeaponColl2.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableBIGPlayerWeaponObject()
     {
         playerWeapon3.enabled = true;
         playerWeaponColl3.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableBIGWeaponObject()
     {
         playerWeapon3.enabled = false;
         playerWeaponColl3.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_PlayWeaponSound()
@@ -207,6 +224,11 @@ public class CombatHandler : MonoBehaviour
     {
         if (weaponPE != null)
             weaponPE.Play();
+    }
+    public void Key_PlayWeaponSummonPE()
+    {
+        if (weaponSummonPE != null)
+            weaponSummonPE.Play();
     }
 
     public void Key_SetAttack1Bool()
@@ -229,20 +251,111 @@ public class CombatHandler : MonoBehaviour
         shieldSFX.Play();
     }
 
+    public void key_SmallVibrate()
+    {
+        StartCoroutine(ControllorVibration.Vibrate(.2f, .2f, .2f));
+    }
+    public void key_LargeVibrate()
+    {
+        StartCoroutine(ControllorVibration.Vibrate(1f, 1f, .4f));
+    }
+
     #endregion
 
-    #region Take Damage
+    #region Health Modifiers
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("EnemyWeapon")|| other.gameObject.CompareTag("EnemyProjectile"))
+        if (other.gameObject.CompareTag("EnemyWeapon") || other.gameObject.CompareTag("EnemyProjectile"))
         {
+            // Get enemy handler out of the enemy weapon
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
+
+            // // If shield state default but the components are enabled, then we exit this function
+            // if (shieldState == ShieldState.Default && (shieldSphereCollider.enabled || shieldMeshRenderer.enabled))
+            //     return;
+
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
                 enemy.weaponCollider.enabled = false;
+                StartCoroutine(ControllorVibration.Vibrate(.5f, .5f, .1f));
             }
+        }
+    }
+
+    // Check for when the player health decreases
+    private bool PlayerHealthUpdated()
+    {
+        if (_localPlayerHP != _playerHandler.GetCurrentHealth())
+        {
+            _localPlayerHP = _playerHandler.GetCurrentHealth();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    // Update the players emission and the vignette as they take damage or heal
+    private void UpdatePlayerEmission()
+    {
+        // Lower the emission intensity when the player takes damage
+        if (!_abilityHandler.GetColorChange() && PlayerHealthUpdated())
+        {
+            for (int i = 0; i < _bodyRenderer.Length; i++)
+            {
+                _bodyRenderer[i].material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
+                ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
+            }
+            Debug.Log("Emission decreased");
+        }
+
+        float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
+        // When you gain max health again, makes it so isn't doesn't read temp when it's negative
+        if (temp <= 0)
+            _cameraManager.SetVignetteIntensity(0f);
+        else
+            _cameraManager.SetVignetteIntensity(temp);
+    }
+
+    // Adds value onto health overtime
+    public void HealOvertime(float value, float duration)
+    {
+        _healthLerpDuration = duration;
+        _healthToHealTo = 0.0f;
+        _healthToHealTo += _playerHandler.GetCurrentHealth() + value; //60
+        _healingPlayer = true;
+    }
+
+    // Lerps the health from current to the new health
+    private void UpdateHeal()
+    {
+        // Only heal the player if the HealOvertime(f) function has been set
+        if (_healingPlayer)
+        {
+            // Grabbing the health from the player
+            float health = _playerHandler.GetCurrentHealth(); // 40.20
+
+            // Linearly interpolating the current health to the "health to heal to" property
+            health = Mathf.Lerp(health, _healthToHealTo, 0.5F / _healthLerpDuration);
+
+            // Checking if health is above out maximum health before setting it to the player
+            if (health > _healthToHealTo - 0.1F)
+            {
+                health = _healthToHealTo;
+                _healingPlayer = false;
+            }
+
+            // Checking if health is above out maximum health before setting it to the player
+            if (health > _playerHandler.GetMaxHealth() - 0.1F)
+            {
+                health = _playerHandler.GetMaxHealth();
+                _healingPlayer = false;
+            }
+
+            _playerHandler.SetCurrentHealth(health); // 40.20
+
+            //Debug.Log(_playerHandler.GetCurrentHealth());
         }
     }
 
@@ -251,14 +364,11 @@ public class CombatHandler : MonoBehaviour
     #region Shield
     // Attributes
     [Header("Timers", order = 0)]
-    // [Range(0.1f, 5f)]
-    // public float shieldTimer = 1.0f;
     [Range(0.1f, 5f)]
     public float shieldCooldown = 1.0f;
     private bool _canShield = true;
 
     // Properties
-    //private float _tempShieldTimer;
     private float _tempShieldCDTimer;
 
     public enum ShieldState
@@ -292,7 +402,7 @@ public class CombatHandler : MonoBehaviour
     private void EnableShield()
     {
         // When the player hits the shield key
-        if (_inputManager.GetShieldButtonPress() && _comboStart)
+        if (_inputManager.GetShieldButtonPress()) //&& _comboStart)
         {
             shieldState = ShieldState.Shielding;
             _animator.SetBool("Shield", true);
@@ -340,11 +450,6 @@ public class CombatHandler : MonoBehaviour
         return _canShield;
     }
 
-    // public float GetMaxShieldTimer()
-    // {
-    //     return _tempShieldTimer;
-    // }
-
     #endregion
 
     #region SlowMotion
@@ -365,6 +470,7 @@ public class CombatHandler : MonoBehaviour
     [Header("Death Attributes")]
     public AudioSource deathSFX1;
     public AudioSource deathSFX2;
+    public ParticleSystem deathPE;
     public float timeTillRespawn = 3.0f;
     private bool _respawning = false;
 
@@ -416,6 +522,10 @@ public class CombatHandler : MonoBehaviour
     {
         deathSFX2.Play();
     }
+    public void key_deathPE()
+    {
+        deathPE.Play();
+    }
 
     #endregion
 
@@ -433,6 +543,11 @@ public class CombatHandler : MonoBehaviour
     public bool GetJustUsedMechanic()
     {
         return _justUsedMechanic;
+    }
+
+    public bool GetIsHealing()
+    {
+        return _healingPlayer;
     }
 
     public IEnumerator Coroutine_JustUsedMechanic(float time)
