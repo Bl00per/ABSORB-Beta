@@ -77325,18 +77325,22 @@ MonoBehaviour:
   deathSound: {fileID: 6233279460524866970}
   deathSoundLength: 2
   deathParticleEffect: {fileID: 6132531780271446540}
+  reviveSound: {fileID: 0}
+  reviveVFX: {fileID: 0}
   overallFXTime: 1
   bodyMeshRenderer:
   - {fileID: 6626176570713725647}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 8158816111336067895}
   weaponCollider: {fileID: 0}
   attackSFX: {fileID: 0}
   attackPE: {fileID: 0}
   typeOfEnemy: 2
   typeOfAbility: 3
-  maxHealth: 150
+  maxHealth: 200
   baseDamage: 10
   attackCooldown: 1
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 50
   tweenEase:
