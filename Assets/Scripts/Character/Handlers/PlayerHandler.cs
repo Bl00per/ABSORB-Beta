@@ -18,6 +18,7 @@ public class PlayerHandler : MonoBehaviour
     // Attributes
     [Header("Attributes")]
     public float maxHealth = 100;
+    public float healthOvertimeRespawnDuration = 10.0f;
     public int primaryAttackDamage = 25;
     public float respawnFlyingTime = 5.0f;
     public float respawnFlyingOffset = 20.0f;
@@ -92,7 +93,8 @@ public class PlayerHandler : MonoBehaviour
     public void RespawnPlayer()
     {
         isAlive = true;
-        _currentHealth = maxHealth;
+        _currentHealth = 1.0f;
+        //_combatHandler.HealOvertime(maxHealth);
         StartCoroutine(MoveOverSeconds(this.gameObject, GetRespawnPosition(), respawnFlyingOffset, respawnFlyingTime));
         //_transform.rotation = GetRespawnPosition().rotation;
     }
@@ -181,6 +183,8 @@ public class PlayerHandler : MonoBehaviour
         _rigidbody.useGravity = true;
         _inputManager.EnableInput();
         _cameraManager.EnableCameraMovement(); // TEMPORARY FOR NOW
+        
+        _combatHandler.HealOvertime(maxHealth, healthOvertimeRespawnDuration);
     }
 
     #endregion
@@ -210,6 +214,9 @@ public class PlayerHandler : MonoBehaviour
     // Return the amount of damage the player should take
     public float TakeDamage(int damageAmount)
     {
+        if(_abilityHandler.GetIsAbsorbing() || _combatHandler.GetIsHealing())
+            return 0.0f;
+
         hitParticleSystem.Play();
         hitSFX.Play();
         _simpleCameraShake.Key_Shake_DAF("0.4|1.0|2.0");
@@ -291,6 +298,16 @@ public class PlayerHandler : MonoBehaviour
     public int GetPrimaryAttackDamage()
     {
         return primaryAttackDamage;
+    }
+
+    public void SetCurrentHealth(float newHealth)
+    {
+        _currentHealth = newHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     public void SetPrimaryAttackDamage(int newDamage)

@@ -41,6 +41,7 @@ public class EnemyHandler : MonoBehaviour
 
     [Header("References")]
     public Renderer[] bodyMeshRenderer;
+    public float abilityIntensity = 1.0f;
     public Renderer weaponMeshRenderer;
     public Collider weaponCollider;
     public AudioSource attackSFX;
@@ -73,6 +74,7 @@ public class EnemyHandler : MonoBehaviour
     private bool _justAttacked = false;
     private Vector3 _hitParryPosition = Vector3.zero;
     private Quaternion _hitParryRotation = Quaternion.identity;
+    private Color[] _emissionColor;
 
     private void Awake()
     {
@@ -93,6 +95,18 @@ public class EnemyHandler : MonoBehaviour
         // Get the particle parent
         if (hasParryEffect)
             _parryParticleParent = parryEffect.transform.parent;
+
+        _emissionColor = new Color[bodyMeshRenderer.Length];
+
+        for (int i = 0; i < bodyMeshRenderer.Length; ++i)
+        {
+            // Lower the emission intensity when the player takes damage
+            Material copy = bodyMeshRenderer[i].material;
+            bodyMeshRenderer[i].material = Instantiate(copy);
+            _emissionColor[i] = bodyMeshRenderer[i].material.GetColor("_EmissionColor");
+        }
+
+
     }
 
     private void Start()
@@ -120,6 +134,20 @@ public class EnemyHandler : MonoBehaviour
 
 
         UpdateSlowMo();
+        UpdateEnemyEmission();
+    }
+
+    private void UpdateEnemyEmission()
+    {
+        if (IsParried())
+            return;
+            
+        for (int i = 0; i < bodyMeshRenderer.Length; ++i)
+        {
+            // Lower the emission intensity when the player takes damage
+            bodyMeshRenderer[i].material.SetColor("_EmissionColor", _emissionColor[i] *
+            ((abilityIntensity / maxHealth) * _currentHealth));
+        }
     }
 
     private void OnTriggerEnter(Collider other)
