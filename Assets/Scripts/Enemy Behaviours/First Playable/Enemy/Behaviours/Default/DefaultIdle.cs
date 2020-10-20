@@ -27,7 +27,8 @@ public class DefaultIdle : AIBehaviour
         if (brain.GetDistanceToPlayer() < totalDistance && // Is the player within distance?
         CheckValue(brain.transform.position.y, minY, maxY) && // Is the player around the same Y level?
         Vector3.Angle(brain.GetDirectionToPlayer(), brain.transform.forward) < viewConeAngle || // Is the player within the view cone?
-        brain.GetDistanceToPlayer() < autoDetectionRadius) // Is the player within the auto detection radius?
+        brain.GetDistanceToPlayer() < autoDetectionRadius &&
+        enemyHandler.GetPlayerHandler().GetIsAlive()) // Is the player within the auto detection radius?
         {
             // If the enemy's group handler isn't null, set the state to chase
             brain.GetHandler().GetEnemyGroupHandler()?.SetState(EnemyGroupHandler.E_GroupState.CHASE);

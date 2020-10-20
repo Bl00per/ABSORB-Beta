@@ -28,9 +28,11 @@ public abstract class GroupState : MonoBehaviour
 
     // Creating link between handler and state
     protected EnemyGroupHandler enemyGroupHandler;
+    protected PlayerHandler playerHandler;
     public void Initialise(EnemyGroupHandler enemyGroupHandler)
     {
         this.enemyGroupHandler = enemyGroupHandler;
+        playerHandler = enemyGroupHandler.playerTransform.GetComponent<PlayerHandler>();
     }
 
     // Functions to be overwritten by derived class

@@ -332,5 +332,8 @@ public class AbilityHandler : MonoBehaviour
     }
 
     // Returns the current ability enum
-    public AbilityType GetCurrentAbility() => _currentAbility;
+    public AbilityType GetCurrentAbilityType() => _currentAbility;
+
+    // Returns the current ability base class
+    public Ability GetCurrentAbility() => _abilities[(int)_currentAbility];
 }

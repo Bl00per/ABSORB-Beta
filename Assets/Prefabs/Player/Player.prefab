@@ -175,7 +175,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813028161}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000035762778}
-  m_LocalPosition: {x: -0.057999995, y: 2.4919968, z: 0.1279984}
+  m_LocalPosition: {x: -0.058, y: 2.492, z: 0.128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3746689148225198915}
@@ -592,6 +592,7 @@ MonoBehaviour:
   primaryAttackDamage: 25
   respawnFlyingTime: 5
   respawnFlyingOffset: 10
+  _currentHealth: 100
   abidaroMesh:
   - {fileID: 8096777458042995960}
   - {fileID: 7231995166932868287}
@@ -736,6 +737,7 @@ MonoBehaviour:
   groundSmashTransform: {fileID: 8992812476964039363}
   impactLocation: {fileID: 1411669150836175499}
   hammerGrunt: {fileID: 2908155104878934357}
+  sphereCollider: {fileID: 7280212037360164889}
   groundSmashReparentTimer: 2
   areaOfEffect: 10
 --- !u!114 &2696885436146177423
@@ -1264,9 +1266,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3150256179211894638}
+  - component: {fileID: 7280212037360164889}
   m_Layer: 17
   m_Name: HAMMER
-  m_TagString: PlayerMelee
+  m_TagString: Ability
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1287,6 +1290,19 @@ Transform:
   m_Father: {fileID: 1387455419609632876}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7280212037360164889
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066650686738381165}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 9
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7480968181914741897
 GameObject:
   m_ObjectHideFlags: 0
@@ -2616,12 +2632,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63ba312287e0b41468935a63c0a31ca4, type: 3}
---- !u!198 &2520570017445212070 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198976190923627218, guid: 63ba312287e0b41468935a63c0a31ca4,
-    type: 3}
-  m_PrefabInstance: {fileID: 2321670311920088436}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2321444506294890142 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4318484539120618, guid: 63ba312287e0b41468935a63c0a31ca4,
@@ -2631,6 +2641,12 @@ Transform:
 --- !u!1 &2322991519895030764 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1361899032133272, guid: 63ba312287e0b41468935a63c0a31ca4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2321670311920088436}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2520570017445212070 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198976190923627218, guid: 63ba312287e0b41468935a63c0a31ca4,
     type: 3}
   m_PrefabInstance: {fileID: 2321670311920088436}
   m_PrefabAsset: {fileID: 0}
@@ -3395,15 +3411,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 349c252aee0d9c443ac0784b5c1a99ac, type: 3}
---- !u!1 &8990501601924737351 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3162698946757761218, guid: 349c252aee0d9c443ac0784b5c1a99ac,
-    type: 3}
-  m_PrefabInstance: {fileID: 6278163556377719173}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8992812476964039363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3165018096382909254, guid: 349c252aee0d9c443ac0784b5c1a99ac,
+    type: 3}
+  m_PrefabInstance: {fileID: 6278163556377719173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8990501601924737351 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3162698946757761218, guid: 349c252aee0d9c443ac0784b5c1a99ac,
     type: 3}
   m_PrefabInstance: {fileID: 6278163556377719173}
   m_PrefabAsset: {fileID: 0}

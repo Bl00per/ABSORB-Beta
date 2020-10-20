@@ -574,8 +574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enterAttackStateDistance: 10
   retreatFromPlayerDistance: 7
-  retreatDistance: 6
-  returnToAttackPosition: 1
+  retreatFromPlayerTimer: 0
   returnToInitialAngularSpeed: 1
 --- !u!114 &1935687146708632264
 MonoBehaviour:
@@ -594,7 +593,7 @@ MonoBehaviour:
   projectileSpeed: 20
   projectileLifeTime: 5
   projectileDamage: 10
-  dashCancelRange: 10
+  retreatFromPlayerTime: 2
   projectilePrefab: {fileID: 5132138959879344579}
   projectileStartPoint: {fileID: 3383889075446886957}
   chargingEffect: {fileID: 419183908351565383}
@@ -2386,6 +2385,11 @@ PrefabInstance:
       propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6831043116944662054, guid: 9157d5114d32e1f449a25c27c39e87a8,
+        type: 3}
+      propertyPath: _enemyHandler
+      value: 
+      objectReference: {fileID: 166303742300683239}
     - target: {fileID: 8840168797588337650, guid: 9157d5114d32e1f449a25c27c39e87a8,
         type: 3}
       propertyPath: m_Name

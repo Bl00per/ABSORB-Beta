@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour
 {
-    private EnemyHandler _enemyHandler;
-
-    private void Start()
-    {
-        _enemyHandler = this.GetComponentInParent<EnemyHandler>();
-    }
+    //public bool 
+    public EnemyHandler _enemyHandler;
 
     public EnemyHandler GetEnemyHandler() => _enemyHandler;
 

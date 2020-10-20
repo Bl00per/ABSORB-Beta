@@ -26276,14 +26276,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.8333333
-    functionName: ActivateWeaponCollider
+    functionName: key_PlayAttackSFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.8333333
-    functionName: key_PlayAttackSFX
+    functionName: ActivateWeaponCollider
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -26298,6 +26298,20 @@ AnimationClip:
     messageOptions: 0
   - time: 1.0416666
     functionName: DeactiveWeaponCollider
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.0833334
+    functionName: Key_UnparentGroundSmashVFX
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1.6666666
+    functionName: Key_DeactivateSwingAnimation
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

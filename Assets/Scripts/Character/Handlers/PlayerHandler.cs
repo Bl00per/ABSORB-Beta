@@ -46,6 +46,7 @@ public class PlayerHandler : MonoBehaviour
     private float _checkPointYLevel;
     private float _playerYLevel;
     private int _defaultDamage;
+    private AbilityHandler _abilityHandler;
 
     Vector3 point = Vector3.zero;
     Vector3 point2 = Vector3.zero;
@@ -64,6 +65,7 @@ public class PlayerHandler : MonoBehaviour
         _transform = this.GetComponent<Transform>();
         _locomotionHandler = this.GetComponent<LocomotionHandler>();
         _combatHandler = this.GetComponent<CombatHandler>();
+        _abilityHandler = this.GetComponent<AbilityHandler>();
         _inputManager = FindObjectOfType<InputManager>();
         _cameraManager = FindObjectOfType<CameraManager>();
         _slowMotionManager = FindObjectOfType<SlowMotionManager>();
@@ -300,6 +302,8 @@ public class PlayerHandler : MonoBehaviour
     {
         primaryAttackDamage = _defaultDamage;
     }
+
+    public AbilityHandler GetAbilityHandler() => _abilityHandler;
 
     #endregion
 

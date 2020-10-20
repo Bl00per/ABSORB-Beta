@@ -190,6 +190,12 @@ public class AIBrain : MonoBehaviour
         return _lastStateID;
     }
 
+    // Returns the current state 
+    public string GetCurrentBehaviour()
+    {
+        return _currentBehaviourID;
+    }
+
     // Returns the player's transform
     public Transform PlayerTransform
     {
