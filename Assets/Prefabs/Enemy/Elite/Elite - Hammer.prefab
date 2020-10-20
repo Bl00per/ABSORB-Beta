@@ -9860,7 +9860,7 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 300
-  m_StoppingDistance: 4
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -9915,9 +9915,12 @@ MonoBehaviour:
   deathSound: {fileID: 9199418631084773071}
   deathSoundLength: 2
   deathParticleEffect: {fileID: 998595182244932248}
+  reviveSound: {fileID: 0}
+  reviveVFX: {fileID: 0}
   overallFXTime: 1
   bodyMeshRenderer:
   - {fileID: 8859269995434949090}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 8859269995434949090}
   weaponCollider: {fileID: 8338199219903466080}
   attackSFX: {fileID: 6876310879570282507}
@@ -9927,6 +9930,7 @@ MonoBehaviour:
   maxHealth: 150
   baseDamage: 10
   attackCooldown: 1
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 50
   tweenEase:
@@ -9991,7 +9995,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enterAttackStateDistance: 7.5
-  retreatDistance: 10
   returnToAttackPosition: 1
   returnToInitialAngularSpeed: 1
 --- !u!114 &2447262687008383899

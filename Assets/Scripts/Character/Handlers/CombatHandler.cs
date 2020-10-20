@@ -278,7 +278,7 @@ public class CombatHandler : MonoBehaviour
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
-                enemy.weaponCollider.enabled = false;
+                //enemy.weaponCollider.enabled = false;
                 StartCoroutine(ControllorVibration.Vibrate(.5f, .5f, .1f));
             }
         }
