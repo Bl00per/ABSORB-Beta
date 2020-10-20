@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class CombatHandler : MonoBehaviour
 {
@@ -45,7 +44,6 @@ public class CombatHandler : MonoBehaviour
     private AbilityHandler _abilityHandler;
     private CameraManager _cameraManager;
     private bool _justUsedMechanic = false;
-    [SerializeField]
     private Renderer[] _bodyRenderer;
     private float _localPlayerHP;
 
@@ -64,13 +62,14 @@ public class CombatHandler : MonoBehaviour
         _rb = this.GetComponent<Rigidbody>();
         _bodyRenderer = new Renderer[_abilityHandler.abidaroMesh.Length];
         _bodyRenderer = _abilityHandler.abidaroMesh;
+
         // Make sure the shield sphere is turned off by default
         shieldMeshRenderer.enabled = false;
         shieldState = ShieldState.Default;
-
         // Set temp timers
         _tempShieldCDTimer = shieldCooldown;
 
+        // Set the local hp at that start = 100f
         _localPlayerHP = _playerHandler.GetCurrentHealth();
 
         enemy = null;
@@ -289,6 +288,7 @@ public class CombatHandler : MonoBehaviour
             return false;
     }
 
+    // Update the players emission and the vignette as they take damage or heal
     private void UpdatePlayerEmission()
     {
         // Lower the emission intensity when the player takes damage

@@ -9,7 +9,6 @@ public class LocomotionHandler : MonoBehaviour
         player controller.  
     */
 
-    // References
     [Header("References")]
     public Transform mainPlayerCamera;
     private PlayerHandler _playerHandler;
@@ -56,12 +55,6 @@ public class LocomotionHandler : MonoBehaviour
     {
         // Updates the players slow down FSM
         UpdateSlowdownFSM();
-
-        // Checks if the player is moving, and sets the animator accordingly
-        // if (_rigidbody.velocity.magnitude > 3.5F)
-        //     _animator.SetBool("Movement", true);
-        // else if (_animator.GetBool("Movement"))
-        //     _animator.SetBool("Movement", false);
     }
 
     // Fixed update is called every physics
@@ -231,8 +224,6 @@ public class LocomotionHandler : MonoBehaviour
     private float _tempPlayerAcceleration;
     private bool _resetPlayerAcceleration = false;
 
-  
-
     // Updates the slowdown
     public void UpdateSlowdownFSM()
     {
@@ -253,8 +244,6 @@ public class LocomotionHandler : MonoBehaviour
     private void SlowdownPlayer()
     {
         _currentAcceleration = Mathf.SmoothDamp(_currentAcceleration, maxSlowAcceleration, ref _speedSmoothVelocity, timeToAcceleration);
-
-        
     }
 
     private void SpeedUpPlayer()
@@ -354,13 +343,13 @@ public class LocomotionHandler : MonoBehaviour
 
     public void Key_Dash()
     {
-            _initialVelocity = _rigidbody.velocity;
-            _initialPosition = transform.position;
-            _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
-            dashPE.Play();
-            dashSFX.Play();
-            _canDash = false;
-            StartCoroutine(CoolDownSequence());
+        _initialVelocity = _rigidbody.velocity;
+        _initialPosition = transform.position;
+        _rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
+        dashPE.Play();
+        dashSFX.Play();
+        _canDash = false;
+        StartCoroutine(CoolDownSequence());
     }
 
     #endregion
