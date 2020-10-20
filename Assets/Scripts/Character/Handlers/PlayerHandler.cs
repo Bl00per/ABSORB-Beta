@@ -43,7 +43,6 @@ public class PlayerHandler : MonoBehaviour
     private CheckPoint _checkpoints;
     private Vector3 _respawnPosition;
     private CapsuleCollider _capsule;
-    private float offset = 10.0f;
     private float _checkPointYLevel;
     private float _playerYLevel;
     private int _defaultDamage;
@@ -96,7 +95,6 @@ public class PlayerHandler : MonoBehaviour
         _currentHealth = 1.0f;
         //_combatHandler.HealOvertime(maxHealth);
         StartCoroutine(MoveOverSeconds(this.gameObject, GetRespawnPosition(), respawnFlyingOffset, respawnFlyingTime));
-        //_transform.rotation = GetRespawnPosition().rotation;
     }
 
     // Move the player back to checkpoint position over a certain number of seconds
@@ -129,31 +127,6 @@ public class PlayerHandler : MonoBehaviour
 
         // Set to end position as a failsafe
         objectToMove.transform.position = end;
-    }
-
-    // Get a mid point between two positions
-    private Vector3 GetPoint(Vector3 object1, Vector3 object2)
-    {
-        //get the positions of our transforms
-        Vector3 pos1 = object1;
-        Vector3 pos2 = object2;
-
-        //get the direction between the two transforms -->
-        Vector3 dir = (pos2 - pos1).normalized;
-
-        //get a direction that crosses our [dir] direction
-        //NOTE! : this can be any of a buhgillion directions that cross our [dir] in 3D space
-        //To alter which direction we're crossing in, assign another directional value to the 2nd parameter
-        Vector3 perpDir = Vector3.Cross(dir, Vector3.right);
-
-        //get our midway point
-        Vector3 midPoint = (pos1 + pos2) / 2f;
-
-        //get the offset point
-        //This is the point you're looking for.
-        Vector3 offsetPoint = midPoint + (perpDir * offset);
-
-        return offsetPoint;
     }
 
     private void DisableReferences()
@@ -290,8 +263,6 @@ public class PlayerHandler : MonoBehaviour
 
     public Vector3 SetRespawnPosition(Vector3 checkpointPosition)
     {
-        // Debug.Log("Set new respawn position at: (" + checkpointPosition.x + ", " +
-        // checkpointPosition.y + ", " + checkpointPosition.z + ")");
         return _respawnPosition = checkpointPosition;
     }
 

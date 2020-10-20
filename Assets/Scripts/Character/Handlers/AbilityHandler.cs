@@ -47,8 +47,7 @@ public class AbilityHandler : MonoBehaviour
     private LocomotionHandler _locomotionHanlder;
     private CombatHandler _combatHandler;
     private Animator _animator;
-    //[SerializeField]
-    public Material[] _material;
+    private Material[] _material;
     private bool _isAbosrbing = false;
     private bool _colorChange = false;
     private Color _nextColor;
@@ -118,8 +117,6 @@ public class AbilityHandler : MonoBehaviour
                 }
             }
         }
-
-        //ColorLerpUpdate();
     }
 
     // Gets called every frame we don't have an ability
@@ -238,6 +235,7 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    // Change the material color and emission over time
     private IEnumerator ColorLerpUpdate(Color nextColor)
     {
         if (_colorChange)
@@ -266,6 +264,7 @@ public class AbilityHandler : MonoBehaviour
         }
     }
 
+    // Return the current color based on the ability
     public Color GetCurrentColor()
     {
         switch (_currentAbility)
