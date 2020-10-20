@@ -27,23 +27,24 @@ public class SpecialMovement : AIBehaviour
         _attackRange = brain.GetNavMeshAgent().stoppingDistance;
 
         // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
-        this.LockDestinationToPlayer(destinationPadding);
+        if(enemyHandler.GetPlayerHandler().GetIsAlive())
+            this.LockDestinationToPlayer(destinationPadding);
     }
 
-    public override void OnStateEnter() 
+    public override void OnStateEnter()
     {
         // Checking if the state we came from was the attack behaviour
-        if(brain.GetLastStateID() == "Attack")
+        if (brain.GetLastStateID() == "Attack")
         {
             Vector3 avoidDirection = (brain.PlayerTransform.position - transform.position).normalized;
             Vector3 avoidDestination = transform.position - (avoidDirection * avoidDistance);
             this.OverrideDestination(avoidDestination, 1.0f);
             _isAvoiding = true;
-        }  
+        }
     }
 
-    public override void OnStateUpdate() 
-    {           
+    public override void OnStateUpdate()
+    {
         // Checking if we should be locked onto the player or not...
         if (this.destinationLockedToPlayer)
             this.currentDestination = brain.PlayerTransform.position;
@@ -52,33 +53,36 @@ public class SpecialMovement : AIBehaviour
         brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
 
         // If player is within attack range;
-        if(brain.GetNavMeshAgent().remainingDistance <= _attackRange)
+        if (brain.GetNavMeshAgent().remainingDistance <= _attackRange)
         {
             // Enemy will enter attack phase if locked onto player:
-            if(this.destinationLockedToPlayer)
+            if (this.destinationLockedToPlayer)
             {
                 brain.SetBehaviour("Attack");
                 return;
             }
             else
             {
-                if(_isAvoiding)
+                if (_isAvoiding)
                 {
-                    this.LockDestinationToPlayer(destinationPadding);
-                    _isAvoiding = false;
+                    if (enemyHandler.GetPlayerHandler().GetIsAlive())
+                    {
+                        this.LockDestinationToPlayer(destinationPadding);
+                        _isAvoiding = false;
+                    }
                 }
 
                 // Here is what they'll do when they aren't locked on
                 // so general movement, stuff will go here when
                 // the group system has been worked out
             }
-            
+
         }
     }
 
-    public override void OnStateFixedUpdate() {}
+    public override void OnStateFixedUpdate() { }
 
-    public override void OnStateExit() {}
+    public override void OnStateExit() { }
 
     // Returns a randomized position from the radius around the center of an object
     // This function will be replaced when "Unit Slotting" or "AI Group Control" gets implemented.
@@ -119,7 +123,7 @@ public class SpecialMovement : AIBehaviour
     // public float attackDistance = 10.0f;
     // public float beforeAttackTimer = 0.7f;
     // private bool _isWaitingToAttack = false;
-    
+
     // public override void OnStateEnter() {}
 
     // public override void OnStateExit() 
@@ -156,7 +160,7 @@ public class SpecialMovement : AIBehaviour
     // }
 
     // public override void OnStateUpdate() { }
-    
+
     // public IEnumerator BeforeAttackTimer()
     // {
     //     _isWaitingToAttack = true;

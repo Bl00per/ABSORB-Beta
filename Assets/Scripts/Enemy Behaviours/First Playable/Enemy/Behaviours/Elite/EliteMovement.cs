@@ -24,10 +24,11 @@ public class EliteMovement : AIBehaviour
         _attackRange = brain.GetNavMeshAgent().stoppingDistance;
 
         // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
-        this.LockDestinationToPlayer(destinationPadding);
+        if (enemyHandler.GetPlayerHandler().GetIsAlive())
+            this.LockDestinationToPlayer(destinationPadding);
     }
 
-    public override void OnStateEnter() {}
+    public override void OnStateEnter() { }
 
     public override void OnStateUpdate()
     {
@@ -39,10 +40,10 @@ public class EliteMovement : AIBehaviour
         brain.SetDestinationOnCooldown(this.currentDestination, destinationPadding);
 
         // If player is within attack range;
-        if(brain.GetNavMeshAgent().remainingDistance <= _attackRange)
+        if (brain.GetNavMeshAgent().remainingDistance <= _attackRange)
         {
             // Enemy will enter attack phase if locked onto player:
-            if(this.destinationLockedToPlayer)
+            if (this.destinationLockedToPlayer)
             {
                 brain.SetBehaviour("Attack");
                 return;
@@ -53,14 +54,14 @@ public class EliteMovement : AIBehaviour
                 // so general movement, stuff will go here when
                 // the group system has been worked out
             }
-            
+
         }
     }
 
-    public override void OnStateFixedUpdate() {}
+    public override void OnStateFixedUpdate() { }
 
-    public override void OnStateExit(){}
-    
+    public override void OnStateExit() { }
+
     // [Header("General Movement")]
     // public float acceleration = 50.0f;
     // public float retreatDashAcceleration = 75.0f;

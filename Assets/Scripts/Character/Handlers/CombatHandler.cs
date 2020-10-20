@@ -259,8 +259,7 @@ public class CombatHandler : MonoBehaviour
     {
         if (other.gameObject.CompareTag("EnemyWeapon") || other.gameObject.CompareTag("EnemyProjectile"))
         {
-            EnemyWeapon weapon = other.gameObject.GetComponent<EnemyWeapon>();
-            EnemyHandler enemy = weapon.GetEnemyHandler();
+            EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
 
             // CHECK IF SHIELD IS DEFAULT, BUT ALL THE COMPONENTS ARE ENABLED:
             // if they are, set the shield state to sheilding. Something must be conflicting and causing a bug.

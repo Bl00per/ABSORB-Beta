@@ -108,37 +108,42 @@ public class EnemyHandler : MonoBehaviour
         UpdateSlowMo();
     }
 
-    // Currently just destroying the enemy if the player attacks them
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerWeapon"))
         {
-            if (other.gameObject.CompareTag("PlayerMelee") && typeOfEnemy != EnemyType.ELITE)
+            // if melee attack
+            if ((other.gameObject.CompareTag("PlayerMelee") && typeOfEnemy != EnemyType.ELITE) || _aiBrain.GetCurrentBehaviour() == "Stagger")
             {
                 TakeDamage(_playerHandler.GetPrimaryAttackDamage());
             }
+
+            // if ability attack
             else if (other.gameObject.CompareTag("Ability"))
             {
-                Ability usedAbility = null;
-                if (other.transform.TryGetComponent(out usedAbility))
-                {
-                    switch (typeOfEnemy)
-                    {
-                        case EnemyType.MINION:
-                            TakeDamage(usedAbility.damageToMinion, usedAbility.GetAbilityType());
-                            break;
-
-                        case EnemyType.SPECIAL:
-                            TakeDamage(usedAbility.damageToSpecial, usedAbility.GetAbilityType());
-                            break;
-
-                        case EnemyType.ELITE:
-                            TakeDamage(usedAbility.damageToElite, usedAbility.GetAbilityType());
-                            break;
-                    }
-                }
+                Ability usedAbility = _playerHandler.GetAbilityHandler().GetCurrentAbility();
+                TakeDamage(GetDamageToEnemyType(usedAbility), usedAbility.GetAbilityType());
             }
         }
+    }
+
+    // Returns the damage that corrosonds with the used ability
+    public float GetDamageToEnemyType(Ability ability)
+    {
+        switch (typeOfEnemy)
+        {
+            case EnemyType.MINION:
+                return ability.damageToMinion;
+
+            case EnemyType.SPECIAL:
+                return ability.damageToSpecial;
+
+            case EnemyType.ELITE:
+                return ability.damageToElite;
+        }
+
+        Debug.LogError("Enemy type invalid -> GetDamageToEnemyType()");
+        return -1.0f;
     }
 
     // Makes the enemy take damage
@@ -156,7 +161,7 @@ public class EnemyHandler : MonoBehaviour
         }
 
         // If the type of enemy isn't an elite or the player used the hammer ability; stagger this enemy
-        if (typeOfEnemy != EnemyType.ELITE || eAbility != AbilityHandler.AbilityType.NONE)
+        if (typeOfEnemy == EnemyType.ELITE || eAbility != AbilityHandler.AbilityType.NONE)
             _aiBrain.SetBehaviour("Stagger");
 
         // Playing damage VFX
@@ -268,6 +273,7 @@ public class EnemyHandler : MonoBehaviour
             _navMeshAgent.enabled = true;
             weaponMeshRenderer.enabled = true;
             _isFunctional = true;
+            //_aiBrain.GetNavMeshAgent().isStopped = false;
         }
         else
         {
@@ -285,6 +291,7 @@ public class EnemyHandler : MonoBehaviour
             weaponMeshRenderer.enabled = false;
             weaponCollider.enabled = false;
             _isFunctional = false;
+            //_aiBrain.GetNavMeshAgent().isStopped = true;
         }
 
         //Debug.Log($"Set functional: {value} -> On enemy: {gameObject.name}");

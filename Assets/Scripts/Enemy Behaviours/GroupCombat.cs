@@ -26,6 +26,12 @@ public class GroupCombat : GroupState
 
     public override void OnStateUpdate()
     {
+        // If the player isn't alive, return to wander state
+        if (!playerHandler.GetIsAlive())
+        {
+            enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
+        }
+
         // Setting up an enemy for an attack
         if (!queueFlag && _unitSlots.Count > 0)
             StartCoroutine(QueueAttack());
@@ -40,7 +46,7 @@ public class GroupCombat : GroupState
             // Get the enemy brain at this index
             AIBrain aiBrain = _unitSlots[i].GetBrain();
 
-            if(aiBrain.GetHandler().GetEnemyType() != EnemyHandler.EnemyType.MINION)
+            if (aiBrain.GetHandler().GetEnemyType() != EnemyHandler.EnemyType.MINION)
                 return;
 
             // Forcing the enemy to face the player
@@ -67,6 +73,8 @@ public class GroupCombat : GroupState
         // Locking the enemies destination to the player, getting them to attack
         if (_unitSlots[_activeIndex].GetEnemyType() == EnemyHandler.EnemyType.MINION)
             _unitSlots[_activeIndex].GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+        else
+            yield break;
 
         // Waiting a queue time before proceeding, giving the functionality of a timer
         yield return new WaitForSeconds(queueTime);

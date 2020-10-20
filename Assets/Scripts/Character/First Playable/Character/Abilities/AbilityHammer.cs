@@ -9,6 +9,7 @@ public class AbilityHammer : Ability
     public Transform groundSmashTransform;
     public Transform impactLocation;
     public AudioSource hammerGrunt;
+    public SphereCollider sphereCollider;
 
     [Header("Properties")]
     public float groundSmashReparentTimer = 2.0f;
@@ -72,8 +73,14 @@ public class AbilityHammer : Ability
         StartCoroutine(ReparentGroundSmash());
 
         // Check for any hits
-        CheckForEnemyHit();
+        //CheckForEnemyHit();
+        sphereCollider.enabled = true;
         active = false;
+    }
+
+    public void Key_DeactivateHammerCollider()
+    {
+        sphereCollider.enabled = false;
     }
 
     public void Key_HammerGruntSFX()
