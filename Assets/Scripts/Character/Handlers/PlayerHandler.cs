@@ -72,7 +72,7 @@ public class PlayerHandler : MonoBehaviour
         _simpleCameraShake = FindObjectOfType<SimpleCameraShakeInCinemachine>();
         _checkpoints = FindObjectOfType<CheckPoint>();
         _capsule = GetComponent<CapsuleCollider>();
-        _currentHealth = maxHealth;
+        //_currentHealth = maxHealth;
         _defaultDamage = primaryAttackDamage;
     }
 
