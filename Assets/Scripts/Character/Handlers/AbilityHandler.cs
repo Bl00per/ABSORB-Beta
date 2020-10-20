@@ -104,7 +104,6 @@ public class AbilityHandler : MonoBehaviour
                 if (!_abilities[(int)_currentAbility].IsActive())
                 {
                     _abilities[(int)_currentAbility].Activate();
-                    _combatHandler.StartJustUsedMechanic(enemyAttackWindowTime);
                 }
             }
         }

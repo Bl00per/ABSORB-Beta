@@ -171,39 +171,39 @@ public class CombatHandler : MonoBehaviour
     {
         playerWeapon.enabled = true;
         playerWeaponColl.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableWeaponObject()
     {
         playerWeapon.enabled = false;
         playerWeaponColl.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableMEDIUMPlayerWeaponObject()
     {
         playerWeapon2.enabled = true;
         playerWeaponColl2.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableMEDIUMWeaponObject()
     {
         playerWeapon2.enabled = false;
         playerWeaponColl2.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_EnableBIGPlayerWeaponObject()
     {
         playerWeapon3.enabled = true;
         playerWeaponColl3.enabled = true;
+        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_DisableBIGWeaponObject()
     {
         playerWeapon3.enabled = false;
         playerWeaponColl3.enabled = false;
-        StartJustUsedMechanic(primaryAttackWindow);
     }
 
     public void Key_PlayWeaponSound()

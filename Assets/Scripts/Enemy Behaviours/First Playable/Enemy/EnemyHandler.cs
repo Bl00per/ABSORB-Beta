@@ -31,7 +31,7 @@ public class EnemyHandler : MonoBehaviour
     public AudioSource deathSound;
     public float deathSoundLength = 2.0f;
     public ParticleSystem deathParticleEffect;
-    
+
     [Header("Revive FX")]
     public AudioSource reviveSound;
     public ParticleSystem reviveVFX;
@@ -52,6 +52,7 @@ public class EnemyHandler : MonoBehaviour
     public float maxHealth = 100.0f;
     public int baseDamage = 10;
     public float attackCooldown = 1.0f;
+    public float moveDetection = 0.5F;
     private float _currentHealth = 0.0f;
     private bool _isAlive = true;
 
@@ -105,6 +106,19 @@ public class EnemyHandler : MonoBehaviour
 
     public void Update()
     {
+        if (typeOfEnemy == EnemyType.ELITE)
+        {
+            if (_aiBrain.GetNavMeshAgent().velocity.magnitude > moveDetection)
+            {
+                _animator.SetBool("Moving", true);
+            }
+            else
+            {
+                _animator.SetBool("Moving", false);
+            }
+        }
+
+
         UpdateSlowMo();
     }
 
@@ -260,7 +274,7 @@ public class EnemyHandler : MonoBehaviour
                 reviveSound.Play();
                 reviveVFX.Play();
             }
-                
+
             _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;

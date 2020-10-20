@@ -11,6 +11,13 @@ public class DefaultStagger : AIBehaviour
 
     public override void OnStateEnter()
     {
+
+        if(enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        {
+            enemyHandler.GetAnimator().SetBool("Stagger", true);
+            //Debug.Log("stagger -> true");
+        }
+
         if (enemyHandler.GetFunctional())
             brain.GetNavMeshAgent().isStopped = true;
             
@@ -20,6 +27,13 @@ public class DefaultStagger : AIBehaviour
 
     public override void OnStateExit()
     {
+        
+        if(enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+        {
+            enemyHandler.GetAnimator().SetBool("Stagger", false);
+        }
+
+
         if (enemyHandler.GetFunctional())
             brain.GetNavMeshAgent().isStopped = false;
     }
