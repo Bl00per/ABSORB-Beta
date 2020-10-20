@@ -31,6 +31,10 @@ public class EnemyHandler : MonoBehaviour
     public AudioSource deathSound;
     public float deathSoundLength = 2.0f;
     public ParticleSystem deathParticleEffect;
+    
+    [Header("Revive FX")]
+    public AudioSource reviveSound;
+    public ParticleSystem reviveVFX;
 
     [Header("Overall FX Properties")]
     public float overallFXTime = 1.0f;
@@ -246,6 +250,12 @@ public class EnemyHandler : MonoBehaviour
         if (value)
         {
             // Enabling all functional components
+            if (reviveVFX != null && reviveSound != null)
+            {
+                reviveSound.Play();
+                reviveVFX.Play();
+            }
+                
             _isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
