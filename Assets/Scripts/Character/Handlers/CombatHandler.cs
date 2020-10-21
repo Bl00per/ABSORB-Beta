@@ -310,7 +310,7 @@ public class CombatHandler : MonoBehaviour
             Debug.Log("Emission decreased");
         }
 
-        float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
+        float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1.1f;
         // When you gain max health again, makes it so isn't doesn't read temp when it's negative
         if (temp <= 0)
             _cameraManager.SetVignetteIntensity(0f);

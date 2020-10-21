@@ -1485,6 +1485,7 @@ MonoBehaviour:
   - {fileID: 3201183807898437943}
   - {fileID: 8276222857735089897}
   - {fileID: 7822275945306792563}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 3201183807898437943}
   weaponCollider: {fileID: 6968428015675753766}
   attackSFX: {fileID: 3001904516625720924}
@@ -1494,6 +1495,7 @@ MonoBehaviour:
   maxHealth: 125
   baseDamage: 5
   attackCooldown: 2
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 20
   tweenEase:
@@ -1564,7 +1566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewConeAngle: 150
-  totalDistance: 75
+  totalDistance: 20
   minY: 3
   maxY: 3
   autoDetectionRadius: 15
@@ -1606,7 +1608,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enterAttackStateDistance: 15
-  retreatDistance: 5
   returnToAttackPosition: 2.03
   returnToInitialAngularSpeed: 1
 --- !u!114 &6809976860378941600
