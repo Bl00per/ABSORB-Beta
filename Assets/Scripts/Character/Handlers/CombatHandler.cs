@@ -47,7 +47,6 @@ public class CombatHandler : MonoBehaviour
     private bool _healingPlayer = false;
     private float _healthToHealTo = 0.0f;
     private float _healthLerpDuration = 1.0f;
-    private float _healthTimeElapsed = 0.0f;
     private Renderer[] _bodyRenderer;
     private float _localPlayerHP;
 
@@ -307,7 +306,7 @@ public class CombatHandler : MonoBehaviour
                 _bodyRenderer[i].material.SetColor("_EmissionColor", _abilityHandler.GetCurrentColor() *
                 ((_abilityHandler.abilityIntensity / _playerHandler.maxHealth) * _playerHandler.GetCurrentHealth()));
             }
-            Debug.Log("Emission decreased");
+            //Debug.Log("Emission decreased");
         }
 
         float temp = (-_playerHandler.GetCurrentHealth() / _playerHandler.maxHealth) + 1;
