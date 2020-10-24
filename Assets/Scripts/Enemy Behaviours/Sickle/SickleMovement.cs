@@ -17,10 +17,14 @@ public class SickleMovement : AIBehaviour
 
     [Header("Timers")]
     public float returnToInitalSpeed = 1.0f;
+    public float retreatFromPlayerTimer = 0.0f;
+    public float returnToInitialAngularSpeed = 1.0f;
 
     private float _initialSpeed = 0.0f;
+    private float _initialAngularSpeed = 0.0f;
     private bool _startedRetreat = false;
     private CombatHandler _combatHandler;
+    private SickleAttack _sickleAttack;
 
     private void Start()
     {
@@ -28,6 +32,7 @@ public class SickleMovement : AIBehaviour
         _initialSpeed = brain.GetNavMeshAgent().speed;
 
         _combatHandler = brain.PlayerTransform.GetComponent<CombatHandler>();
+        _sickleAttack = GetComponent<SickleAttack>();
     }
 
     public override void OnStateEnter()
@@ -98,16 +103,40 @@ public class SickleMovement : AIBehaviour
 
         if (distance <= eliteStartRetreatDistance || enemyHandler.GetJustAttacked())
         {
-            Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * eliteRetreatDistance);
-            OverrideDestination(retreatPosition, 1.0f);
+            // Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * eliteRetreatDistance);
+            // OverrideDestination(retreatPosition, 1.0f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+            if (!_startedRetreat)
+            {
+                Vector3 retreatPosition = transform.position - (-brain.GetDirectionToPlayer() * GetRetreatDistance());
+                StartCoroutine(Retreat(retreatPosition, retreatFromPlayerTimer, returnToInitialAngularSpeed));
+            }
             return;
         }
         else if (_combatHandler.GetJustUsedMechanic())
         {
             if (Random.value <= attackChance)
-                brain.SetBehaviour("Attack"); 
+                brain.SetBehaviour("Attack");
         }
     }
+
+
+    private IEnumerator Retreat(Vector3 position, float returnToPositionTimer, float returnToInitialAngularSpeedTimer)
+    {
+        _startedRetreat = true;
+        brain.GetNavMeshAgent().angularSpeed = 0.0f;
+        yield return new WaitForSeconds(returnToPositionTimer);
+        OverrideDestination(position, 1.0f); ;
+        yield return new WaitForSeconds(returnToInitialAngularSpeedTimer);
+        brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
+        _startedRetreat = false;
+    }
+
+    public float GetRetreatDistance()
+    {
+        return brain.GetDistanceToPlayer() - _sickleAttack.eliteStartDashDistance;
+    }
+
 
     // [Header("Properties")]
     // public float destinationPadding = 1.0f;

@@ -30,7 +30,7 @@ public class PotMovement : AIBehaviour
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
-        Debug.Log(GetRetreatDistance());
+        //Debug.Log(GetRetreatDistance());
 
         // Checking if we should be locked onto the player or not...
         if (this.destinationLockedToPlayer)
