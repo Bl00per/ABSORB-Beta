@@ -38,15 +38,17 @@ public class HammerAttack : AIBehaviour
 
     public override void OnStateUpdate()
     {
-        // Setting the target destination
-        this.LockDestinationToPlayer(1.0f);
-
         // Checking if the player is close enough to start the animation sequence
         if (DetermineAttackFromPlayerVelocity())
         {
             float distance = brain.GetDistanceToPlayer();
             if (distance <= startAnimationDistance)
                 _animator.SetBool(swingAnimationName, true);
+        }
+        else
+        {
+            // Setting the target destination
+            this.LockDestinationToPlayer(1.0f);
         }
     }
 
