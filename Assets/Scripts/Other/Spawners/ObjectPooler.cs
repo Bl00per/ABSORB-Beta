@@ -38,6 +38,7 @@ public class ObjectPooler : MonoBehaviour
     private GameObject barrier;
     [SerializeField]
     private AudioSource barrierDisableSound;
+    private bool barrierDisabled = false;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -56,7 +57,6 @@ public class ObjectPooler : MonoBehaviour
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
 
-
         // Populate list of enemies with the children of this gameobject
         foreach (Transform child in transform.GetChild(0))
         {
@@ -68,12 +68,12 @@ public class ObjectPooler : MonoBehaviour
                 _activeEnemies.Add(enemy);
             }
         }
+        //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
 
         if (barrier == null && barrierDisableSound == null)
             return;
         else
             barrier?.SetActive(true);
-        //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
     }
 
     // Called every frame
@@ -87,10 +87,9 @@ public class ObjectPooler : MonoBehaviour
         else
         {
             // If final enemy is dead or doesn't exist, disable the barrier
-            if (!CheckForFinalEnemy())
+            if (!CheckForFinalEnemy() && !barrierDisabled)
             {
-                barrier?.SetActive(false);
-                barrierDisableSound.Play();
+                DeactivateBarrier();
             }
         }
     }
@@ -336,5 +335,13 @@ public class ObjectPooler : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    private void DeactivateBarrier()
+    {
+        barrier.GetComponent<MeshRenderer>().enabled = false;
+        barrier.GetComponent<BoxCollider>().enabled = false;
+        barrierDisableSound.Play();
+        barrierDisabled = true;
     }
 }
