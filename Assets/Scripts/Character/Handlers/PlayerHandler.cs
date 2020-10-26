@@ -91,7 +91,7 @@ public class PlayerHandler : MonoBehaviour
 
     public void RespawnPlayer()
     {
-        isAlive = true;
+        isAlive = false;
         _currentHealth = 1.0f;
         //_combatHandler.HealOvertime(maxHealth);
         StartCoroutine(MoveOverSeconds(this.gameObject, GetRespawnPosition(), respawnFlyingOffset, respawnFlyingTime));
@@ -156,7 +156,7 @@ public class PlayerHandler : MonoBehaviour
         _rigidbody.useGravity = true;
         _inputManager.EnableInput();
         _cameraManager.EnableCameraMovement(); // TEMPORARY FOR NOW
-        
+        isAlive = true;
         _combatHandler.HealOvertime(maxHealth, healthOvertimeRespawnDuration);
     }
 
