@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 8126481831163025187}
   - component: {fileID: 5145586591748348038}
   - component: {fileID: 6957002559294581836}
-  - component: {fileID: 5397962488458412961}
   - component: {fileID: 4432812551013167881}
   - component: {fileID: 3099263383823068154}
   - component: {fileID: 1076650555403926607}
   - component: {fileID: 5186444205790376980}
+  - component: {fileID: 4051670066857362061}
   m_Layer: 18
   m_Name: Environment_Barrel_003_Blockout
   m_TagString: Untagged
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8902702253728796057}
-  m_Mesh: {fileID: -7089432561855009611, guid: 726a08961dbd02c4aaa1abdb5dd5f065, type: 3}
+  m_Mesh: {fileID: 7591503566589240239, guid: 14f6fcef95c0b85438a91beb6c203213, type: 3}
 --- !u!23 &6957002559294581836
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 5561349426305759274, guid: 726a08961dbd02c4aaa1abdb5dd5f065, type: 3}
+  - {fileID: 2100000, guid: 415dedb053ebba74fa01ea60a2123aad, type: 2}
   - {fileID: 2100000, guid: 22d3eef818b680b46b1bf6ce79b1d8d0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -85,19 +85,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &5397962488458412961
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8902702253728796057}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.6142066, y: 2.074207, z: 1.8861182}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4432812551013167881
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -246,3 +233,17 @@ AudioReverbFilter:
   m_LFReference: 250
   m_ReflectionsDelay: 0
   m_ReverbPreset: 27
+--- !u!64 &4051670066857362061
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8902702253728796057}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7591503566589240239, guid: 14f6fcef95c0b85438a91beb6c203213, type: 3}
