@@ -28,7 +28,7 @@ public class CheckPoint : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player walked through trigger");
+            //Debug.Log("Player walked through trigger");
             _playerHandler.SetRespawnPosition(this.spawnPosition.position);
             Rigidbody rb = other.GetComponent<Rigidbody>();
             //rb.constraints = RigidbodyConstraints.None;

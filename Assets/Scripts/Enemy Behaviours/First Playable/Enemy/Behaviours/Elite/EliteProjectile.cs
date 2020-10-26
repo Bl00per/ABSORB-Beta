@@ -36,12 +36,15 @@ public class EliteProjectile : MonoBehaviour
     {
         _rb = this.GetComponent<Rigidbody>();
         enemyWeapon = this.GetComponent<EnemyWeapon>();
+        _collider.enabled = false;
+        _renderer.enabled = false;
     }
 
     // Sets up the direction for the projectile
     public void InitialiseProjectile(EnemyHandler enemyHandler, Transform playerTransform, Transform projectileStartPoint, float speed, float lifeTime, float damage)
     {
         _collider.enabled = true;
+        _renderer.enabled = true;
         transform.position = projectileStartPoint.position;
         transform.rotation = projectileStartPoint.rotation;
         _enemyHandler = enemyHandler;
