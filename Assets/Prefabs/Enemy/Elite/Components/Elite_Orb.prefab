@@ -206,7 +206,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8840168797588337650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.1922293, y: -93.05795, z: -11.40121}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4133530613702595917}
@@ -261,7 +261,12 @@ MonoBehaviour:
   waterHitAudio: {fileID: 1418244907931542846}
   waterParryAudio: {fileID: 0}
   directionOffset: {x: 0, y: 1.5, z: 0}
+  minOrbSize: {x: 0, y: 0, z: 0}
+  maxOrbSize: {x: 0, y: 0, z: 0}
   effectTime: 2
+  projectileStartPoint: {fileID: 0}
+  _collider: {fileID: 0}
+  _renderer: {fileID: 0}
 --- !u!82 &1428469120824874813
 AudioSource:
   m_ObjectHideFlags: 0
@@ -466,6 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6176b2fb896763e43b238149e7aad9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enemyHandler: {fileID: 0}
 --- !u!1001 &3764559341423575694
 PrefabInstance:
   m_ObjectHideFlags: 0

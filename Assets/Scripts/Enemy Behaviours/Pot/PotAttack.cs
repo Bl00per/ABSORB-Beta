@@ -35,7 +35,7 @@ public class PotAttack : AIBehaviour
         switch (enemyHandler.GetEnemyType())
         {
             case EnemyHandler.EnemyType.ELITE:
-                brain.SetBehaviour("Movement");
+                //brain.SetBehaviour("Movement");
                 break;
 
             case EnemyHandler.EnemyType.SPECIAL:
