@@ -472,6 +472,7 @@ MonoBehaviour:
   bodyMeshRenderer:
   - {fileID: 4637594308398444586}
   - {fileID: 1618211037323172584}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 1618211037323172584}
   weaponCollider: {fileID: 5132138959879344581}
   attackSFX: {fileID: 1231521354}
@@ -481,6 +482,7 @@ MonoBehaviour:
   maxHealth: 125
   baseDamage: 4
   attackCooldown: 1
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 50
   tweenEase:
@@ -2253,6 +2255,36 @@ PrefabInstance:
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
       objectReference: {fileID: 4637594308398444586}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 0.9608455
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3716781073600009081, guid: 041620d1d9708cd4e8564fe30753d775,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
