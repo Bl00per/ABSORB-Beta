@@ -153,7 +153,7 @@ public class LocomotionHandler : MonoBehaviour
     private bool CheckIfGrounded()
     {
         RaycastHit hit;
-        return Physics.SphereCast(_transform.position + (Vector3.up * 2), 0.2f, Vector3.down, out hit, 1.0f);
+        return Physics.SphereCast(_transform.position + (Vector3.up * 1.5f), 1.0f, Vector3.down, out hit, 1.0f);
     }
 
     // Returns the collider below the players feet, if there is any
@@ -303,7 +303,7 @@ public class LocomotionHandler : MonoBehaviour
 
     private void UpdateDash()
     {
-        if (_inputManager.GetDashButtonPress() && _canDash && _playerHandler.GetCombatHandler().shieldState != CombatHandler.ShieldState.Shielding)
+        if (_inputManager.GetDashButtonPress() && _canDash && _playerHandler.GetCombatHandler().shieldState != CombatHandler.ShieldState.Shielding && CheckIfGrounded())
         {
             _animator.SetBool("Dash", true);
 
