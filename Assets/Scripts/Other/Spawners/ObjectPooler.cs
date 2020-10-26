@@ -304,6 +304,11 @@ public class ObjectPooler : MonoBehaviour
         return true;
     }
 
+    public EnemyHandler GetActiveEnemy(int index)
+    {
+        return _activeEnemies[index];
+    }
+
     // [System.Serializable]
     // public class Pool
     // {

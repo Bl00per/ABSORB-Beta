@@ -52,7 +52,7 @@ public class GroupWander : GroupState
     {
         if (enemyGroupHandler.GetEnemies().Count > 0)
         {
-            EnemyHandler randEnemy = this.enemyGroupHandler.GetEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
+            EnemyHandler randEnemy = this.enemyGroupHandler.GetActiveEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
             randEnemy.GetBrain().SetBehaviour("Idle");
             AIBehaviour movement = randEnemy.GetBrain().GetAIBehaviour("Movement");
             movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius), 1.0f);
