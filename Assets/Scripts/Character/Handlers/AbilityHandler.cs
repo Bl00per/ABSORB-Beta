@@ -27,7 +27,7 @@ public class AbilityHandler : MonoBehaviour
     public float parriedCastRadius = 5.0f;
 
     [Header("Arm Skin Mesh Renderers")]
-    public List<SkinnedMeshRenderer> abilityArms = new List<SkinnedMeshRenderer>();
+    public List<Renderer> abilityArms = new List<Renderer>();
     private int _abilityArmIndex = 0;
 
     [Header("Abidaro Color/Intensity")]
