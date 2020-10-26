@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioZoneController : MonoBehaviour
 {
-    public AudioSource AmbientElectricity;
+
     public AudioSource AmbientWind;
 
     // Start is called before the first frame update
@@ -21,12 +21,12 @@ public class AudioZoneController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        AmbientElectricity.enabled = true;
+ 
         AmbientWind.enabled = true;
     }
     private void OnTriggerExit(Collider other)
     {
-        AmbientElectricity.enabled = false;
+     
         AmbientWind.enabled = true;
     }
 }
