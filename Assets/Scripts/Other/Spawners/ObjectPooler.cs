@@ -325,6 +325,10 @@ public class ObjectPooler : MonoBehaviour
         return true;
     }
 
+    public EnemyHandler GetActiveEnemy(int index)
+    {
+        return _activeEnemies[index];
+    }
     private bool CheckForFinalEnemy()
     {
         if (!finalEnemy.IsAlive() || finalEnemy == null)
