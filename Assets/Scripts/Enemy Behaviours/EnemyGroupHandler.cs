@@ -24,7 +24,8 @@ public class EnemyGroupHandler : MonoBehaviour
 
     // FSM variables
     private GroupState[] _groupStates;
-    private E_GroupState _currentState;
+    [Header("READ ONLY")]
+    [SerializeField] private E_GroupState _currentState;
 
     // List of enemies within group
     private List<EnemyHandler> _activeEnemies = new List<EnemyHandler>();
