@@ -25,9 +25,7 @@ public class CombatHandler : MonoBehaviour
     public int playerWeaponDamage3 = 100;
     public AudioSource weaponSwingAudio;
     public ParticleSystem weaponPE;
-    public ParticleSystem weaponSummonPE1;
-    public ParticleSystem weaponSummonPE2;
-    public ParticleSystem weaponSummonPE3;
+    public ParticleSystem weaponSummonPE;
     [Header("Debug purposes only [TURN-OFF/REMOVE IN BUILD]")]
     public bool debugDeath = false;
     [Header("Body")]
@@ -226,20 +224,10 @@ public class CombatHandler : MonoBehaviour
         if (weaponPE != null)
             weaponPE.Play();
     }
-    public void Key_PlayWeaponSummonPE1()
+    public void Key_PlayWeaponSummonPE()
     {
-        if (weaponSummonPE1 != null)
-            weaponSummonPE1.Play();
-    }
-    public void Key_PlayWeaponSummonPE2()
-    {
-        if (weaponSummonPE2 != null)
-            weaponSummonPE2.Play();
-    }
-    public void Key_PlayWeaponSummonPE3()
-    {
-        if (weaponSummonPE3 != null)
-            weaponSummonPE3.Play();
+        if (weaponSummonPE != null)
+            weaponSummonPE.Play();
     }
 
     public void Key_SetAttack1Bool()
