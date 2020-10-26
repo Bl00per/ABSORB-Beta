@@ -32,8 +32,12 @@ public class ObjectPooler : MonoBehaviour
     public bool findOffScreenSpawnPoint = true;
     public Transform onScreenSpawnPoint;
 
-    [Header("The death of this enemy will end the combat sequence.")]
+    [Header("The death of this enemy will end the combat sequence and disable barrier.")]
     public EnemyHandler finalEnemy;
+    [SerializeField]
+    private GameObject barrier;
+    [SerializeField]
+    private AudioSource barrierDisableSound;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -51,6 +55,11 @@ public class ObjectPooler : MonoBehaviour
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
+
+        if (barrier == null && barrierDisableSound == null)
+            return;
+        else
+            barrier?.SetActive(true);
 
         // Populate list of enemies with the children of this gameobject
         foreach (Transform child in transform.GetChild(0))
@@ -71,6 +80,18 @@ public class ObjectPooler : MonoBehaviour
     {
         // Checking for specified enemy spawn
         CheckForEnemyTypeSpawn();
+
+        if (barrier == null && barrierDisableSound == null)
+            return;
+        else
+        {
+            // If final enemy is dead or doesn't exist, disable the barrier
+            if (!CheckForFinalEnemy())
+            {
+                barrier?.SetActive(false);
+                barrierDisableSound.Play();
+            }
+        }
     }
 
     // Ignores the queue
@@ -79,7 +100,7 @@ public class ObjectPooler : MonoBehaviour
         // If the enemy is in the active list
         if (this.GetListStatus(enemyHandler))
         {
-            if(enemyHandler.GetFunctional())
+            if (enemyHandler.GetFunctional())
                 enemyHandler.SetFunctional(false);
             _activeEnemies.Remove(enemyHandler);
             _inactiveEnemies.Add(enemyHandler);
@@ -87,7 +108,7 @@ public class ObjectPooler : MonoBehaviour
         // If the enemy is in the inactive list
         else
         {
-           if(!enemyHandler.GetFunctional())
+            if (!enemyHandler.GetFunctional())
                 enemyHandler.SetFunctional(true);
             _inactiveEnemies.Remove(enemyHandler);
             _activeEnemies.Add(enemyHandler);
@@ -170,7 +191,7 @@ public class ObjectPooler : MonoBehaviour
             _respawnQueue.Remove(handler);
             _activeEnemies.Add(handler);
 
-            if(!handler.GetFunctional())
+            if (!handler.GetFunctional())
                 handler.SetFunctional(true);
         }
     }
@@ -308,139 +329,11 @@ public class ObjectPooler : MonoBehaviour
     {
         return _activeEnemies[index];
     }
-
-    // [System.Serializable]
-    // public class Pool
-    // {
-    //     public string tag;
-    //     public GameObject prefab;
-    //     public int size;
-    // }
-
-    // public List<Pool> pools;
-    // public Dictionary<string, Queue<GameObject>> poolDictionary;
-    // public Queue<GameObject> objectPool;
-    // private SpawnerV2 spawner;
-
-    // public static ObjectPooler Instance;
-
-    // private void Awake()
-    // {
-    //     // Singleton
-    //     Instance = this;
-
-    //     poolDictionary = new Dictionary<string, Queue<GameObject>>();
-    //     spawner = FindObjectOfType<SpawnerV2>();
-
-    //     foreach (Pool pool in pools)
-    //     {
-    //         objectPool = new Queue<GameObject>();
-
-    //         for (int i = 0; i < pool.size; i++)
-    //         {
-    //             GameObject obj = Instantiate(pool.prefab);
-    //             AIBrain aIBrain = obj.GetComponent<AIBrain>();
-    //             aIBrain.PlayerTransform = spawner.playerTransform;
-    //             //aIBrain.GetComponent<EnemyHandler>().SetupSpawner(spawner);
-    //             obj.SetActive(false);
-    //             objectPool.Enqueue(obj);
-    //         }
-
-    //         poolDictionary.Add(pool.tag, objectPool);
-    //     }
-    // }
-
-    // public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
-    // {
-    //     // Throw a warning if there is no pool with that tag
-    //     if (!poolDictionary.ContainsKey(tag))
-    //     {
-    //         Debug.LogWarning("Pool with tag " + tag + " doesn't exist");
-    //         return null;
-    //     }
-
-    //     // Remove the object from the dictionary
-    //     GameObject objectToSpawn = poolDictionary[tag].Dequeue();
-
-    //     // Basically activate the enemy
-    //     objectToSpawn.SetActive(true);
-    //     objectToSpawn.transform.position = position;
-    //     objectToSpawn.transform.rotation = rotation;
-
-    //     //poolDictionary[tag].Enqueue(objectToSpawn);
-
-    //     return objectToSpawn;
-    // }
-
-    // public class SpawnerV2 : MonoBehaviour
-    // {
-    //     [Header("References")]
-    //     // The transform the enemy will target
-    //     public Transform playerTransform;
-    //     public string objectToSpawnTag;
-    //     [Header("Spawner Properties")]
-    //     public float timeBetweenEachEnemySpawn = 5f;
-    //     [Header("Only spawn the max number of enemies")]
-    //     public bool setSpawnAmount = false;
-    //     [Header("Keep off if you want to spawn first wave instantaneously")]
-    //     public bool waitForSpawn = false;
-    //     [Space]
-    //     public Transform[] spawnerPositions;
-
-    //     public int numberOfTaggedObjects;
-    //     private int _objectPoolCount;
-    //     private int _checkAmountOfSpawns;
-    //     private float _tempTime;
-
-    //     ObjectPooler objectPooler;
-
-    //     // Use this for initialization
-    //     void Start()
-    //     {
-    //         objectPooler = ObjectPooler.Instance;
-    //         _objectPoolCount = objectPooler.poolDictionary[objectToSpawnTag].Count;
-    //         _tempTime = timeBetweenEachEnemySpawn;
-
-    //         if (waitForSpawn)
-    //         {
-    //             timeBetweenEachEnemySpawn = 0.0f;
-    //             waitForSpawn = false;
-    //         }
-    //     }
-
-    //     // Update is called once per frame
-    //     void Update()
-    //     {
-    //         // TODO:
-    //         // - Potentially spawn more enemies if 1 dies (e.g. 1 enemy dies, 2 more spawn)
-
-    //         // If it hasnt reached the max amount of spawns, keep running or if it's set to false
-    //         if (setSpawnAmount && _checkAmountOfSpawns != _objectPoolCount || !setSpawnAmount)
-    //         {
-    //             // Make sure there is an object to spawn before running the coroutine
-    //             if (!waitForSpawn && objectPooler.poolDictionary[objectToSpawnTag].Count > 0)
-    //             {
-    //                 waitForSpawn = true;
-    //                 StartCoroutine(SpawnSequence());
-    //             }
-    //         }
-
-    //         // Keep track of the number of enemies currently active in the scene
-    //         numberOfTaggedObjects = GameObject.FindGameObjectsWithTag(objectToSpawnTag).Length;
-    //     }
-
-    //     IEnumerator SpawnSequence()
-    //     {
-    //         // Wait for set amount of seconds before we spawn a new enemy
-    //         yield return new WaitForSeconds(timeBetweenEachEnemySpawn);
-    //         timeBetweenEachEnemySpawn = _tempTime;
-    //         // Choose a random position from the array to spawn them at
-    //         int spawnNumber = Random.Range(0, spawnerPositions.Count());
-    //         objectPooler.SpawnFromPool(objectToSpawnTag, spawnerPositions[spawnNumber].transform.position, Quaternion.identity);
-    //         waitForSpawn = false;
-
-    //         // Increment to keep track of max amount of spawns
-    //         if (setSpawnAmount)
-    //             _checkAmountOfSpawns += 1;
-    //     }
+    private bool CheckForFinalEnemy()
+    {
+        if (!finalEnemy.IsAlive() || finalEnemy == null)
+            return false;
+        else
+            return true;
+    }
 }
