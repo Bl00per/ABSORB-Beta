@@ -27,17 +27,17 @@ public class GroupCombat : GroupState
 
     public override void OnStateUpdate()
     {
-        if(_unitSlots.Count <= 0)
-            return;
-        
         // If the player isn't alive, return to wander state
         if (!playerHandler.GetIsAlive())
         {
             enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
         }
 
+        if (_unitSlots.Count <= 0)
+            return;
+
         // If the first index's distance from the player is greater than returnToChaseDistance, then return to chasing the player
-        if(Vector3.Distance(_unitSlots[0].transform.position, enemyGroupHandler.playerTransform.position) >= returnToChaseDistance)
+        if (Vector3.Distance(_unitSlots[0].transform.position, enemyGroupHandler.playerTransform.position) >= returnToChaseDistance)
         {
             enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.CHASE);
         }
@@ -46,7 +46,7 @@ public class GroupCombat : GroupState
         if (!queueFlag)
             StartCoroutine(QueueAttack());
 
-        if(Vector3.Distance(_unitSlots[0].transform.position, enemyGroupHandler.playerTransform.position) <= stopMovingToCircleDistance)
+        if (Vector3.Distance(_unitSlots[0].transform.position, enemyGroupHandler.playerTransform.position) <= stopMovingToCircleDistance)
             return;
 
         // Iterating over each of the passive enemies (Currently only doing this for minions)
@@ -55,9 +55,9 @@ public class GroupCombat : GroupState
             // Continuing loop if the active index is equal to the iterator
             if (i == _activeIndex)
                 continue;
-            
+
             // Continuing loop if enemy just attacked
-            if(_unitSlots[i].GetJustAttacked())
+            if (_unitSlots[i].GetJustAttacked())
                 continue;
 
             // Get the enemy brain at this index

@@ -505,7 +505,7 @@ public class CombatHandler : MonoBehaviour
         }
 
         // Is the player is dead
-        if (!_playerHandler.GetIsAlive() && !_respawning)
+        if (!_playerHandler.GetIsAlive() && !_respawning && _playerHandler.GetCurrentHealth() <= 0)
         {
             _respawning = true;
             _inputManager.DisableInput();
