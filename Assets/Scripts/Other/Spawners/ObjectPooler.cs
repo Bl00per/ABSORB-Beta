@@ -56,10 +56,6 @@ public class ObjectPooler : MonoBehaviour
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
 
-        if (barrier == null && barrierDisableSound == null)
-            return;
-        else
-            barrier?.SetActive(true);
 
         // Populate list of enemies with the children of this gameobject
         foreach (Transform child in transform.GetChild(0))
@@ -72,6 +68,11 @@ public class ObjectPooler : MonoBehaviour
                 _activeEnemies.Add(enemy);
             }
         }
+
+        if (barrier == null && barrierDisableSound == null)
+            return;
+        else
+            barrier?.SetActive(true);
         //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
     }
 

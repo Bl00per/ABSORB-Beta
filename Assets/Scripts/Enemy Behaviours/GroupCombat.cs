@@ -63,7 +63,7 @@ public class GroupCombat : GroupState
             // Get the enemy brain at this index
             AIBrain aiBrain = _unitSlots[i].GetBrain();
 
-            //Forcing the enemy to face the player
+            //-Forcing the enemy to face the player
             _positionFix = aiBrain.PlayerTransform.position;
             _positionFix.y = aiBrain.transform.position.y;
             aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;

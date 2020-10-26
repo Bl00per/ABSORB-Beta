@@ -39,7 +39,7 @@ public class GroupWander : GroupState
     // Moves all enemys to a new position within the radius
     private void MoveAll()
     {
-        foreach (EnemyHandler e in enemyGroupHandler.GetEnemies())
+        foreach (EnemyHandler e in enemyGroupHandler.GetObjectPooler().GetActiveEnemyList())
         {
             e.GetBrain().SetBehaviour("Idle");
             AIBehaviour movement = e.GetBrain().GetAIBehaviour("Movement");
@@ -50,7 +50,7 @@ public class GroupWander : GroupState
     // Moves one enemy at random
     private void MoveOne()
     {
-        if (enemyGroupHandler.GetEnemies().Count > 0)
+        if (enemyGroupHandler.GetObjectPooler().GetActiveEnemyList().Count > 0)
         {
             EnemyHandler randEnemy = this.enemyGroupHandler.GetActiveEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
             randEnemy.GetBrain().SetBehaviour("Idle");
