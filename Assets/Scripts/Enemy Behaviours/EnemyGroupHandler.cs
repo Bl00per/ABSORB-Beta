@@ -197,8 +197,8 @@ public class EnemyGroupHandler : MonoBehaviour
     // Returns the array list of enemies
     public List<EnemyHandler> GetEnemies() => _activeEnemies;
 
-    // Returns a specified enemy
-    public EnemyHandler GetEnemy(int index) => _activeEnemies[index];
+    // Returns a specified enemy within the active enemies list
+    public EnemyHandler GetActiveEnemy(int index) => _activeEnemies[index];
 
     // Returns the amount of enemies within group
     public int GetEnemyCount() => _groupStates.Length;
