@@ -340,7 +340,7 @@ public class ObjectPooler : MonoBehaviour
     private void DeactivateBarrier()
     {
         barrier.GetComponent<MeshRenderer>().enabled = false;
-        barrier.GetComponent<BoxCollider>().enabled = false;
+        barrier.GetComponent<Collider>().enabled = false;
         barrierDisableSound.Play();
         barrierDisabled = true;
     }
