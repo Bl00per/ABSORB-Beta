@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 788955825830414835}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1024, y: 1.1024, z: 1.1024}
   m_Children: []
   m_Father: {fileID: 1648399131594883043}
   m_RootOrder: 0
@@ -143,7 +143,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8748892135801146194, guid: 4cca6be80ef12dc4e9669746b5e39c21, type: 3}
+  - {fileID: 2100000, guid: 2602b6f56a0e5fa498c6c8e1d181c16c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10061,8 +10061,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3498955780137120228}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.821, z: -0.14}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
+  m_LocalPosition: {x: -0, y: 0.622, z: -0.14}
+  m_LocalScale: {x: 1.6472399, y: 1.6472399, z: 1.6472399}
   m_Children:
   - {fileID: 5794298049251639381}
   - {fileID: 1648399131594883043}
@@ -10584,6 +10584,7 @@ GameObject:
   - component: {fileID: 4165402235293637486}
   - component: {fileID: 4165402235293637457}
   - component: {fileID: 3862423504700199463}
+  - component: {fileID: 3723311164799388478}
   m_Layer: 9
   m_Name: Minion_Alpha
   m_TagString: EnemyMinion
@@ -10654,9 +10655,9 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 300
   m_StoppingDistance: 3
-  m_AutoTraverseOffMeshLink: 1
+  m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
-  m_AutoRepath: 1
+  m_AutoRepath: 0
   m_Height: 2
   m_BaseOffset: -1
   m_WalkableMask: 4294967295
@@ -10765,10 +10766,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewConeAngle: 90
-  totalDistance: 20
+  totalDistance: 25
   minY: 3
   maxY: 3
-  autoDetectionRadius: 15
+  autoDetectionRadius: 20
 --- !u!114 &4165402235293637487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10926,6 +10927,23 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!191 &3723311164799388478
+OffMeshLink:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4165402235293637482}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_AreaIndex: 1
+  m_AgentTypeID: 0
+  m_Start: {fileID: 0}
+  m_End: {fileID: 0}
+  m_CostOverride: -1
+  m_BiDirectional: 1
+  m_Activated: 1
+  m_AutoUpdatePositions: 0
 --- !u!1 &5248278440063269112
 GameObject:
   m_ObjectHideFlags: 0
