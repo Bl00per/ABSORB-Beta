@@ -143,7 +143,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8748892135801146194, guid: a9e39e3044488394dbc5c8a4af226ec3, type: 3}
+  - {fileID: 8748892135801146194, guid: 4cca6be80ef12dc4e9669746b5e39c21, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10701,9 +10701,12 @@ MonoBehaviour:
   deathSound: {fileID: 3862423504700199463}
   deathSoundLength: 2
   deathParticleEffect: {fileID: 3391721248243392130}
+  reviveSound: {fileID: 0}
+  reviveVFX: {fileID: 0}
   overallFXTime: 1
   bodyMeshRenderer:
   - {fileID: 8868169853625625682}
+  abilityIntensity: 1
   weaponMeshRenderer: {fileID: 3593453364837397834}
   weaponCollider: {fileID: 4399012327263053344}
   attackSFX: {fileID: 7681235080657279104}
@@ -10713,6 +10716,7 @@ MonoBehaviour:
   maxHealth: 75
   baseDamage: 2
   attackCooldown: 1
+  moveDetection: 0.5
   printHealthStats: 0
   slowMotionPercentage: 50
   tweenEase:

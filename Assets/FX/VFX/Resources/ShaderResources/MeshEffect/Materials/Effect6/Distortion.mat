@@ -9,11 +9,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Distortion
   m_Shader: {fileID: 4800000, guid: 972a05a1fafc1c54d8287892f2a939b6, type: 3}
-  m_ShaderKeywords: USE_ALPHA_CLIPING USE_MAINTEX USE_SOFT_PARTICLES
+  m_ShaderKeywords: USE_ALPHA_CLIPING USE_HEIGHT USE_SOFT_PARTICLES _USESOFTPARTICLES_ON
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2999
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -39,6 +39,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DistortTex1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DistortTex2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -49,14 +57,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 315f04441ccf27b4fabd16ec9df5000f, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 2, y: 2}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalTex:
-        m_Texture: {fileID: 2800000, guid: df20aa6c2120a4340afbb52dc86fd1ef, type: 3}
+        m_Texture: {fileID: 2800000, guid: ab4579307357a464e84dc428c56093ca, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -64,6 +76,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PerlinNoise:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -76,18 +92,23 @@ Material:
     - _Cutout: 0.68
     - _CutoutThreshold: 0.015
     - _DetailNormalMapScale: 1
-    - _Distortion: -35
+    - _Distortion: 100
     - _DstBlend: 0
+    - _FPOW: 5
     - _FresnelDistort: 1500
     - _FresnelPow: 5
+    - _FresnelPower: 2.49
     - _FresnelR0: 0.04
+    - _FresnelScale: 0.65
     - _Glossiness: 0.5
-    - _Height: 0.1
+    - _Height: 0
     - _InvFade: 10
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Offset: 0
     - _Parallax: 0.02
+    - _R0: 0.05
     - _RefractiveStrength: 0
     - _SrcBlend: 1
     - _UVSec: 0
@@ -95,17 +116,27 @@ Material:
     - _UseBlending: 0
     - _UseCutout: 0
     - _UseFresnel: 0
-    - _UseHeight: 0
-    - _UseMainTex: 1
+    - _UseFresnelOpacity: 0
+    - _UseHeight: 1
+    - _UseMainTex: 0
     - _UseRefractive: 0
     - _UseSoft: 1
+    - _UseSoftParticles: 1
+    - _UseVelocity: 0
     - _ZWrite: 1
     - _ZWriteMode: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CutoutColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DistortSpeed: {r: 1, g: 0.1, b: 1, a: 0.1}
+    - _DropWavesScale: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FresnelColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _HeightUVScrollDistort: {r: 8, g: 12, b: 0, a: 0}
-    - _MainColor: {r: 0.58336425, g: 0.32106623, b: 0.6132076, a: 0.3254902}
-    - _TintColor: {r: 0.745283, g: 0.47510326, b: 0.32694018, a: 1}
+    - _HeightUVScrollDistort: {r: 0, g: 0.05, b: 0, a: 0}
+    - _MainColor: {r: 0.1442707, g: 0, b: 0.5377358, a: 0.73333335}
+    - _NoiseScale: {r: 1, g: 1, b: 1, a: 0.2}
+    - _NoiseSpeed: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0.5}
+    - _Speed: {r: 1, g: 0, b: 0, a: 0}
+    - _SpeedDistort: {r: 1, g: 0, b: 0, a: 0}
+    - _TintColor: {r: 0, g: 0, b: 0, a: 1}
