@@ -26,10 +26,12 @@ public class EliteProjectile : MonoBehaviour
     private float _speed = 0.0f;
     private bool _isActive = false;
     private float _lifeTime = 0.0f;
+    private float _lifeTimer = 0.0f;
     private Transform _parentTransform;
     private EnemyHandler _enemyHandler;
     private EnemyWeapon enemyWeapon;
     private float _damage;
+    private bool _cleanup = false, _timeLife = false;
 
     // Gets called on awake
     private void Awake()
@@ -37,12 +39,13 @@ public class EliteProjectile : MonoBehaviour
         _rb = this.GetComponent<Rigidbody>();
         enemyWeapon = this.GetComponent<EnemyWeapon>();
         _collider.enabled = false;
-        _renderer.enabled = false;
+        //_renderer.enabled = false;
     }
 
     // Sets up the direction for the projectile
     public void InitialiseProjectile(EnemyHandler enemyHandler, Transform playerTransform, Transform projectileStartPoint, float speed, float lifeTime, float damage)
     {
+        gameObject.SetActive(true);
         _collider.enabled = true;
         _renderer.enabled = true;
         transform.position = projectileStartPoint.position;
@@ -61,29 +64,34 @@ public class EliteProjectile : MonoBehaviour
         _speed = speed;
         _lifeTime = lifeTime;
         _damage = damage;
-        StartCoroutine(LifeTimer());
+        _timeLife = true;
+
+        //gameObject.SetActive(true);
+        // StartCoroutine(LifeTimer());
     }
 
     // Gets called every frame
     private void Update()
     {
-        if (_enemyHandler != null && !_enemyHandler.IsAlive())
+        if (_timeLife)
         {
-            this.transform.localScale = minOrbSize;
-            waterHitEffectGO.transform.position = this.transform.position;
-            waterHitEffectGO.transform.SetParent(this.gameObject.transform);
-            waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            _renderer.enabled = true;
-            this.gameObject.SetActive(false);
+            _lifeTimer += Time.deltaTime;
+            if (_lifeTimer >= _lifeTime)
+            {
+                PlayHitVFX();
+            }
         }
 
+        if (_enemyHandler != null && !_enemyHandler.IsAlive() && !_isActive)
+        {
+            Reset();
+        }
 
         if (this.transform.localScale.x <= maxOrbSize.x)
             this.transform.localScale += this.transform.localScale * Time.deltaTime * 2;
 
         if (_isActive)
             _rb.MovePosition(transform.position + _direction * _speed * Time.deltaTime);
-
     }
 
     // Returns the damage of this projectile
@@ -106,13 +114,20 @@ public class EliteProjectile : MonoBehaviour
             _enemyHandler.GetBrain().SetBehaviour("Parried");
             waterParryEffect.Play();
             waterParryAudio.Play();
-
         }
 
+        PlayHitVFX();
+    }
+
+    public void PlayHitVFX()
+    {
+        _lifeTimer -= _lifeTimer;
+        _timeLife = false;
         _isActive = false;
         _collider.enabled = false;
         _renderer.enabled = false;
         waterHitEffectGO.transform.SetParent(null);
+        waterHitEffectGO.transform.rotation = Quaternion.identity;
         waterHitEffect.Play();
         waterHitAudio.Play();
         StartCoroutine(Cleanup());
@@ -122,22 +137,22 @@ public class EliteProjectile : MonoBehaviour
     {
         return _enemyHandler;
     }
+
     public IEnumerator Cleanup()
     {
+        _cleanup = true;
         yield return new WaitForSeconds(effectTime);
-
-        this.transform.localScale = minOrbSize;
-        waterHitEffectGO.transform.SetParent(this.gameObject.transform);
-        waterHitEffectGO.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-        waterHitEffectGO.transform.position = this.transform.position;
-        _renderer.enabled = true;
-        this.gameObject.SetActive(false);
+        _cleanup = false;
+        Reset();
     }
 
-    public IEnumerator LifeTimer()
+    public bool GetCleanUp()
     {
-        yield return new WaitForSeconds(_lifeTime);
+        return _cleanup;
+    }
 
+    public void Reset()
+    {
         this.transform.localScale = minOrbSize;
         waterHitEffectGO.transform.position = this.transform.position;
         waterHitEffectGO.transform.SetParent(this.gameObject.transform);

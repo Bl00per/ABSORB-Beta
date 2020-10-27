@@ -19,14 +19,22 @@ public class PotAttack : AIBehaviour
     public Transform projectileStartPoint;
     public ParticleSystem chargingEffect;
 
+    private Transform _orbParent;
     private Animator _animator;
     private PotMovement _potMovement;
+    private EliteProjectile _projectile;
     private bool _startedRetreatTimer = false;
 
     public void Awake()
     {
-        _animator = this.GetComponent<Animator>();
         _potMovement = this.GetComponent<PotMovement>();
+        _projectile = projectilePrefab.GetComponent<EliteProjectile>();
+    }
+
+    private void Start()
+    {
+        _animator = enemyHandler.GetAnimator();
+        _orbParent = projectilePrefab.transform.parent;
     }
 
     public override void OnStateEnter()
@@ -42,12 +50,6 @@ public class PotAttack : AIBehaviour
                 enemyHandler.GetBrain().GetNavMeshAgent().isStopped = true;
                 break;
         }
-
-
-        /*        waterFireEffect.Play();
-                EliteProjectile eliteProjectile = Instantiate(projectilePrefab, null).GetComponent<EliteProjectile>();
-                eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
-                StartCoroutine(JustFiredTimer());*/
     }
 
     public override void OnStateExit()
@@ -62,20 +64,12 @@ public class PotAttack : AIBehaviour
                 enemyHandler.GetBrain().GetNavMeshAgent().isStopped = false;
                 break;
         }
-
     }
 
     public override void OnStateFixedUpdate() { }
 
     public override void OnStateUpdate()
     {
-        // // If player gets too close when preparing to fire, the enemy will cancel the attack.
-        // if (brain.GetDistanceToPlayer() < dashCancelRange)
-        // {
-        //     brain.SetBehaviour("Movement");
-        //     return;
-        // }
-
         if (brain.GetDistanceToPlayer() <= _potMovement.enterAttackStateDistance + 1.0f)
         {
             switch (enemyHandler.GetEnemyType())
@@ -106,18 +100,26 @@ public class PotAttack : AIBehaviour
 
     public void key_ProjectileCharge()
     {
+        projectilePrefab.transform.position = projectileStartPoint.position;
+        switch (enemyHandler.GetEnemyType())
+        {
+            case EnemyHandler.EnemyType.ELITE:
+                projectilePrefab.transform.SetParent(projectileStartPoint);
+                break;
+
+            case EnemyHandler.EnemyType.SPECIAL:
+                projectilePrefab.transform.SetParent(this.gameObject.transform);
+                break;
+        }
 
         chargingEffect.Play();
-        projectilePrefab.transform.position = projectileStartPoint.position;
-        projectilePrefab.transform.SetParent(this.gameObject.transform);
         projectilePrefab.SetActive(true);
     }
 
     public void key_FireProjectile()
     {
         _animator.SetBool("Attacking", false);
-        EliteProjectile eliteProjectile = projectilePrefab.GetComponent<EliteProjectile>();
-        eliteProjectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
+        _projectile.InitialiseProjectile(enemyHandler, brain.PlayerTransform, projectileStartPoint, projectileSpeed, projectileLifeTime, projectileDamage);
         projectilePrefab.transform.SetParent(null);
         StartCoroutine(JustFiredTimer());
     }
@@ -127,5 +129,10 @@ public class PotAttack : AIBehaviour
         yield return new WaitForSecondsRealtime(justFiredProjectileTimer);
         if (!brain.GetHandler().IsParried())
             brain.SetBehaviour("Movement");
+    }
+
+    public EliteProjectile GetProjectile()
+    {
+        return _projectile;
     }
 }
