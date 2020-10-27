@@ -14,9 +14,9 @@ public class CombatHandler : MonoBehaviour
     public Collider shieldSphereCollider;
     public AudioSource shieldSFX;
     [Header("Weapon")]
-    public SkinnedMeshRenderer playerWeapon;
-    public SkinnedMeshRenderer playerWeapon2;
-    public SkinnedMeshRenderer playerWeapon3;
+    public Renderer playerWeapon;
+    public Renderer playerWeapon2;
+    public Renderer playerWeapon3;
     public Collider playerWeaponColl;
     public Collider playerWeaponColl2;
     public Collider playerWeaponColl3;
