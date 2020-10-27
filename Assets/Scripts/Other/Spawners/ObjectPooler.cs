@@ -31,6 +31,8 @@ public class ObjectPooler : MonoBehaviour
     public float spawnTime = 1.0f;
     public bool findOffScreenSpawnPoint = true;
     public Transform onScreenSpawnPoint;
+    public AudioSource battleMusic;
+    public float fadeOutTime;
 
     [Header("The death of this enemy will end the combat sequence and disable barrier.")]
     public EnemyHandler finalEnemy;
@@ -89,7 +91,7 @@ public class ObjectPooler : MonoBehaviour
             // If final enemy is dead or doesn't exist, disable the barrier
             if (!CheckForFinalEnemy() && !barrierDisabled)
             {
-                DeactivateBarrier();
+                StartCoroutine(DeactivateBarrier());
             }
         }
     }
@@ -332,7 +334,7 @@ public class ObjectPooler : MonoBehaviour
 
     private void PlayerActivateBarrier()
     {
-        if (barrier == null && barrierSoundEffect == null)
+        if (barrier == null && barrierSoundEffect == null && triggerBox == null && triggerBox.Collider)
             return;
         // When the player enters the trigger, turn on the barrier
         else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
@@ -351,11 +353,21 @@ public class ObjectPooler : MonoBehaviour
             return true;
     }
 
-    private void DeactivateBarrier()
+    private IEnumerator DeactivateBarrier()
     {
         barrier.GetComponent<MeshRenderer>().enabled = false;
         barrier.GetComponent<Collider>().enabled = false;
         barrierSoundEffect.Play();
         barrierDisabled = true;
+        float elapseTime = 0;
+        
+        while (elapseTime < fadeOutTime)
+        {
+            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapseTime / fadeOutTime));
+            battleMusic.volume = volume;
+            elapseTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        //yield break;
     }
 }
