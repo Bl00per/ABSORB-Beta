@@ -436,7 +436,7 @@ NavMeshAgent:
   m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 300
-  m_StoppingDistance: 15
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e9c14c090393e94e88562114ce7b177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enterAttackStateDistance: 10
+  enterAttackStateDistance: 15
   retreatFromPlayerDistance: 7
   retreatFromPlayerTimer: 0
   returnToInitialAngularSpeed: 1
