@@ -37,8 +37,10 @@ public class ObjectPooler : MonoBehaviour
     [SerializeField]
     private GameObject barrier;
     [SerializeField]
-    private AudioSource barrierDisableSound;
+    private AudioSource barrierSoundEffect;
+    public Trigger triggerBox;
     private bool barrierDisabled = false;
+    private bool barrierTriggered = false;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -69,11 +71,6 @@ public class ObjectPooler : MonoBehaviour
             }
         }
         //_unactiveEnemies.ForEach((_unactiveEnemies) => { _unactiveEnemies.gameObject.SetActive(false); });
-
-        if (barrier == null && barrierDisableSound == null)
-            return;
-        else
-            barrier?.SetActive(true);
     }
 
     // Called every frame
@@ -82,7 +79,10 @@ public class ObjectPooler : MonoBehaviour
         // Checking for specified enemy spawn
         CheckForEnemyTypeSpawn();
 
-        if (barrier == null && barrierDisableSound == null)
+        // Checking for when player touches the barrier trigger
+        PlayerActivateBarrier();
+
+        if (barrier == null && barrierSoundEffect == null)
             return;
         else
         {
@@ -329,6 +329,20 @@ public class ObjectPooler : MonoBehaviour
     {
         return _activeEnemies[index];
     }
+
+    private void PlayerActivateBarrier()
+    {
+        if (barrier == null && barrierSoundEffect == null)
+            return;
+        // When the player enters the trigger, turn on the barrier
+        else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
+        {
+            barrier?.SetActive(true);
+            barrierSoundEffect.Play();
+            barrierTriggered = true;
+        }
+    }
+
     private bool CheckForFinalEnemy()
     {
         if (!finalEnemy.IsAlive() || finalEnemy == null)
@@ -341,7 +355,7 @@ public class ObjectPooler : MonoBehaviour
     {
         barrier.GetComponent<MeshRenderer>().enabled = false;
         barrier.GetComponent<Collider>().enabled = false;
-        barrierDisableSound.Play();
+        barrierSoundEffect.Play();
         barrierDisabled = true;
     }
 }
