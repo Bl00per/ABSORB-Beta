@@ -13,11 +13,20 @@ public class PotMovement : AIBehaviour
     public float returnToInitialAngularSpeed = 1.0f;
     private float _initialAngularSpeed = 0.0f;
     private bool _startedRetreat = false;
+    private bool _hasAttacked = false;
+    private PotAttack _potAttack;
+    private EliteProjectile _projectile;
+
+    private void Awake()
+    {
+        _potAttack = this.GetComponent<PotAttack>();
+    }
 
     private void Start()
     {
         // Storing the initial angular speed of the agent
         _initialAngularSpeed = brain.GetNavMeshAgent().angularSpeed;
+        _projectile = _potAttack.GetProjectile();
     }
 
     public override void OnStateEnter()
@@ -30,22 +39,6 @@ public class PotMovement : AIBehaviour
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
-        //Debug.Log(GetRetreatDistance());
-
-        // Checking if we should be locked onto the player or not...
-        if (this.destinationLockedToPlayer)
-            this.currentDestination = brain.PlayerTransform.position;
-
-        // Updating the target destination every frame
-        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
-
-        // if (distance <= retreatFromPlayerDistance)
-        // {
-        //     Vector3 retreatPosition = transform.position - (brain.GetDirectionToPlayer() * enterAttackStateDistance);
-        //     OverrideDestination(retreatPosition, 1.0f);
-        //     return;
-        // }
-        /* else */
         if (enemyHandler.GetJustAttacked() || distance <= retreatFromPlayerDistance)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
@@ -55,21 +48,22 @@ public class PotMovement : AIBehaviour
                 StartCoroutine(Retreat(retreatPosition, retreatFromPlayerTimer, returnToInitialAngularSpeed));
             }
         }
-        else if (distance <= enterAttackStateDistance && !_startedRetreat)
+        else if (distance <= enterAttackStateDistance && !_startedRetreat && !_projectile.GetCleanUp())
         {
             brain.SetBehaviour("Attack");
+            _hasAttacked = true;
         }
-        // // If the remaining distance is less than or equal to the stopping distance; enter the attack behaviour.
-        // if (distance <= enterAttackStateDistance && !enemyHandler.GetJustAttacked())
-        // {
-        //     _attackPosition = transform.position;
-        //     brain.SetBehaviour("Attack");
-        // }
-
-
-        // Debug.Log("Locked onto player: " + IsLockedOntoPlayer());
-        // Debug.Log("Current dest: " + this.currentDestination);
-
+        else if (_hasAttacked && !_startedRetreat)
+        {
+            if (enemyHandler.GetPlayerHandler().GetIsAlive())
+            {
+               this.LockDestinationToPlayer(1.0f);
+            }
+            else
+            {
+                _hasAttacked = false;
+            }
+        }
     }
 
     public override void OnStateExit() { }
