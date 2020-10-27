@@ -58,10 +58,10 @@ public class MainMenu : MonoBehaviour
         inMainMenu = true;
         mainSettingsMenu.SetActive(false);
 
-        // Clear selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        // Set the play button as the first selected object
-        EventSystem.current.SetSelectedGameObject(mainMenuFirstSelectedButton);
+        // // Clear selected object
+        // EventSystem.current.SetSelectedGameObject(null);
+        // // Set the play button as the first selected object
+        // EventSystem.current.SetSelectedGameObject(mainMenuFirstSelectedButton);
 
         // Update this if we have 2 different camera speed values
         defaultSensX = _cameraManager.mouseCamera.m_XAxis.m_MaxSpeed;
