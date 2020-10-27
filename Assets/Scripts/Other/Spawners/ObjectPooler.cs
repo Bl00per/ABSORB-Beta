@@ -36,6 +36,9 @@ public class ObjectPooler : MonoBehaviour
 
     [Header("The death of this enemy will end the combat sequence and disable barrier.")]
     public EnemyHandler finalEnemy;
+
+    [Header("Barrier References")]
+    public bool hasBarrier = false;
     [SerializeField]
     private GameObject barrier;
     [SerializeField]
@@ -43,6 +46,8 @@ public class ObjectPooler : MonoBehaviour
     public Trigger triggerBox;
     private bool barrierDisabled = false;
     private bool barrierTriggered = false;
+    private PlayerHandler _playerHandler;
+    private bool _startedBarrierDeactivate = false;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -57,6 +62,7 @@ public class ObjectPooler : MonoBehaviour
         _activeEnemies = new List<EnemyHandler>();
         _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
+        _playerHandler = playerTransform.GetComponent<PlayerHandler>();
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
@@ -81,18 +87,18 @@ public class ObjectPooler : MonoBehaviour
         // Checking for specified enemy spawn
         CheckForEnemyTypeSpawn();
 
+        // Not running the following functions if the object pooler has no barrier
+        if (!hasBarrier)
+            return;
+
         // Checking for when player touches the barrier trigger
         PlayerActivateBarrier();
 
-        if (barrier == null && barrierSoundEffect == null)
-            return;
-        else
+        // If final enemy is dead or doesn't exist, disable the barrier
+        if ((!CheckForFinalEnemy() && !barrierDisabled) || !_playerHandler.GetIsAlive())
         {
-            // If final enemy is dead or doesn't exist, disable the barrier
-            if (!CheckForFinalEnemy() && !barrierDisabled)
-            {
+            if (!_startedBarrierDeactivate)
                 StartCoroutine(DeactivateBarrier());
-            }
         }
     }
 
@@ -334,15 +340,25 @@ public class ObjectPooler : MonoBehaviour
 
     private void PlayerActivateBarrier()
     {
-        if (barrier == null && barrierSoundEffect == null && triggerBox == null && triggerBox.Collider)
-            return;
-        // When the player enters the trigger, turn on the barrier
-        else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
+        if (triggerBox.Collider != null)
         {
-            barrier?.SetActive(true);
-            barrierSoundEffect.Play();
-            barrierTriggered = true;
+            if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
+            {
+               // triggerBox.GetComponent<Collider>().isTrigger = false;
+                barrier.SetActive(true);
+                barrierSoundEffect.Play();
+                barrierTriggered = true;
+            }
         }
+        // if (barrier == null && barrierSoundEffect == null && triggerBox == null && triggerBox.Collider)
+        //     return;
+        // // When the player enters the trigger, turn on the barrier
+        // else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
+        // {
+        //     barrier?.SetActive(true);
+        //     barrierSoundEffect.Play();
+        //     barrierTriggered = true;
+        // }
     }
 
     private bool CheckForFinalEnemy()
@@ -355,12 +371,14 @@ public class ObjectPooler : MonoBehaviour
 
     private IEnumerator DeactivateBarrier()
     {
+        //triggerBox.GetComponent<Collider>().isTrigger = true;
+        _startedBarrierDeactivate = true;
         barrier.GetComponent<MeshRenderer>().enabled = false;
         barrier.GetComponent<Collider>().enabled = false;
         barrierSoundEffect.Play();
         barrierDisabled = true;
         float elapseTime = 0;
-        
+
         while (elapseTime < fadeOutTime)
         {
             float volume = Mathf.Lerp(battleMusic.volume, 0, (elapseTime / fadeOutTime));
@@ -368,6 +386,8 @@ public class ObjectPooler : MonoBehaviour
             elapseTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        _startedBarrierDeactivate = false;
         //yield break;
     }
 }
