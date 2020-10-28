@@ -31,8 +31,6 @@ public class ObjectPooler : MonoBehaviour
     public float spawnTime = 1.0f;
     public bool findOffScreenSpawnPoint = true;
     public Transform onScreenSpawnPoint;
-    public AudioSource battleMusic;
-    public float fadeOutTime;
 
     [Header("The death of this enemy will end the combat sequence and disable barrier.")]
     public EnemyHandler finalEnemy;
@@ -44,16 +42,22 @@ public class ObjectPooler : MonoBehaviour
     [SerializeField]
     private AudioSource barrierSoundEffect;
     public Trigger triggerBox;
-    private bool barrierDisabled = false;
-    private bool barrierTriggered = false;
-    private PlayerHandler _playerHandler;
-    private bool _startedBarrierDeactivate = false;
+    public AudioSource battleMusic;
+    public float musicFadeOutTime;
 
     [Space]
     public Transform[] spawnerPositions;
     private List<Transform> _spawnPointsOffScreen = new List<Transform>();
 
+    private PlayerHandler _playerHandler;
+    private MeshRenderer _barrierMesh;
+    private Collider _barrierCollider;
+    private Collider _hiddenBarrierCollider;
     private bool _isSpawning = false;
+    private bool _barrierDisabled = false;
+    private bool _barrierTriggered = false;
+    private bool _startedBarrierDeactivate = false;
+    private float _volumeHolder;
 
     // Called on initialise
     private void Awake()
@@ -66,6 +70,15 @@ public class ObjectPooler : MonoBehaviour
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
+
+        _barrierMesh = barrier?.GetComponent<MeshRenderer>();
+        _barrierCollider = barrier?.GetComponent<Collider>();
+        _hiddenBarrierCollider = barrier?.transform.GetChild(0).GetComponent<Collider>();
+        if (barrier != null)
+            BarrierInactive();
+
+        // Hold the volume of the music so we can reset when player dies
+        _volumeHolder = battleMusic.volume;
 
         // Populate list of enemies with the children of this gameobject
         foreach (Transform child in transform.GetChild(0))
@@ -94,13 +107,18 @@ public class ObjectPooler : MonoBehaviour
         // Checking for when player touches the barrier trigger
         PlayerActivateBarrier();
 
-        // If final enemy is dead or doesn't exist, disable the barrier
-        if ((!CheckForFinalEnemy() && !barrierDisabled) || !_playerHandler.GetIsAlive())
+        if (!_playerHandler.GetIsAlive())
         {
-            if (!_startedBarrierDeactivate)
-                StartCoroutine(DeactivateBarrier());
+            StartCoroutine(ResetBarrier());
+        }
+        // If final enemy is dead or doesn't exist, disable the barrier
+        else if ((!CheckForFinalEnemy() && !_barrierDisabled))
+        {
+            StartCoroutine(DeactivateBarrier());
         }
     }
+
+    #region Spawner Functions
 
     // Ignores the queue
     public void SwapActiveLists(EnemyHandler enemyHandler)
@@ -338,27 +356,24 @@ public class ObjectPooler : MonoBehaviour
         return _activeEnemies[index];
     }
 
+    #endregion
+
+    #region Barrier Functions
+
     private void PlayerActivateBarrier()
     {
         if (triggerBox.Collider != null)
         {
-            if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
+            if (triggerBox.Collider.CompareTag("Player") && _playerHandler.GetIsAlive() && triggerBox.Enabled && !_barrierTriggered)
             {
-               // triggerBox.GetComponent<Collider>().isTrigger = false;
-                barrier.SetActive(true);
+                // triggerBox.GetComponent<Collider>().isTrigger = false;
+                BarrierActive();
                 barrierSoundEffect.Play();
-                barrierTriggered = true;
+                battleMusic.Play();
+                _barrierTriggered = true;
+                Debug.Log("Barrier Triggered");
             }
         }
-        // if (barrier == null && barrierSoundEffect == null && triggerBox == null && triggerBox.Collider)
-        //     return;
-        // // When the player enters the trigger, turn on the barrier
-        // else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
-        // {
-        //     barrier?.SetActive(true);
-        //     barrierSoundEffect.Play();
-        //     barrierTriggered = true;
-        // }
     }
 
     private bool CheckForFinalEnemy()
@@ -372,22 +387,54 @@ public class ObjectPooler : MonoBehaviour
     private IEnumerator DeactivateBarrier()
     {
         //triggerBox.GetComponent<Collider>().isTrigger = true;
-        _startedBarrierDeactivate = true;
-        barrier.GetComponent<MeshRenderer>().enabled = false;
-        barrier.GetComponent<Collider>().enabled = false;
         barrierSoundEffect.Play();
-        barrierDisabled = true;
-        float elapseTime = 0;
+        _barrierDisabled = true;
+        BarrierInactive();
 
-        while (elapseTime < fadeOutTime)
+        float elapsedTime = 0;
+        while (elapsedTime < musicFadeOutTime)
         {
-            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapseTime / fadeOutTime));
+            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapsedTime / musicFadeOutTime));
             battleMusic.volume = volume;
-            elapseTime += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
-        _startedBarrierDeactivate = false;
-        //yield break;
+        battleMusic.Stop();
     }
+
+    private IEnumerator ResetBarrier()
+    {
+        _barrierTriggered = false;
+        barrierSoundEffect.Play();
+        BarrierInactive();
+
+        float elapsedTime = 0;
+        while (elapsedTime < musicFadeOutTime)
+        {
+            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapsedTime / musicFadeOutTime));
+            battleMusic.volume = volume;
+            elapsedTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        battleMusic.Stop();
+        battleMusic.volume = _volumeHolder;
+    }
+
+    private void BarrierActive()
+    {
+        _barrierCollider.enabled = true;
+        _hiddenBarrierCollider.enabled = true;
+        _barrierMesh.enabled = true;
+    }
+
+    private void BarrierInactive()
+    {
+        _barrierCollider.enabled = false;
+        _hiddenBarrierCollider.enabled = false;
+        _barrierMesh.enabled = false;
+    }
+
+    #endregion
 }
