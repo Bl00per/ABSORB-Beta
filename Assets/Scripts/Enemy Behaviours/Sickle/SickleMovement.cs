@@ -116,7 +116,10 @@ public class SickleMovement : AIBehaviour
         else if (_combatHandler.GetJustUsedMechanic())
         {
             if (Random.value <= attackChance)
+            {
                 brain.SetBehaviour("Attack");
+                enemyHandler.GetEnemyGroupHandler()?.ForceAllEnemiesToRetreat(enemyHandler);
+            }
         }
     }
 

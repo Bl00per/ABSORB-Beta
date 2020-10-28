@@ -120,6 +120,13 @@ public class EnemyHandler : MonoBehaviour
 
     public void Update()
     {
+        UpdateMovingAnimation();
+        UpdateSlowMo();
+        UpdateEmission();
+    }
+
+    private void UpdateMovingAnimation()
+    {
         if (typeOfEnemy == EnemyType.ELITE)
         {
             if (_aiBrain.GetNavMeshAgent().velocity.magnitude > moveDetection)
@@ -131,17 +138,13 @@ public class EnemyHandler : MonoBehaviour
                 _animator.SetBool("Moving", false);
             }
         }
-
-
-        UpdateSlowMo();
-        UpdateEnemyEmission();
     }
 
-    private void UpdateEnemyEmission()
+    private void UpdateEmission()
     {
         if (IsParried())
             return;
-            
+
         for (int i = 0; i < bodyMeshRenderer.Length; ++i)
         {
             // Lower the emission intensity when the player takes damage
@@ -184,7 +187,7 @@ public class EnemyHandler : MonoBehaviour
                 return ability.damageToElite;
         }
 
-        Debug.LogError("Enemy type invalid -> GetDamageToEnemyType()");
+        Debug.LogError($"Enemy type invalid -> {typeOfEnemy}");
         return -1.0f;
     }
 
@@ -337,6 +340,13 @@ public class EnemyHandler : MonoBehaviour
         }
 
         //Debug.Log($"Set functional: {value} -> On enemy: {gameObject.name}");
+    }
+
+    // Forces the just attacked boolean and starts the coroutine to set it false
+    public void ForceJustAttacked()
+    {
+        _justAttacked = true;
+        StartCoroutine(Coroutine_JustAttacked());
     }
 
     // Kills the enemy
