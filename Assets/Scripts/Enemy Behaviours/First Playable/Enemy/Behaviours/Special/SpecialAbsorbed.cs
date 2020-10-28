@@ -92,7 +92,13 @@ public class SpecialAbsorbed : AIBehaviour
             absorbGameObject.SetActive(true);
             absorbGameObject.transform.SetParent(this.gameObject.transform);
             enemyHandler.Kill();
-            enemyHandler.Reset();
+
+            if (enemyHandler.GetFunctional())
+                enemyHandler.SetFunctional(false);
+
+            brain.SetBehaviour("Idle");
+
+            //enemyHandler.Reset();
             _enabled = false;
         }
     }

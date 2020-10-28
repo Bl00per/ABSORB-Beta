@@ -306,7 +306,7 @@ public class EnemyHandler : MonoBehaviour
                 reviveVFX.Play();
             }
 
-            _isAlive = true;
+            //_isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
             foreach (Renderer mesh in bodyMeshRenderer)
@@ -323,7 +323,7 @@ public class EnemyHandler : MonoBehaviour
         else
         {
             // Disabling all functional components
-            _isAlive = false;
+            //_isAlive = false;
             _aiBrain.enabled = false;
             _rigidbody.isKinematic = true;
             foreach (Renderer mesh in bodyMeshRenderer)
@@ -354,6 +354,7 @@ public class EnemyHandler : MonoBehaviour
     {
         // // Disabling functional components of enemy
         // SetFunctional(false);
+        _isAlive = false;
 
         // Playing death VFX
         PlayDeathFX();
