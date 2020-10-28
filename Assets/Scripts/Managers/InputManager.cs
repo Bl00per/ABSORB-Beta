@@ -89,13 +89,20 @@ public class InputManager : MonoBehaviour
             isControllerConnected = true;
         else
             isControllerConnected = false;
-
-        if (_inputCheck)
-            StartCoroutine(CheckForInputType());
     }
 
-    void OnGUI()
+    private void LateUpdate()
     {
+        if (_inputCheck)
+        {
+
+            StartCoroutine(CheckForInputType());
+        }
+    }
+        
+
+    void OnGUI()
+    { 
         Event e = Event.current;
 
         if (e.keyCode != 0 && _isUsingController)
