@@ -23,6 +23,9 @@ public class GroupChase : GroupState
             return;
         }
 
+        if(_unitSlots.Count <= 0)
+            return;
+
         // Move all enemies towards the player
         this.enemyGroupHandler.SetTargetDestination(enemyGroupHandler.playerTransform.position);
         this.enemyGroupHandler.UpdateAllFlockDestinations();
