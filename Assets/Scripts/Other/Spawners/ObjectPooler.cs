@@ -34,6 +34,7 @@ public class ObjectPooler : MonoBehaviour
 
     [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
+    public EnemyHandler specialEnemy;
 
     [Space]
     public Transform[] spawnerPositions;
