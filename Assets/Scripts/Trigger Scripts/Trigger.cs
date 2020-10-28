@@ -19,11 +19,11 @@ public class Trigger : MonoBehaviour
         _collider = null;
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        _enabled = true;
-        _collider = other;
-    }
+    // private void OnTriggerStay(Collider other)
+    // {
+    //     _enabled = true;
+    //     _collider = other;
+    // }
 
     public bool Enabled
     {

@@ -19,6 +19,10 @@ public class EnemyGroupHandler : MonoBehaviour
     [Header("Combat Engagement Properties")]
     public float engagementDistance = 10.0f;
 
+    [Header("Retreat Properties")]
+    public float retreatDistance = 5.0f;
+    public float retreatTime = 1.0f;
+
     [Header("Debug")]
     public bool debugCurrentState = false;
 
@@ -40,7 +44,12 @@ public class EnemyGroupHandler : MonoBehaviour
     protected Vector3 _targetDestination = Vector3.zero;
 
     // Vectors for calculating the flock destination (not updated every frame)
-    private Vector3 cDir, sDir, aDir, CoM;
+    private Vector3 _cDir, _sDir, _aDir, _CoM;
+
+    // Flag to determine if the enemies should retreat
+    private bool _shouldRetreat = false;
+    private bool _startedRetreatSequence = false;
+    private int _attackerID = 0;
 
     // Called on initialise
     private void Awake()
@@ -74,9 +83,13 @@ public class EnemyGroupHandler : MonoBehaviour
     private void Update()
     {
         // Check if there are any active enemies, if not then enter the idle state
-        if(_activeEnemies.Count <= 0)
+        if (_activeEnemies.Count <= 0)
             return;
-        
+
+        // Checking if we want all enemies to retreat
+        if (_shouldRetreat)
+            UpdateRetreat();
+
         // Updating the current state
         _groupStates[(int)_currentState].OnStateUpdate();
 
@@ -119,10 +132,10 @@ public class EnemyGroupHandler : MonoBehaviour
     // Returns a flock destination for the specified enemy
     public Vector3 GetFlockDestination(EnemyHandler enemy)
     {
-        cDir = CalculateCoherence(CoM, enemy.transform.position); //incase bug: removed .normalized
-        sDir = CalculateSeperation(enemy);
-        aDir = CalculateAlignment(enemy.transform.position);
-        return enemy.transform.position + (cDir + sDir + aDir).normalized * _groupStates[(int)_currentState].moveDistance * Time.deltaTime;
+        _cDir = CalculateCoherence(_CoM, enemy.transform.position); //incase bug: removed .normalized
+        _sDir = CalculateSeperation(enemy);
+        _aDir = CalculateAlignment(enemy.transform.position);
+        return enemy.transform.position + (_cDir + _sDir + _aDir).normalized * _groupStates[(int)_currentState].moveDistance * Time.deltaTime;
     }
 
     // Updates flocking destination for every enemy within group
@@ -132,7 +145,7 @@ public class EnemyGroupHandler : MonoBehaviour
         if (_activeEnemies.Count > 1)
         {
             // Going to update this every frame for now, but might have to delay it on a coroutine if there are perfomace issues!
-            CoM = CalculateCenterOfMass();
+            _CoM = CalculateCenterOfMass();
             foreach (EnemyHandler enemy in _activeEnemies)
                 enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetFlockDestination(enemy), 1.0f);
         }
@@ -192,8 +205,51 @@ public class EnemyGroupHandler : MonoBehaviour
         return result /= sumOfAllWeights;
     }
 
+    // Forces all active enemies to retreat / not attack
+    public void ForceAllEnemiesToRetreat(EnemyHandler attacker)
+    {
+        _attackerID = attacker.gameObject.GetInstanceID();
+        foreach (EnemyHandler enemy in _activeEnemies)
+        {
+            if (enemy.gameObject.GetInstanceID() == _attackerID)
+                continue;
+
+            enemy.ForceJustAttacked();
+            _shouldRetreat = true;
+        }
+    }
+
+    // Forces all enemies to move away from the player overtime
+    public void UpdateRetreat()
+    {
+        if (!_startedRetreatSequence)
+            StartCoroutine(RetreatSequence());
+
+        Vector3 _positionFix = playerTransform.position;
+        foreach (EnemyHandler enemy in _activeEnemies)
+        {
+            if (enemy.gameObject.GetInstanceID() == _attackerID)
+                continue;
+
+            //Forcing the enemy to face the player
+            _positionFix.y = enemy.transform.position.y;
+            enemy.transform.forward = (_positionFix - enemy.transform.position).normalized;
+
+            enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(enemy.transform.position - (enemy.GetBrain().GetDirectionToPlayer() * retreatDistance * Time.deltaTime), 1.0f);
+        }
+    }
+
+    // Coroutine to stop the enemies retreating
+    private IEnumerator RetreatSequence()
+    {
+        _startedRetreatSequence = true;
+        yield return new WaitForSeconds(retreatTime);
+        _shouldRetreat = false;
+        _startedRetreatSequence = false;
+    }
+
     // Returns the calculated center of mass
-    public Vector3 GetCenterOfMass() => CoM;
+    public Vector3 GetCenterOfMass() => _CoM;
 
     // Returns the array list of enemies
     public List<EnemyHandler> GetEnemies() => _activeEnemies;

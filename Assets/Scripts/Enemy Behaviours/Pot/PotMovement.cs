@@ -52,12 +52,15 @@ public class PotMovement : AIBehaviour
         {
             brain.SetBehaviour("Attack");
             _hasAttacked = true;
+
+            if (enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+                enemyHandler.GetEnemyGroupHandler()?.ForceAllEnemiesToRetreat(enemyHandler);
         }
         else if (_hasAttacked && !_startedRetreat)
         {
             if (enemyHandler.GetPlayerHandler().GetIsAlive())
             {
-               this.LockDestinationToPlayer(1.0f);
+                this.LockDestinationToPlayer(1.0f);
             }
             else
             {

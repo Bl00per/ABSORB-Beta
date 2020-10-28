@@ -54,6 +54,9 @@ public class HammerMovement : AIBehaviour
         {
             brain.SetBehaviour("Attack");
             _hasAttacked = true;
+
+            if(enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
+                enemyHandler.GetEnemyGroupHandler()?.ForceAllEnemiesToRetreat(enemyHandler);
         }
         else if (_hasAttacked)
         {

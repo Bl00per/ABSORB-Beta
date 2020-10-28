@@ -31,23 +31,9 @@ public class ObjectPooler : MonoBehaviour
     public float spawnTime = 1.0f;
     public bool findOffScreenSpawnPoint = true;
     public Transform onScreenSpawnPoint;
-    public AudioSource battleMusic;
-    public float fadeOutTime;
 
-    [Header("The death of this enemy will end the combat sequence and disable barrier.")]
+    [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
-
-    [Header("Barrier References")]
-    public bool hasBarrier = false;
-    [SerializeField]
-    private GameObject barrier;
-    [SerializeField]
-    private AudioSource barrierSoundEffect;
-    public Trigger triggerBox;
-    private bool barrierDisabled = false;
-    private bool barrierTriggered = false;
-    private PlayerHandler _playerHandler;
-    private bool _startedBarrierDeactivate = false;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -62,7 +48,6 @@ public class ObjectPooler : MonoBehaviour
         _activeEnemies = new List<EnemyHandler>();
         _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
-        _playerHandler = playerTransform.GetComponent<PlayerHandler>();
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
@@ -86,21 +71,9 @@ public class ObjectPooler : MonoBehaviour
     {
         // Checking for specified enemy spawn
         CheckForEnemyTypeSpawn();
-
-        // Not running the following functions if the object pooler has no barrier
-        if (!hasBarrier)
-            return;
-
-        // Checking for when player touches the barrier trigger
-        PlayerActivateBarrier();
-
-        // If final enemy is dead or doesn't exist, disable the barrier
-        if ((!CheckForFinalEnemy() && !barrierDisabled) || !_playerHandler.GetIsAlive())
-        {
-            if (!_startedBarrierDeactivate)
-                StartCoroutine(DeactivateBarrier());
-        }
     }
+
+    #region Spawner Functions
 
     // Ignores the queue
     public void SwapActiveLists(EnemyHandler enemyHandler)
@@ -254,6 +227,13 @@ public class ObjectPooler : MonoBehaviour
                 break;
             }
         }
+        else if(specialEnemy != null && !_isSpawning) 
+        {
+            if(!specialEnemy.IsAlive())
+            {
+                StartCoroutine(RespawnEnemy(specialEnemy));
+            }
+        }
     }
 
     // Finds a spawn point not rendered by the camera, and spawns the specified enemy there
@@ -338,56 +318,5 @@ public class ObjectPooler : MonoBehaviour
         return _activeEnemies[index];
     }
 
-    private void PlayerActivateBarrier()
-    {
-        if (triggerBox.Collider != null)
-        {
-            if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
-            {
-               // triggerBox.GetComponent<Collider>().isTrigger = false;
-                barrier.SetActive(true);
-                barrierSoundEffect.Play();
-                barrierTriggered = true;
-            }
-        }
-        // if (barrier == null && barrierSoundEffect == null && triggerBox == null && triggerBox.Collider)
-        //     return;
-        // // When the player enters the trigger, turn on the barrier
-        // else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
-        // {
-        //     barrier?.SetActive(true);
-        //     barrierSoundEffect.Play();
-        //     barrierTriggered = true;
-        // }
-    }
-
-    private bool CheckForFinalEnemy()
-    {
-        if (!finalEnemy.IsAlive() || finalEnemy == null)
-            return false;
-        else
-            return true;
-    }
-
-    private IEnumerator DeactivateBarrier()
-    {
-        //triggerBox.GetComponent<Collider>().isTrigger = true;
-        _startedBarrierDeactivate = true;
-        barrier.GetComponent<MeshRenderer>().enabled = false;
-        barrier.GetComponent<Collider>().enabled = false;
-        barrierSoundEffect.Play();
-        barrierDisabled = true;
-        float elapseTime = 0;
-
-        while (elapseTime < fadeOutTime)
-        {
-            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapseTime / fadeOutTime));
-            battleMusic.volume = volume;
-            elapseTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-
-        _startedBarrierDeactivate = false;
-        //yield break;
-    }
+    #endregion
 }
