@@ -37,6 +37,7 @@ public class MainMenu : MonoBehaviour
     private InputManager _inputManager;
     private ReadWriteText _readWrite;
     private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null, _sensXSliderFill = null, _sensYSliderFill = null;
+    public Color sliderColor;
     [HideInInspector]
     public bool inMainMenu = true;
     private float cameraSensX = 0f;     // Keep track of current sensitivity
@@ -102,27 +103,27 @@ public class MainMenu : MonoBehaviour
                 GameObject temp = EventSystem.current.currentSelectedGameObject;
                 // I can't use a switch statement for this, I really tried. Forgive me
                 if (temp == masterVolumeSlider.gameObject)  // Master Volume Slider
-                    _masterSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                    _masterSliderFill.color = sliderColor;
                 else
                     _masterSliderFill.color = Color.white;
 
                 if (temp == musicVolumeSlider.gameObject)   // Music Volume Slider
-                    _musicSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                    _musicSliderFill.color = sliderColor;
                 else
                     _musicSliderFill.color = Color.white;
 
                 if (temp == sfxVolumeSlider.gameObject)     // SFX Volume Slider
-                    _sfxSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                    _sfxSliderFill.color = sliderColor;
                 else
                     _sfxSliderFill.color = Color.white;
 
                 if (temp == sensitivityXSlider.gameObject)  // Sensitivity X Slider
-                    _sensXSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                    _sensXSliderFill.color = sliderColor;
                 else
                     _sensXSliderFill.color = Color.white;
 
                 if (temp == sensitivityYSlider.gameObject)  // Sensitivity Y Slider
-                    _sensYSliderFill.color = new Vector4(213f, 0, 217f, 255f);
+                    _sensYSliderFill.color = sliderColor;
                 else
                     _sensYSliderFill.color = Color.white;
             }
