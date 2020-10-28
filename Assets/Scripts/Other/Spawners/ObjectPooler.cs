@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -39,6 +39,17 @@ public class ObjectPooler : MonoBehaviour
     public EnemyHandler specialEnemy;
     public AbilityHandler.AbilityType onlyRespawnWhenNotActive;
 
+    [Header("Barrier References")]
+    public bool hasBarrier = false;
+    [SerializeField]
+    private GameObject barrier;
+    [SerializeField]
+    private AudioSource barrierSoundEffect;
+    public Trigger triggerBox;
+    private bool barrierDisabled = false;
+    private bool barrierTriggered = false;
+    private PlayerHandler _playerHandler;
+    private bool _startedBarrierDeactivate = false;
     private bool _respawnSpecial = false;
 
     [Space]
