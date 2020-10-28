@@ -34,7 +34,7 @@ public class ObjectPooler : MonoBehaviour
 
     [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
-    public EnemyHandler specialEnemy;
+   
 
     [Header("Reference to the enemy which will ignore the final enemy death.")]
     public EnemyHandler specialEnemy;
