@@ -39,6 +39,7 @@ public class ObjectPooler : MonoBehaviour
 
     [Header("Reference to the enemy which will ignore the final enemy death.")]
     public EnemyHandler specialEnemy;
+    public AbilityHandler.AbilityType onlyRespawnWhenNotActive;
 
     [Header("Barrier References")]
     public bool hasBarrier = false;
@@ -51,6 +52,7 @@ public class ObjectPooler : MonoBehaviour
     private bool barrierTriggered = false;
     private PlayerHandler _playerHandler;
     private bool _startedBarrierDeactivate = false;
+    private bool _respawnSpecial = false;
 
     [Space]
     public Transform[] spawnerPositions;
@@ -259,7 +261,7 @@ public class ObjectPooler : MonoBehaviour
         }
         else if(specialEnemy != null && !_isSpawning) 
         {
-            if(!specialEnemy.IsAlive())
+            if(!specialEnemy.IsAlive() && _playerHandler.GetAbilityHandler().GetCurrentAbilityType() != onlyRespawnWhenNotActive)
             {
                 StartCoroutine(RespawnEnemy(specialEnemy));
             }
@@ -283,12 +285,8 @@ public class ObjectPooler : MonoBehaviour
             // Exiting this function if there are no points on-screen
             if (_spawnPointsOffScreen.Count <= 0)
             {
-                // Setting the spawning flag to false
-                _isSpawning = false;
-
                 // Printing a debug message
                 Debug.LogWarning("Object Pool - Couldn't find spawner off screen.");
-                yield break;
             }
         }
 
@@ -298,7 +296,7 @@ public class ObjectPooler : MonoBehaviour
         // Refreshing the enemy list within the group handler
         _enemyGroupHandler.UpdateEnemyList();
 
-        if (findOffScreenSpawnPoint)
+        if (findOffScreenSpawnPoint && _spawnPointsOffScreen.Count > 0)
         {
             // Get a random number between 0 and the spawn point max
             int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
@@ -316,6 +314,14 @@ public class ObjectPooler : MonoBehaviour
 
         // Resetting the enemies properties
         enemy.Reset();
+
+        // Bandaid fix for functionality of special
+        if(!enemy.GetFunctional())
+            enemy.SetFunctional(true);
+        
+        // // Locking enemy back onto player if they are alive
+        // if(_playerHandler.GetIsAlive())
+        //     enemy.GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
 
         // Setting the spawning flag to false
         _isSpawning = false;
