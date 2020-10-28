@@ -34,8 +34,11 @@ public class ObjectPooler : MonoBehaviour
     public AudioSource battleMusic;
     public float fadeOutTime;
 
-    [Header("The death of this enemy will end the combat sequence and disable barrier.")]
+    [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
+
+    [Header("Reference to the enemy which will ignore the final enemy death.")]
+    public EnemyHandler specialEnemy;
 
     [Header("Barrier References")]
     public bool hasBarrier = false;
@@ -252,6 +255,13 @@ public class ObjectPooler : MonoBehaviour
                 // If the types are a match, respawn the enemy
                 StartCoroutine(RespawnEnemy(enemy));
                 break;
+            }
+        }
+        else if(specialEnemy != null && !_isSpawning) 
+        {
+            if(!specialEnemy.IsAlive())
+            {
+                StartCoroutine(RespawnEnemy(specialEnemy));
             }
         }
     }
