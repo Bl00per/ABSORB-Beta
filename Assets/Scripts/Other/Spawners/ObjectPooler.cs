@@ -67,6 +67,9 @@ public class ObjectPooler : MonoBehaviour
         _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
 
+        // Get the player handler from the player transform
+        _playerHandler = playerTransform.GetComponent<PlayerHandler>();
+
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
 
