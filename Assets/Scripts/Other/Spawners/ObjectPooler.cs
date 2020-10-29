@@ -35,29 +35,16 @@ public class ObjectPooler : MonoBehaviour
     [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
    
-
     [Header("Reference to the enemy which will ignore the final enemy death.")]
     public EnemyHandler specialEnemy;
     public AbilityHandler.AbilityType onlyRespawnWhenNotActive;
-
-    [Header("Barrier References")]
-    public bool hasBarrier = false;
-    [SerializeField]
-    private GameObject barrier;
-    [SerializeField]
-    private AudioSource barrierSoundEffect;
-    public Trigger triggerBox;
-    private bool barrierDisabled = false;
-    private bool barrierTriggered = false;
-    private PlayerHandler _playerHandler;
-    private bool _startedBarrierDeactivate = false;
-    private bool _respawnSpecial = false;
 
     [Space]
     public Transform[] spawnerPositions;
     private List<Transform> _spawnPointsOffScreen = new List<Transform>();
 
     private bool _isSpawning = false;
+    private PlayerHandler _playerHandler;
 
     // Called on initialise
     private void Awake()
@@ -66,6 +53,9 @@ public class ObjectPooler : MonoBehaviour
         _activeEnemies = new List<EnemyHandler>();
         _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
+
+        // Get the player handler from the player transform
+        _playerHandler = playerTransform.GetComponent<PlayerHandler>();
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
@@ -339,6 +329,4 @@ public class ObjectPooler : MonoBehaviour
     {
         return _activeEnemies[index];
     }
-
-    #endregion
 }
