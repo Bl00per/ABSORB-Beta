@@ -111,7 +111,6 @@ public class AIBrain : MonoBehaviour
 
         // Call OnExit() before the state switch, then call OnEnter() after.
         _aiBehaviours[_currentBehaviourID].OnStateExit();
-
         _currentBehaviourID = behaviour;
         _aiBehaviours[_currentBehaviourID].OnStateEnter();
 

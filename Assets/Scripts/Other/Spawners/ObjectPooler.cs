@@ -32,21 +32,19 @@ public class ObjectPooler : MonoBehaviour
     public bool findOffScreenSpawnPoint = true;
     public Transform onScreenSpawnPoint;
 
-    [Header("The death of this enemy will end the combat sequence and disable barrier.")]
+    [Header("Reference to the final enemy of the combat sequence.")]
     public EnemyHandler finalEnemy;
-    [SerializeField]
-    private GameObject barrier;
-    [SerializeField]
-    private AudioSource barrierSoundEffect;
-    public Trigger triggerBox;
-    private bool barrierDisabled = false;
-    private bool barrierTriggered = false;
+   
+    [Header("Reference to the enemy which will ignore the final enemy death.")]
+    public EnemyHandler specialEnemy;
+    public AbilityHandler.AbilityType onlyRespawnWhenNotActive;
 
     [Space]
     public Transform[] spawnerPositions;
     private List<Transform> _spawnPointsOffScreen = new List<Transform>();
 
     private bool _isSpawning = false;
+    private PlayerHandler _playerHandler;
 
     // Called on initialise
     private void Awake()
@@ -55,6 +53,9 @@ public class ObjectPooler : MonoBehaviour
         _activeEnemies = new List<EnemyHandler>();
         _respawnQueue = new List<EnemyHandler>();
         _inactiveEnemies = new List<EnemyHandler>();
+
+        // Get the player handler from the player transform
+        _playerHandler = playerTransform.GetComponent<PlayerHandler>();
 
         // Get the enemy group handler on this object
         _enemyGroupHandler = this.GetComponent<EnemyGroupHandler>();
@@ -78,21 +79,9 @@ public class ObjectPooler : MonoBehaviour
     {
         // Checking for specified enemy spawn
         CheckForEnemyTypeSpawn();
-
-        // Checking for when player touches the barrier trigger
-        PlayerActivateBarrier();
-
-        if (barrier == null && barrierSoundEffect == null)
-            return;
-        else
-        {
-            // If final enemy is dead or doesn't exist, disable the barrier
-            if (!CheckForFinalEnemy() && !barrierDisabled)
-            {
-                DeactivateBarrier();
-            }
-        }
     }
+
+    #region Spawner Functions
 
     // Ignores the queue
     public void SwapActiveLists(EnemyHandler enemyHandler)
@@ -246,6 +235,13 @@ public class ObjectPooler : MonoBehaviour
                 break;
             }
         }
+        else if(specialEnemy != null && !_isSpawning) 
+        {
+            if(!specialEnemy.IsAlive() && _playerHandler.GetAbilityHandler().GetCurrentAbilityType() != onlyRespawnWhenNotActive)
+            {
+                StartCoroutine(RespawnEnemy(specialEnemy));
+            }
+        }
     }
 
     // Finds a spawn point not rendered by the camera, and spawns the specified enemy there
@@ -265,12 +261,8 @@ public class ObjectPooler : MonoBehaviour
             // Exiting this function if there are no points on-screen
             if (_spawnPointsOffScreen.Count <= 0)
             {
-                // Setting the spawning flag to false
-                _isSpawning = false;
-
                 // Printing a debug message
                 Debug.LogWarning("Object Pool - Couldn't find spawner off screen.");
-                yield break;
             }
         }
 
@@ -280,7 +272,7 @@ public class ObjectPooler : MonoBehaviour
         // Refreshing the enemy list within the group handler
         _enemyGroupHandler.UpdateEnemyList();
 
-        if (findOffScreenSpawnPoint)
+        if (findOffScreenSpawnPoint && _spawnPointsOffScreen.Count > 0)
         {
             // Get a random number between 0 and the spawn point max
             int spawnNumber = Random.Range(0, _spawnPointsOffScreen.Count);
@@ -298,6 +290,14 @@ public class ObjectPooler : MonoBehaviour
 
         // Resetting the enemies properties
         enemy.Reset();
+
+        // Bandaid fix for functionality of special
+        if(!enemy.GetFunctional())
+            enemy.SetFunctional(true);
+        
+        // // Locking enemy back onto player if they are alive
+        // if(_playerHandler.GetIsAlive())
+        //     enemy.GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
 
         // Setting the spawning flag to false
         _isSpawning = false;
@@ -329,33 +329,5 @@ public class ObjectPooler : MonoBehaviour
     {
         return _activeEnemies[index];
     }
-
-    private void PlayerActivateBarrier()
-    {
-        if (barrier == null && barrierSoundEffect == null)
-            return;
-        // When the player enters the trigger, turn on the barrier
-        else if (triggerBox.Collider.CompareTag("Player") && triggerBox.Enabled && !barrierTriggered)
-        {
-            barrier?.SetActive(true);
-            barrierSoundEffect.Play();
-            barrierTriggered = true;
-        }
-    }
-
-    private bool CheckForFinalEnemy()
-    {
-        if (!finalEnemy.IsAlive() || finalEnemy == null)
-            return false;
-        else
-            return true;
-    }
-
-    private void DeactivateBarrier()
-    {
-        barrier.GetComponent<MeshRenderer>().enabled = false;
-        barrier.GetComponent<Collider>().enabled = false;
-        barrierSoundEffect.Play();
-        barrierDisabled = true;
-    }
+    #endregion
 }

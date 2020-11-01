@@ -32,12 +32,12 @@ public class MinionMovement : AIBehaviour
         // Storing the distance to preform multiple checks on
         float distance = brain.GetDistanceToPlayer();
 
-        // Checking if we should be locked onto the player or not...
-        if (this.destinationLockedToPlayer)
-            this.currentDestination = brain.PlayerTransform.position;
+        // // Checking if we should be locked onto the player or not...
+        // if (this.destinationLockedToPlayer)
+        //     this.currentDestination = brain.PlayerTransform.position;
 
-        // Updating the target destination every frame
-        brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
+        // // Updating the target destination every frame
+        // brain.SetDestinationOnCooldown(this.currentDestination, 1.0f);
 
         if (enemyHandler.GetJustAttacked())
         {

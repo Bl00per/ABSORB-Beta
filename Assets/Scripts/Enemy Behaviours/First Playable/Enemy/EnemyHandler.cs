@@ -120,6 +120,13 @@ public class EnemyHandler : MonoBehaviour
 
     public void Update()
     {
+        UpdateMovingAnimation();
+        UpdateSlowMo();
+        UpdateEmission();
+    }
+
+    private void UpdateMovingAnimation()
+    {
         if (typeOfEnemy == EnemyType.ELITE)
         {
             if (_aiBrain.GetNavMeshAgent().velocity.magnitude > moveDetection)
@@ -131,17 +138,13 @@ public class EnemyHandler : MonoBehaviour
                 _animator.SetBool("Moving", false);
             }
         }
-
-
-        UpdateSlowMo();
-        UpdateEnemyEmission();
     }
 
-    private void UpdateEnemyEmission()
+    private void UpdateEmission()
     {
         if (IsParried())
             return;
-            
+
         for (int i = 0; i < bodyMeshRenderer.Length; ++i)
         {
             // Lower the emission intensity when the player takes damage
@@ -184,7 +187,7 @@ public class EnemyHandler : MonoBehaviour
                 return ability.damageToElite;
         }
 
-        Debug.LogError("Enemy type invalid -> GetDamageToEnemyType()");
+        Debug.LogError($"Enemy type invalid -> {typeOfEnemy}");
         return -1.0f;
     }
 
@@ -303,7 +306,7 @@ public class EnemyHandler : MonoBehaviour
                 reviveVFX.Play();
             }
 
-            _isAlive = true;
+            //_isAlive = true;
             _aiBrain.enabled = true;
             _rigidbody.isKinematic = false;
             foreach (Renderer mesh in bodyMeshRenderer)
@@ -320,7 +323,7 @@ public class EnemyHandler : MonoBehaviour
         else
         {
             // Disabling all functional components
-            _isAlive = false;
+            //_isAlive = false;
             _aiBrain.enabled = false;
             _rigidbody.isKinematic = true;
             foreach (Renderer mesh in bodyMeshRenderer)
@@ -339,11 +342,19 @@ public class EnemyHandler : MonoBehaviour
         //Debug.Log($"Set functional: {value} -> On enemy: {gameObject.name}");
     }
 
+    // Forces the just attacked boolean and starts the coroutine to set it false
+    public void ForceJustAttacked()
+    {
+        _justAttacked = true;
+        StartCoroutine(Coroutine_JustAttacked());
+    }
+
     // Kills the enemy
     public void Kill()
     {
         // // Disabling functional components of enemy
         // SetFunctional(false);
+        _isAlive = false;
 
         // Playing death VFX
         PlayDeathFX();
