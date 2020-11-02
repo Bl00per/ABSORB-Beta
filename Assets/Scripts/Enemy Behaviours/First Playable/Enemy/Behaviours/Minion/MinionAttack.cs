@@ -5,27 +5,15 @@ using UnityEngine;
 public class MinionAttack : AIBehaviour
 {
     [Header("General Movement")]
-    public bool lookAtPlayer = true;
     public float turnSpeed = 0.20f;
 
     [Header("References")]
-    public Trigger weaponTrigger;
     public GameObject weaponToEnable;
-    private Animator _animator;
-    private CombatHandler _combatHandler;
-
-    [Header("Timers")]
-    public float transitionTime = 2.0f;
-    public float timeBeforeAttack = 0.5f;
-
-    [Header("Attack Properties")]
-    public float attackForce = 10.0f;
 
     private Vector3 _initialPos;
     private Quaternion _initialRot;
-
-    // private bool _hasAttacked = false; 
-    // private bool _canAttack = false; 
+    private Animator _animator;
+    private CombatHandler _combatHandler;
 
     private void Awake()
     {
@@ -53,16 +41,8 @@ public class MinionAttack : AIBehaviour
         // Get direction to player 
         Vector3 dir = brain.GetDirectionToPlayer();
 
-        // // Checking if we should be locked onto the player or not... 
-        // if (this.destinationLockedToPlayer) 
-        //     this.currentDestination = brain.PlayerTransform.position; 
-
-        // // Updating the target destination every frame 
-        // brain.SetDestinationOnCooldown(this.currentDestination, 1.0f); 
-
         // Rotate to face direction 
-        if (lookAtPlayer)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), turnSpeed);
     }
 
     // Deactivates the collision check on the enemy's weapon 
@@ -70,7 +50,6 @@ public class MinionAttack : AIBehaviour
     {
         weaponToEnable.SetActive(false);
         _animator.SetBool("Attacking", false);
-        //_canAttack = false; 
         brain.SetBehaviour("Movement");
     }
 
