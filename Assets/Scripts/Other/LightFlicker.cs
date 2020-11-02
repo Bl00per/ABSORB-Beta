@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightFlicker : MonoBehaviour
@@ -12,7 +11,6 @@ public class LightFlicker : MonoBehaviour
     public float maxTimeBetweenFlickers = 0.5f;
 
     private Light _lightObject;
-    //private bool _flicker = true;
     private float _maxRange;
     private float _randNumber;
     private float _tempTimer;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
 
 public class SlowMotionManager : MonoBehaviour
@@ -12,7 +10,6 @@ public class SlowMotionManager : MonoBehaviour
     private float tempSlowMoPercentage = 0.0f;
     private float currentTimeScale;
     private float defaultTimeScale = 1.0f;
-    //private bool activateSlowmo = false;
     public AudioMixer _mixer;
 
     private enum SlowMotionState
