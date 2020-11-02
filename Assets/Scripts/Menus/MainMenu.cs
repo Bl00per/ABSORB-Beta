@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
+    public Color sliderColor;
     [Header("Sensitivity Sliders")]
     public Slider sensitivityXSlider;
     public Slider sensitivityYSlider;
@@ -30,6 +31,11 @@ public class MainMenu : MonoBehaviour
     [Header("For Debug Purposes")]
     public bool disableMenu = false;
 
+    [Header("ALL BUTTONS")]
+    [SerializeField]
+    private GameObject[] menuButtons;
+    private Animator[] buttonAnimator;
+
     private PlayerHandler _playerHandler;
     private LocomotionHandler _locomotionHandler;
     private CameraManager _cameraManager;
@@ -37,7 +43,6 @@ public class MainMenu : MonoBehaviour
     private InputManager _inputManager;
     private ReadWriteText _readWrite;
     private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null, _sensXSliderFill = null, _sensYSliderFill = null;
-    public Color sliderColor;
     [HideInInspector]
     public bool inMainMenu = true;
     private float cameraSensX = 0f;     // Keep track of current sensitivity
@@ -70,6 +75,12 @@ public class MainMenu : MonoBehaviour
         // If you exit in and out of settings the camera speeds will be set to zero if this isnt here
         cameraSensX = defaultSensX;
         cameraSensY = defaultSensY;
+
+        buttonAnimator = new Animator[menuButtons.Length];
+        for (int i = 0; i < menuButtons.Length; i++)
+        {
+            buttonAnimator[i] = menuButtons[i].GetComponent<Animator>();
+        }
 
         _masterSliderFill = masterVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
         _musicSliderFill = musicVolumeSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>();
@@ -141,25 +152,41 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
         //UnityEditor.EditorApplication.ExitPlaymode();
+    }
 
+    private void ResetButtonAnimator()
+    {
+        for (int i = 0; i < buttonAnimator.Length; i++)
+        {
+            buttonAnimator[i].SetTrigger("Normal");
+            menuButtons[i].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+        }
     }
 
     // Displays the settings menu
     public void ShowSettings()
     {
         mainSettingsMenu.SetActive(true);
+        ResetButtonAnimator();
         mainMenu.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(settingsFirstSelectedButton);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(settingsFirstSelectedButton);
+        }
     }
 
     public void CloseSettings()
     {
         SaveSettings();
-        mainSettingsMenu.SetActive(false);
         mainMenu.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(settingsClosedButton);
+        ResetButtonAnimator();
+        mainSettingsMenu.SetActive(false);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(settingsClosedButton);
+        }
     }
 
     private void ControllerRecognition()
