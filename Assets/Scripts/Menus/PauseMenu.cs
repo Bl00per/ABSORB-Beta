@@ -28,6 +28,11 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsClosedButton;
     public GameObject quitGameButton;
 
+    [Header("ALL BUTTONS")]
+    [SerializeField]
+    private GameObject[] pauseMenuButtons;
+    private Animator[] buttonAnimator;
+
     [HideInInspector]
     public bool mouseControllerConfirmed;
 
@@ -39,6 +44,7 @@ public class PauseMenu : MonoBehaviour
     private MainMenu _mainMenu;
     private Image _masterSliderFill = null, _musicSliderFill = null, _sfxSliderFill = null, _sensXSliderFill = null, _sensYSliderFill = null;
     private GameObject _quitPopupFirstSelectedButton;
+    private RectTransform _quitButtonYes, _quitButtonNo;
     private float cameraSensX = 0f;     // Keep track of current sensitivity
     private float cameraSensY = 0f;
     private float defaultSensX = 0f;    // For referencing to when setting sensitivity values
@@ -57,6 +63,8 @@ public class PauseMenu : MonoBehaviour
         _readWrite = GetComponent<ReadWriteText>();
         _audioMixer = _mainMenu.audioMixer;
         _quitPopupFirstSelectedButton = quitPopup.transform.GetChild(2).gameObject;
+        _quitButtonYes = quitPopup.transform.GetChild(1).GetComponent<RectTransform>();
+        _quitButtonNo = _quitPopupFirstSelectedButton.GetComponent<RectTransform>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -67,6 +75,12 @@ public class PauseMenu : MonoBehaviour
         // If you exit in and out of settings the camera speeds will be set to zero if this isnt here
         cameraSensX = defaultSensX;
         cameraSensY = defaultSensY;
+
+        buttonAnimator = new Animator[pauseMenuButtons.Length];
+        for (int i = 0; i < pauseMenuButtons.Length; i++)
+        {
+            buttonAnimator[i] = pauseMenuButtons[i].GetComponent<Animator>();
+        }
 
         // This is so I don't have to assign every single fill
         // The fact you can't even change the highlight to be the fill instead of the handle is the bane of my existence
@@ -136,6 +150,7 @@ public class PauseMenu : MonoBehaviour
         {
             Paused = false;
             _inputManager.EnableInput();
+            ResetButtonAnimator();
             pauseMenu.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -147,10 +162,14 @@ public class PauseMenu : MonoBehaviour
             Paused = true;
             _inputManager.DisableInput();
             pauseMenu.SetActive(true);
-            // Clear selected object
-            EventSystem.current.SetSelectedGameObject(null);
-            // Set the play button as the first selected object
-            EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
+            ResetButtonAnimator();
+            if (_inputManager.GetIsUsingController())
+            {
+                // Clear selected object
+                EventSystem.current.SetSelectedGameObject(null);
+                // Set the play button as the first selected object
+                EventSystem.current.SetSelectedGameObject(pauseFirstSelectedButton);
+            }
             // If the controller is connected dont display the cursor, it breaks things
             _cameraManager.DisableCameraMovement();
         }
@@ -165,8 +184,11 @@ public class PauseMenu : MonoBehaviour
     {
         // Enables "Are you sure?" popup
         quitPopup.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(_quitPopupFirstSelectedButton);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(_quitPopupFirstSelectedButton);
+        }
     }
 
     public void QuitConfirm()
@@ -177,9 +199,23 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitDeny()
     {
+        _quitButtonNo.localScale = new Vector3(1,1,1);
+        _quitButtonYes.localScale = new Vector3(1,1,1);
         quitPopup.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(quitGameButton);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(quitGameButton);
+        }
+    }
+
+    private void ResetButtonAnimator()
+    {
+        for (int i = 0; i < buttonAnimator.Length; i++)
+        {
+            buttonAnimator[i].SetTrigger("Normal");
+            pauseMenuButtons[i].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+        }
     }
 
     private void ControllerRecognition()
@@ -216,20 +252,28 @@ public class PauseMenu : MonoBehaviour
     public void OpenSettingsMenu()
     {
         ReadSettings();
+        ResetButtonAnimator();
         pauseMenu.SetActive(false);
         settingsMenu.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(settingFirstSelectedButton);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(settingFirstSelectedButton);
+        }
     }
 
     // Close the settings menu and write the changes to the file despite if a change was made or not
     public void CloseSettingsMenu()
     {
         SaveSettings();
+        ResetButtonAnimator();
         pauseMenu.SetActive(true);
         settingsMenu.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(settingsClosedButton);
+        if (_inputManager.GetIsUsingController())
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(settingsClosedButton);
+        }
     }
 
     // Get the current volume settings (Useful for when we come from the main menu)
