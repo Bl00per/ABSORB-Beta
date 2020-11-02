@@ -197,9 +197,9 @@ MonoBehaviour:
   reviveVFX: {fileID: 2881338021141658861}
   overallFXTime: 1
   bodyMeshRenderer:
-  - {fileID: 8859269995434949090}
+  - {fileID: 0}
   abilityIntensity: 1
-  weaponMeshRenderer: {fileID: 8859269995434949090}
+  weaponMeshRenderer: {fileID: 0}
   weaponCollider: {fileID: 8338199219903466080}
   attackSFX: {fileID: 5525071664485255010}
   attackPE: {fileID: 5707623952544298858}
@@ -570,8 +570,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5416290357217053398}
+  m_Children: []
   m_Father: {fileID: 3671954389950212816}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -823,109 +822,6 @@ Transform:
   m_Father: {fileID: 423595438137095224}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4972153303048960397
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5416290357217053398}
-  - component: {fileID: 8859269995434949090}
-  m_Layer: 0
-  m_Name: Character_Enemy_Elite_Hammer_Mesh
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5416290357217053398
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4972153303048960397}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2292389677661060717}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &8859269995434949090
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4972153303048960397}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 13492d09e9a50d64ba1f14e2b00ba589, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 628795047210932803, guid: 266e953126f30ed4986e91baae27908e, type: 3}
-  m_Bones:
-  - {fileID: 3000622675403524403}
-  - {fileID: 622956975364017655}
-  - {fileID: 6739024372414926987}
-  - {fileID: 478184322427191661}
-  - {fileID: 4760807233591725164}
-  - {fileID: 5759621126804937252}
-  - {fileID: 4617487693709622583}
-  - {fileID: 375007895921603504}
-  - {fileID: 4730539041473789292}
-  - {fileID: 3222438834080438139}
-  - {fileID: 5624512611109845798}
-  - {fileID: 4741940935873194594}
-  - {fileID: 2102208597095482495}
-  - {fileID: 423595438137095224}
-  - {fileID: 6533031519256228442}
-  - {fileID: 6854739614016054639}
-  - {fileID: 7346820550367610057}
-  - {fileID: 364579172847808982}
-  - {fileID: 3426305663010917547}
-  - {fileID: 5757720542659397846}
-  - {fileID: 3940870932392647249}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 3000622675403524403}
-  m_AABB:
-    m_Center: {x: -0.0128977895, y: 2.151273, z: -0.022132725}
-    m_Extent: {x: 1.7010639, y: 1.8974955, z: 0.76491344}
-  m_DirtyAABB: 0
 --- !u!164 &7532146589810204454
 AudioReverbFilter:
   m_ObjectHideFlags: 0
@@ -1442,7 +1338,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
-      objectReference: {fileID: 8859269995434949090}
+      objectReference: {fileID: 0}
     - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -1522,7 +1418,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
-      objectReference: {fileID: 8859269995434949090}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 041620d1d9708cd4e8564fe30753d775, type: 3}
 --- !u!4 &2881338021141658863 stripped
@@ -2203,7 +2099,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
-      objectReference: {fileID: 8859269995434949090}
+      objectReference: {fileID: 0}
     - target: {fileID: 3716781073600009080, guid: ea021ce220c07db4d916e588153d51c4,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -2323,7 +2219,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ShapeModule.m_SkinnedMeshRenderer
       value: 
-      objectReference: {fileID: 8859269995434949090}
+      objectReference: {fileID: 0}
     - target: {fileID: 5378219883035097886, guid: ea021ce220c07db4d916e588153d51c4,
         type: 3}
       propertyPath: VelocityModule.y.scalar
