@@ -345,7 +345,7 @@ public class CombatHandler : MonoBehaviour
         if (_healingPlayer)
         {
             // Grabbing the health from the player
-            float health = _playerHandler.GetCurrentHealth(); // 40.20
+            float health = _playerHandler.GetCurrentHealth();
 
             // Linearly interpolating the current health to the "health to heal to" property
             health = Mathf.Lerp(health, _healthToHealTo, 0.5F / _healthLerpDuration);
@@ -364,9 +364,8 @@ public class CombatHandler : MonoBehaviour
                 _healingPlayer = false;
             }
 
-            _playerHandler.SetCurrentHealth(health); // 40.20
-
-            //Debug.Log(_playerHandler.GetCurrentHealth());
+            // Setting player health to calculated health
+            _playerHandler.SetCurrentHealth(health);
         }
     }
 
@@ -394,8 +393,6 @@ public class CombatHandler : MonoBehaviour
     // Updates the shields FSM
     private void UpdateShieldFSM()
     {
-        // Debug.Log("Just used mechainc: " + _justUsedMechanic);
-
         switch (shieldState)
         {
             case ShieldState.Default:
