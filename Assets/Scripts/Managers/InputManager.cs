@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using XboxCtrlrInput;
 using Cinemachine;
 
@@ -12,7 +11,7 @@ public class InputManager : MonoBehaviour
 
     [Header("Properties")]
     public XboxController controller;
-    public float checkForInputTime = 0.1f;
+    public float inputTime = 0.1f;
     [Range(0, 1)]
     public float triggerDeadZone = 0.1F;
     [HideInInspector]
@@ -49,16 +48,15 @@ public class InputManager : MonoBehaviour
     private int _queriedNumberOfCtrlrs;
     private bool _disableInput = false;  // Allow input as long as input isnt disabled
     private bool _isUsingController;
-    private bool _inputCheck = true;
-
+    Timer timer;
 
     // Start is called before the first frame update
     void Awake()
     {
         controller = XboxController.First;
         _isUsingController = false; // Expecting player to use keyboard and mouse at start
-        _inputCheck = true;
         _cameraManager = FindObjectOfType<CameraManager>();
+        timer = new Timer(inputTime);
 
         // Check if there is a xbox controller connected on awake
         if (!_didQueryNumOfCtrlrs)
@@ -93,16 +91,13 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_inputCheck)
-        {
-
-            StartCoroutine(CheckForInputType());
-        }
+        if (timer.ExpireReset())
+            CheckForInputType();
     }
-        
+
 
     void OnGUI()
-    { 
+    {
         Event e = Event.current;
 
         if (e.keyCode != 0 && _isUsingController)
@@ -112,10 +107,8 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private IEnumerator CheckForInputType()
+    private void CheckForInputType()
     {
-        _inputCheck = false;
-        yield return new WaitForSeconds(checkForInputTime);
         // Check for input on controller and if the input isnt already on controller
         if ((PollControllerButtons() || PollControllerLJoystick() || PollControllerRJoystick()) && !_isUsingController)
         {
@@ -127,7 +120,6 @@ public class InputManager : MonoBehaviour
             _isUsingController = false;
             Debug.LogWarning("Input changed to keyboard");
         }
-        _inputCheck = true;
     }
 
     private bool PollControllerButtons()

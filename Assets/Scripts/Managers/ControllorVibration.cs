@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using XInputDotNetPure;
 public class ControllorVibration : MonoBehaviour
@@ -22,7 +21,7 @@ public class ControllorVibration : MonoBehaviour
 
     public static IEnumerator Vibrate(float leftMotor, float rightMotor, float Time)
     {
-        if (/* controllorVibration */_inputManager.GetIsUsingController())
+        if (_inputManager.GetIsUsingController())
         {
             GamePad.SetVibration(_playerIndex, leftMotor, rightMotor);
 
