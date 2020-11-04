@@ -43,7 +43,7 @@ public class ArenaBarrier : MonoBehaviour
         // Checking for when player touches the barrier trigger
         PlayerActivateBarrier();
 
-        if (!playerHandler.GetIsAlive())
+        if (!playerHandler.GetIsAlive() && !_barrierDisabled)
         {
             StartCoroutine(ResetBarrier());
         }
