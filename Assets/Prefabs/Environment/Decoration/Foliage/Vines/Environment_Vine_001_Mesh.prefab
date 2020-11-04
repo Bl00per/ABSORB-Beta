@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2520694433922383688}
   - component: {fileID: 1537017950738870509}
   - component: {fileID: 3652528042831545383}
+  - component: {fileID: 8926062780521560889}
+  - component: {fileID: 3369726538578755540}
   m_Layer: 0
   m_Name: Environment_Vine_001_Mesh
   m_TagString: Untagged
@@ -80,6 +82,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8926062780521560889
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3004075323295737330}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4205434110377656076, guid: 093d2343b1c78d94890e7ee8debfbc52, type: 3}
+--- !u!54 &3369726538578755540
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3004075323295737330}
+  serializedVersion: 2
+  m_Mass: 2
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &7015758737337605244
 GameObject:
   m_ObjectHideFlags: 0
