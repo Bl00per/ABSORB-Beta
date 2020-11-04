@@ -94,11 +94,15 @@ public class MainMenu : MonoBehaviour
             _playerHandler.enabled = false;
             _combatHandler.enabled = false;
             _locomotionHandler.enabled = false;
+            _playerHandler.GetRigidbody().useGravity = false;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         else
+        {
             Initialise();
+            ActivatePlayer();
+        }
     }
 
     void Update()
@@ -157,7 +161,7 @@ public class MainMenu : MonoBehaviour
         for (int i = 0; i < buttonAnimator.Length; i++)
         {
             buttonAnimator[i].SetTrigger("Normal");
-            menuButtons[i].GetComponent<RectTransform>().localScale = new Vector3(1,1,1);
+            menuButtons[i].GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         }
     }
 
@@ -247,14 +251,19 @@ public class MainMenu : MonoBehaviour
     // Initialise all the variables that have to be set for the mouse controls
     private void Initialise()
     {
-        cutsceneCamera.Priority = 0;
-        _playerHandler.enabled = true;
-        _combatHandler.enabled = true;
-        _locomotionHandler.enabled = true;
         mainMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         inMainMenu = false;
+    }
+
+    public void ActivatePlayer()
+    {
+        cutsceneCamera.Priority = 0;
+        _playerHandler.enabled = true;
+        _combatHandler.enabled = true;
+        _locomotionHandler.enabled = true;
+        _playerHandler.GetRigidbody().useGravity = true;
     }
 
     // Set the volume of the master throught the slider

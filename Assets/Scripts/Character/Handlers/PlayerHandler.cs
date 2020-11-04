@@ -31,6 +31,7 @@ public class PlayerHandler : MonoBehaviour
     public GameObject respawnParticle;
     public ParticleSystem hitParticleSystem;
     public AudioSource hitSFX;
+
     private Animator _animator;
     private Rigidbody _rigidbody;
     private Transform _transform;
@@ -41,12 +42,13 @@ public class PlayerHandler : MonoBehaviour
     private CameraManager _cameraManager;
     private SimpleCameraShakeInCinemachine _simpleCameraShake;
     private CheckPoint _checkpoints;
-    private Vector3 _respawnPosition;
     private CapsuleCollider _capsule;
+    private AbilityHandler _abilityHandler;
+    private MainMenu _mainMenu;
+    private Vector3 _respawnPosition;
     private float _checkPointYLevel;
     private float _playerYLevel;
     private int _defaultDamage;
-    private AbilityHandler _abilityHandler;
 
     Vector3 point = Vector3.zero;
     Vector3 point2 = Vector3.zero;
@@ -72,7 +74,7 @@ public class PlayerHandler : MonoBehaviour
         _simpleCameraShake = FindObjectOfType<SimpleCameraShakeInCinemachine>();
         _checkpoints = FindObjectOfType<CheckPoint>();
         _capsule = GetComponent<CapsuleCollider>();
-        //_currentHealth = maxHealth;
+        _mainMenu = FindObjectOfType<MainMenu>();
         _defaultDamage = primaryAttackDamage;
     }
 
@@ -292,6 +294,11 @@ public class PlayerHandler : MonoBehaviour
     }
 
     public AbilityHandler GetAbilityHandler() => _abilityHandler;
+
+    public void Key_ActivatePlayer()
+    {
+        _mainMenu.ActivatePlayer();   
+    }
 
     #endregion
 
