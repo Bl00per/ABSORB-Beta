@@ -87,14 +87,10 @@ public class InputManager : MonoBehaviour
             isControllerConnected = true;
         else
             isControllerConnected = false;
-    }
 
-    private void LateUpdate()
-    {
         if (timer.ExpireReset())
             CheckForInputType();
     }
-
 
     void OnGUI()
     {
