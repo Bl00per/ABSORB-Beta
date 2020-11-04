@@ -190,7 +190,14 @@ public class ObjectPooler : MonoBehaviour
         if (!_respawnQueue.Contains(handler))
         {
             _inactiveEnemies.Remove(handler);
-            _respawnQueue.Add(handler);
+
+            // If the enemy is a special, then add it to the front of the respawn list.
+            if(handler.GetEnemyType() == EnemyHandler.EnemyType.SPECIAL)
+                _respawnQueue.Insert(0, handler);
+            else
+                _respawnQueue.Add(handler);
+
+            // If this doesn't work, then we can just start the coroutine on the enemy instantly.
         }
     }
 
