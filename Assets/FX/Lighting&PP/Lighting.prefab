@@ -39,7 +39,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 161490030}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -1101,12 +1101,12 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 8
-    angle: 37.858063
+    angle: 17.861897
     length: 191.88
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: -0.3307539, y: 0.1435335, z: -0.00004688278}
+    m_Position: {x: -0.3305692, y: 0.14353351, z: -0.011050645}
     m_Rotation: {x: 0, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
@@ -1929,8 +1929,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.13307539
-      minScalar: -0.06692462
+      scalar: 0.13305692
+      minScalar: -0.06694308
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2035,8 +2035,8 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.10000469
-      minScalar: -0.099995315
+      scalar: 0.101105064
+      minScalar: -0.09889494
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -15366,8 +15366,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436899384}
-  m_LocalRotation: {x: -0.9808658, y: -0.08782064, z: -0.083162025, w: -0.15255798}
-  m_LocalPosition: {x: -39.9, y: 47.6, z: 153.4}
+  m_LocalRotation: {x: -0.9793465, y: -0.09034656, z: -0.099468894, w: -0.15107584}
+  m_LocalPosition: {x: -37.6, y: 48.1, z: 153.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 478720441}
@@ -15375,7 +15375,7 @@ Transform:
   - {fileID: 759972853509710874}
   m_Father: {fileID: 5015080046943718213}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: -196.539, y: -11.4279785, z: -11.898987}
+  m_LocalEulerAnglesHint: {x: -196.137, y: -13.369995, z: -12.445007}
 --- !u!108 &1436899388
 Light:
   m_ObjectHideFlags: 0
@@ -15390,7 +15390,7 @@ Light:
   m_Color: {r: 1, g: 0.79152215, b: 0.6273585, a: 1}
   m_Intensity: 0.8
   m_Range: 191.88
-  m_SpotAngle: 75.716125
+  m_SpotAngle: 35.723793
   m_InnerSpotAngle: 2.1512318
   m_CookieSize: 10
   m_Shadows:
@@ -15451,8 +15451,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useCustomBounds: 0
   bounds:
-    m_Center: {x: -21.67744, y: 20.28865, z: 63.252823}
-    m_Extent: {x: 184.91899, y: 196.69724, z: 157.29865}
+    m_Center: {x: -16.289095, y: 21.434639, z: 64.13791}
+    m_Extent: {x: 89.99644, y: 97.46872, z: 119.43024}
   profile: {fileID: 0}
   customRange: 191.88
   targetCamera: {fileID: 0}
@@ -20540,7 +20540,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 191.88
-  field of view: 75.716125
+  field of view: 35.723793
   orthographic: 0
   orthographic size: 0
   m_Depth: 0
