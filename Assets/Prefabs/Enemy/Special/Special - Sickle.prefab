@@ -1146,10 +1146,9 @@ MonoBehaviour:
   specialEnterAttackStateDistance: 10
   specialAfterAttackSpeed: 7.5
   eliteStartRetreatDistance: 10
-  eliteRetreatDistance: 10
-  attackChance: 1
-  returnToInitalSpeed: 1
-  retreatFromPlayerTimer: 0
+  eliteAttackChance: 1
+  returnToInitialSpeed: 2
+  retreatFromPlayerTimer: 1
   returnToInitialAngularSpeed: 1
 --- !u!114 &5919911638438754550
 MonoBehaviour:
@@ -1164,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swingAnimationName: Attacking
-  specialMovementSpeed: 10
+  specialMovementSpeed: 7.5
   specialStartAnimationDistance: 5
   eliteMovementSpeed: 10
   eliteDashMovementSpeed: 40
