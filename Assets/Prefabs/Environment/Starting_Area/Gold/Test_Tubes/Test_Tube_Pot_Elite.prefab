@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!95 &8882445803281823226
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2465924374149356231}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 05eeaf4949111754ca9d666a53e3421f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7610043995129400994
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,7 +32,7 @@ GameObject:
   - component: {fileID: 8258672361514463095}
   - component: {fileID: 1959700643753317472}
   m_Layer: 0
-  m_Name: Environment_ChamberHammerElite_001_Mesh 1
+  m_Name: Test_Tube_Pot_Elite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,6 +188,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 177588963a353e048a7cd086d2c0fbc1, type: 3}
+--- !u!1 &2465924374149356231 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 177588963a353e048a7cd086d2c0fbc1,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384966353552893846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2986847026392989821 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 177588963a353e048a7cd086d2c0fbc1,

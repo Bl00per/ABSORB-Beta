@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6886594009877913718}
   - component: {fileID: 977601035803076040}
   m_Layer: 0
-  m_Name: Environment_ChamberMinion_001_Mesh 1 (2)
+  m_Name: Test_Tube_Pot_Special
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,6 +95,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.332389, y: 8.356934, z: 4.192119}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &8867317395994759555
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081082822055322864}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e510060608ef22a4a848324abe4fc1bd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &8396644489087469916
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,6 +183,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4ccf2f828e3e414c94f21c76016c7e0, type: 3}
+--- !u!1 &2081082822055322864 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7523160236174781868, guid: b4ccf2f828e3e414c94f21c76016c7e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 8396644489087469916}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2199000471725236150 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7638866842996807402, guid: b4ccf2f828e3e414c94f21c76016c7e0,
