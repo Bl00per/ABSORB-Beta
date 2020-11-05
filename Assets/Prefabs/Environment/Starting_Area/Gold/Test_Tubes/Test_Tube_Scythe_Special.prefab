@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1848938819287784911}
   - component: {fileID: 1038455397276755811}
   m_Layer: 0
-  m_Name: Environment_ChamberMinion_001_Mesh 1
+  m_Name: Test_Tube_Scythe_Special
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,6 +95,25 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4.332389, y: 8.356934, z: 4.192119}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &8303928754390781742
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326948890567028658}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: abb38af6ea4322d469cc18634a4f6de1, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &7788906163343587518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -164,6 +183,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40135b77c2342e6409e98392d628780a, type: 3}
+--- !u!1 &3326948890567028658 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4772815602522871564, guid: 40135b77c2342e6409e98392d628780a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7788906163343587518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9042095651850063213 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1255443223414928851, guid: 40135b77c2342e6409e98392d628780a,
