@@ -248,6 +248,7 @@ GameObject:
   - component: {fileID: 8560588836661058924}
   - component: {fileID: 5228467590182209357}
   - component: {fileID: 5100828416173818932}
+  - component: {fileID: 2020579670331982528}
   m_Layer: 0
   m_Name: Environment_Tree_003_Trunk_Mesh
   m_TagString: Untagged
@@ -316,6 +317,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &2020579670331982528
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171380551908334236}
+  m_Material: {fileID: 13400000, guid: b652c4515c926b74db77d6141f87d1cf, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5360508, y: 8.202854, z: 1.4343759}
+  m_Center: {x: -0.13899863, y: 4.101427, z: -0.10304722}
 --- !u!1 &2479043953842312207
 GameObject:
   m_ObjectHideFlags: 0
