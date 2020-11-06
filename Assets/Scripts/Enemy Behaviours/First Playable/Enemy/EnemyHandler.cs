@@ -45,6 +45,7 @@ public class EnemyHandler : MonoBehaviour
     public Renderer weaponMeshRenderer;
     public Collider weaponCollider;
     public AudioSource attackSFX;
+    public AudioSource sickleAttackSFX;
     public ParticleSystem attackPE;
 
     [Header("Properties")]
@@ -287,7 +288,12 @@ public class EnemyHandler : MonoBehaviour
         attackSFX.PlayOneShot(attackSFX.clip);
 
     }
+    public void key_sickleAttackSFX()
+    {
+        if(sickleAttackSFX != null)
+        sickleAttackSFX.PlayOneShot(attackSFX.clip);
 
+    }
     // Returns the brain of this enemy
     internal AIBrain GetBrain()
     {

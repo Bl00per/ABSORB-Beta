@@ -8,7 +8,8 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject player;
     public GameObject mainMenu;
-    public GameObject mainSettingsMenu;
+    public GameObject mainSettingsMenu, breakPE, breakPE2;
+
     [SerializeField]
     public CinemachineVirtualCamera cutsceneCamera;
     [Header("Settings Menu References")]
@@ -61,7 +62,6 @@ public class MainMenu : MonoBehaviour
         _inputManager = FindObjectOfType<InputManager>();
         inMainMenu = true;
         mainSettingsMenu.SetActive(false);
-
         // // Clear selected object
         // EventSystem.current.SetSelectedGameObject(null);
         // // Set the play button as the first selected object
@@ -95,6 +95,7 @@ public class MainMenu : MonoBehaviour
             _combatHandler.enabled = false;
             _locomotionHandler.enabled = false;
             _playerHandler.GetRigidbody().useGravity = false;
+            _playerHandler.GetRigidbody().isKinematic = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -251,19 +252,25 @@ public class MainMenu : MonoBehaviour
     // Initialise all the variables that have to be set for the mouse controls
     private void Initialise()
     {
+        cutsceneCamera.Priority = 0;
         mainMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         inMainMenu = false;
+        _playerHandler.GetAnimator().SetBool("Break", true);
+        _playerHandler.GetAnimator().SetBool("Start", false);
     }
 
     public void ActivatePlayer()
     {
-        cutsceneCamera.Priority = 0;
         _playerHandler.enabled = true;
         _combatHandler.enabled = true;
         _locomotionHandler.enabled = true;
         _playerHandler.GetRigidbody().useGravity = true;
+        _playerHandler.GetRigidbody().isKinematic = false;
+        _playerHandler.GetAnimator().SetBool("Break", false);
+        breakPE.SetActive(true);
+        breakPE2.SetActive(true);
     }
 
     // Set the volume of the master throught the slider
