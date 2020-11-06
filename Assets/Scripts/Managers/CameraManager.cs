@@ -10,6 +10,8 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook controllerCamera;
     public CinemachineFreeLook mouseCamera;
     public CinemachineVirtualCamera deathCamera;
+    public CinemachineVirtualCamera flyCamera;
+    public KeyCode flyCamKey = KeyCode.C;
 
     [HideInInspector]
     public Camera mainCamera;
@@ -19,6 +21,9 @@ public class CameraManager : MonoBehaviour
     public Vignette vignette;
     private bool _controllerUpdated = false;
     private PauseMenu _pauseMenu;
+    private CinemachineFreeLook _previousCam;
+    private FreeFlyCamera _flyCam;
+    private bool _flyCamActive = false;
 
     // Speed shit, please ignore
     private float _tempMouseSpeedY;
@@ -31,6 +36,7 @@ public class CameraManager : MonoBehaviour
     {
         //inputManager = FindObjectOfType<InputManager>();
         _pauseMenu = FindObjectOfType<PauseMenu>();
+        _flyCam = flyCamera.gameObject.GetComponent<FreeFlyCamera>();
 
         // If controller is connected and not overridden
         if (inputManager.GetIsUsingController())
@@ -44,6 +50,8 @@ public class CameraManager : MonoBehaviour
         cameraVolume.profile.TryGet(out vignette);
         _controllerUpdated = inputManager.GetIsUsingController();
         deathCamera.Priority = 0;
+        flyCamera.Priority = 0;
+        _flyCam.active = false;
 
         _tempMouseSpeedY = mouseCamera.m_YAxis.m_MaxSpeed;
         _tempMouseSpeedX = mouseCamera.m_XAxis.m_MaxSpeed;
@@ -83,6 +91,9 @@ public class CameraManager : MonoBehaviour
             inputManager.ManualUpdateController();
             _controllerUpdated = inputManager.GetIsUsingController();
         }
+
+        if (Input.GetKeyDown(flyCamKey))
+            ToggleFlyCamera();
     }
 
     public void SetControllerCamera()
@@ -103,6 +114,30 @@ public class CameraManager : MonoBehaviour
 
         // Set InputManager camera
         inputManager.cinemachine = mouseCamera;
+    }
+
+    public void ToggleFlyCamera()
+    {
+        _flyCamActive = !_flyCamActive;
+
+        if (_flyCamActive)
+        {
+            _previousCam = GetCurrentCamera();
+            _flyCam.active = true;
+            // Change Camera Priority
+            controllerCamera.Priority = 0;
+            mouseCamera.Priority = 0;
+            flyCamera.Priority = 5;
+        }
+        else
+        {
+            _flyCam.active = false;
+            flyCamera.Priority = 0;
+            if (_previousCam == mouseCamera)
+                SetMouseCamera();
+            else
+                SetControllerCamera();
+        }
     }
 
     public void DisableCameraMovement()
@@ -132,10 +167,10 @@ public class CameraManager : MonoBehaviour
 
     public CinemachineFreeLook GetCurrentCamera()
     {
-        if (mouseCamera.Priority > 0)
-            return mouseCamera;
-        else
+        if (controllerCamera.Priority > 0)
             return controllerCamera;
+        else
+            return mouseCamera;
     }
 
     public CinemachineFreeLook GetControllerCamera()
