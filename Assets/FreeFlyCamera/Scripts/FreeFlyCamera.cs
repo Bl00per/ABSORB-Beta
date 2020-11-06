@@ -12,9 +12,8 @@ public class FreeFlyCamera : MonoBehaviour
 
     [Space]
 
-    [SerializeField]
     [Tooltip("The script is currently active")]
-    private bool _active = true;
+    public bool active = true;
 
     [Space]
 
@@ -105,7 +104,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_active)
+        if (active)
             _wantedMode = CursorLockMode.Locked;
     }
 
@@ -144,7 +143,7 @@ public class FreeFlyCamera : MonoBehaviour
 
     private void Update()
     {
-        if (!_active)
+        if (!active)
             return;
 
         SetCursorState();
@@ -167,16 +166,16 @@ public class FreeFlyCamera : MonoBehaviour
             if (Input.GetKey(_boostSpeed))
                 currentSpeed = _boostedSpeed;
 
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(KeyCode.UpArrow))
                 deltaPosition += transform.forward;
 
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(KeyCode.DownArrow))
                 deltaPosition -= transform.forward;
 
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(KeyCode.LeftArrow))
                 deltaPosition -= transform.right;
 
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(KeyCode.RightArrow))
                 deltaPosition += transform.right;
 
             if (Input.GetKey(_moveUp))
