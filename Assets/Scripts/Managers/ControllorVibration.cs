@@ -1,27 +1,32 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using XInputDotNetPure;
+
 public class ControllorVibration : MonoBehaviour
 {
     public static PlayerIndex _playerIndex;
     public static bool controllorVibration = true;
+    private Toggle vibrationToggle;
 
     static private InputManager _inputManager;
 
-    void Start()
+    void Awake()
     {
         _inputManager = FindObjectOfType<InputManager>();
+        vibrationToggle = FindObjectOfType<Toggle>();
+        vibrationToggle.isOn = controllorVibration;
     }
 
 
-    public void VibrationCheck(bool check)
+    public void ControllorVibrationToggle()
     {
-        controllorVibration =! controllorVibration; 
+        controllorVibration = !controllorVibration; 
     }
 
     public static IEnumerator Vibrate(float leftMotor, float rightMotor, float Time)
     {
-        if (_inputManager.GetIsUsingController())
+        if (controllorVibration && _inputManager.GetIsUsingController())
         {
             GamePad.SetVibration(_playerIndex, leftMotor, rightMotor);
 
