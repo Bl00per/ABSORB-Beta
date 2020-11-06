@@ -47,6 +47,7 @@ public class EndCutscene : MonoBehaviour
     {
         // Play animation?
         _mouseCamera.Priority = 0;
+        _controllerCamera.Priority = 0;
         cutsceneCamera.Priority = 1;
         _playerHandler.enabled = false;
         _combatHandler.enabled = false;
