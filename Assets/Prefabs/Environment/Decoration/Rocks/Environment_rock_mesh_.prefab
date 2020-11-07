@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 3616971180506508903}
   - component: {fileID: 8231734327398278349}
   - component: {fileID: 4762266716669212567}
-  - component: {fileID: 1156129719152185885}
+  - component: {fileID: 3772445024403554961}
+  - component: {fileID: 4778806574006092582}
   m_Layer: 0
   m_Name: Environment_rock_mesh_low
   m_TagString: Untagged
@@ -80,8 +81,24 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1156129719152185885
-MeshCollider:
+--- !u!54 &3772445024403554961
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156129719152185874}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &4778806574006092582
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,10 +107,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6967731073721728968, guid: 4e2718b9cba110d49aac91d72268b70a, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.4279025
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3391782511791129954
 GameObject:
   m_ObjectHideFlags: 0
