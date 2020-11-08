@@ -43,7 +43,7 @@ public class GroupWander : GroupState
         {
             e.GetBrain().SetBehaviour("Idle");
             AIBehaviour movement = e.GetBrain().GetAIBehaviour("Movement");
-            movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius), 1.0f);
+            movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius));
         }
     }
 
@@ -55,7 +55,7 @@ public class GroupWander : GroupState
             EnemyHandler randEnemy = this.enemyGroupHandler.GetActiveEnemy(Random.Range(0, enemyGroupHandler.GetEnemies().Count));
             randEnemy.GetBrain().SetBehaviour("Idle");
             AIBehaviour movement = randEnemy.GetBrain().GetAIBehaviour("Movement");
-            movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius), 1.0f);
+            movement.OverrideDestination(GetRandomizedPositionAroundCenter(wanderRadiusCenter.position, wanderRadius));
         }
     }
 

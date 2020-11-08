@@ -78,7 +78,7 @@ public class PotMovement : AIBehaviour
         _startedRetreat = true;
         brain.GetNavMeshAgent().angularSpeed = 0.0f;
         yield return new WaitForSeconds(returnToPositionTimer);
-        OverrideDestination(position, 1.0f); ;
+        OverrideDestination(position); ;
         yield return new WaitForSeconds(returnToInitialAngularSpeedTimer);
         brain.GetNavMeshAgent().angularSpeed = _initialAngularSpeed;
         _startedRetreat = false;

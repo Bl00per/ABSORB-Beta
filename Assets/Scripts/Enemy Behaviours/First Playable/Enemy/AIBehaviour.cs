@@ -31,7 +31,7 @@ public abstract class AIBehaviour : MonoBehaviour
     abstract public void OnStateExit();
 
     // Moves the nav mesh agent to the new destination, also unlocking the "locked to player" flag
-    public void OverrideDestination(Vector3 newDestination, float newDestinationPadding)
+    public void OverrideDestination(Vector3 newDestination, float newDestinationPadding = 1.0f)
     {
         destinationLockedToPlayer = false;
         currentDestination = newDestination;
@@ -39,7 +39,7 @@ public abstract class AIBehaviour : MonoBehaviour
     }
 
     // Locks the nav mesh agents destination to the player
-    public void LockDestinationToPlayer(float newDestinationPadding)
+    public void LockDestinationToPlayer(float newDestinationPadding = 1.0f)
     {
         destinationLockedToPlayer = true;
         currentDestination = brain.PlayerTransform.position;
