@@ -5,8 +5,10 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour
 {
     //public Trigger triggerBox;
+    [Header("References")]
     public Transform spawnPosition;
-
+    public EnemyGroupHandler[] enemyGroupHandler;
+    public Transform enemyRetreatToPosition;
     private PlayerHandler _playerHandler;
 
     // Start is called before the first frame update
@@ -15,25 +17,14 @@ public class CheckPoint : MonoBehaviour
         _playerHandler = FindObjectOfType<PlayerHandler>();
     }
 
-    // void Update()
-    // {
-    //     // if (triggerBox.Enabled && triggerBox.Collider.CompareTag("Player"))
-    //     // {
-    //     //     Debug.Log("Player walked through trigger");
-    //     //     _playerHandler.SetRespawnPosition(this.spawnPosition.position);
-    //     // }
-    // }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //Debug.Log("Player walked through trigger");
-            _playerHandler.SetRespawnPosition(this.spawnPosition.position);
-            Rigidbody rb = other.GetComponent<Rigidbody>();
-            //rb.constraints = RigidbodyConstraints.None;
+            _playerHandler.SetRespawnPosition(spawnPosition.position);
 
-
+            foreach(EnemyGroupHandler group in enemyGroupHandler)
+                group.SetState(EnemyGroupHandler.GroupState.RETREAT);
         }
     }
 

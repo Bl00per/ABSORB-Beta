@@ -144,7 +144,7 @@ public class SickleAttack : AIBehaviour
 
                 brain.GetNavMeshAgent().speed = eliteDashMovementSpeed;
                 brain.GetNavMeshAgent().angularSpeed = 0.0f;
-                OverrideDestination(_dashDestination, 1.0f);
+                OverrideDestination(_dashDestination);
                 _isDashing = true;
             }
             // Move towards player if not dashing or within start dash distance

@@ -38,7 +38,7 @@ public class SpecialMovement : AIBehaviour
         {
             Vector3 avoidDirection = (brain.PlayerTransform.position - transform.position).normalized;
             Vector3 avoidDestination = transform.position - (avoidDirection * avoidDistance);
-            this.OverrideDestination(avoidDestination, 1.0f);
+            OverrideDestination(avoidDestination);
             _isAvoiding = true;
         }
     }

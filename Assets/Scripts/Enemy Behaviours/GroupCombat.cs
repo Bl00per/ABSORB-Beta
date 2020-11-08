@@ -30,7 +30,7 @@ public class GroupCombat : GroupState
         // If the player isn't alive, return to wander state
         if (!playerHandler.GetIsAlive())
         {
-            enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
+            enemyGroupHandler.SetState(EnemyGroupHandler.GroupState.WANDER);
         }
 
         if (_unitSlots.Count <= 0)
@@ -39,7 +39,7 @@ public class GroupCombat : GroupState
         // If the first index's distance from the player is greater than returnToChaseDistance, then return to chasing the player
         if (Vector3.Distance(_unitSlots[0].transform.position, enemyGroupHandler.playerTransform.position) >= returnToChaseDistance)
         {
-            enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.CHASE);
+            enemyGroupHandler.SetState(EnemyGroupHandler.GroupState.CHASE);
         }
 
         // Setting up an enemy for an attack
@@ -69,7 +69,7 @@ public class GroupCombat : GroupState
             aiBrain.transform.forward = (_positionFix - aiBrain.transform.position).normalized;
 
             // Moving enemy to a new passive position
-            aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(enemyGroupHandler.playerTransform.position, i), 1.0f);
+            aiBrain.GetAIBehaviour("Movement").OverrideDestination(GetPositionAroundPoint(enemyGroupHandler.playerTransform.position, i));
         }
     }
 
