@@ -22,8 +22,8 @@ public class CameraManager : MonoBehaviour
     private bool _controllerUpdated = false;
     private PauseMenu _pauseMenu;
     private CinemachineFreeLook _previousCam;
-    private FreeFlyCamera _flyCam;
-    private bool _flyCamActive = false;
+   // private FreeFlyCamera _flyCam;
+   // private bool _flyCamActive = false;
 
     // Speed shit, please ignore
     private float _tempMouseSpeedY;
@@ -36,7 +36,7 @@ public class CameraManager : MonoBehaviour
     {
         //inputManager = FindObjectOfType<InputManager>();
         _pauseMenu = FindObjectOfType<PauseMenu>();
-        _flyCam = flyCamera.gameObject.GetComponent<FreeFlyCamera>();
+       // _flyCam = flyCamera.gameObject.GetComponent<FreeFlyCamera>();
 
         // If controller is connected and not overridden
         if (inputManager.GetIsUsingController())
@@ -50,8 +50,8 @@ public class CameraManager : MonoBehaviour
         cameraVolume.profile.TryGet(out vignette);
         _controllerUpdated = inputManager.GetIsUsingController();
         deathCamera.Priority = 0;
-        flyCamera.Priority = 0;
-        _flyCam.active = false;
+        //flyCamera.Priority = 0;
+        //_flyCam.active = false;
 
         _tempMouseSpeedY = mouseCamera.m_YAxis.m_MaxSpeed;
         _tempMouseSpeedX = mouseCamera.m_XAxis.m_MaxSpeed;
@@ -92,8 +92,8 @@ public class CameraManager : MonoBehaviour
             _controllerUpdated = inputManager.GetIsUsingController();
         }
 
-        if (Input.GetKeyDown(flyCamKey))
-            ToggleFlyCamera();
+/*        if (Input.GetKeyDown(flyCamKey))
+            ToggleFlyCamera();*/
     }
 
     public void SetControllerCamera()
@@ -116,7 +116,7 @@ public class CameraManager : MonoBehaviour
         inputManager.cinemachine = mouseCamera;
     }
 
-    public void ToggleFlyCamera()
+/*    public void ToggleFlyCamera()
     {
         _flyCamActive = !_flyCamActive;
 
@@ -138,7 +138,7 @@ public class CameraManager : MonoBehaviour
             else
                 SetControllerCamera();
         }
-    }
+    }*/
 
     public void DisableCameraMovement()
     {
