@@ -89,10 +89,11 @@ public class ArenaBarrier : MonoBehaviour
         BarrierInactive();
 
         float elapsedTime = 0;
+        float startVolume = battleMusic.volume;
+        float targetVolume = 0;
         while (elapsedTime < musicFadeOutTime)
         {
-            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapsedTime / musicFadeOutTime));
-            battleMusic.volume = volume;
+            battleMusic.volume = Mathf.Lerp(startVolume, targetVolume, (elapsedTime / musicFadeOutTime));
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -107,10 +108,11 @@ public class ArenaBarrier : MonoBehaviour
         BarrierInactive();
 
         float elapsedTime = 0;
+        float startVolume = battleMusic.volume;
+        float targetVolume = 0;
         while (elapsedTime < musicFadeOutTime)
         {
-            float volume = Mathf.Lerp(battleMusic.volume, 0, (elapsedTime / musicFadeOutTime));
-            battleMusic.volume = volume;
+            battleMusic.volume = Mathf.Lerp(startVolume, targetVolume, (elapsedTime / musicFadeOutTime));
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

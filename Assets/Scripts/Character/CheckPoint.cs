@@ -24,7 +24,10 @@ public class CheckPoint : MonoBehaviour
             _playerHandler.SetRespawnPosition(spawnPosition.position);
 
             foreach(EnemyGroupHandler group in enemyGroupHandler)
-                group.SetState(EnemyGroupHandler.GroupState.RETREAT);
+            {
+                if(group.GetCurrentState() == EnemyGroupHandler.GroupState.COMBAT)
+                    group.SetState(EnemyGroupHandler.GroupState.RETREAT);
+            }
         }
     }
 
