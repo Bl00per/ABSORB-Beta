@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 209128269058480734}
   - component: {fileID: 3839638194542220795}
   - component: {fileID: 1345966960795902257}
+  - component: {fileID: 1630687013463382189}
   m_Layer: 0
   m_Name: Environment_Solaris_Stand_Mesh
   m_TagString: Untagged
@@ -79,3 +80,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &1630687013463382189
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697259292654911716}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8515497300763149683, guid: 3d87b6e2697afce4d8ac45852a7e8b32, type: 3}

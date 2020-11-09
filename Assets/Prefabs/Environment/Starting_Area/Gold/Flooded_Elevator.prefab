@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5953731143646195368}
   - component: {fileID: 6884814782351795095}
   - component: {fileID: 1975632327707583881}
-  - component: {fileID: 8860580683568721085}
+  - component: {fileID: 9122957838662009712}
   m_Layer: 0
   m_Name: Black_Hole
   m_TagString: Untagged
@@ -80,8 +80,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &8860580683568721085
-CapsuleCollider:
+--- !u!64 &9122957838662009712
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,10 +90,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7778397873252697260
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 6969807558384147990}
   - component: {fileID: 6275309365467468211}
   - component: {fileID: 8138734427800741241}
+  - component: {fileID: 6099254625637058852}
   m_Layer: 0
   m_Name: Flooded_Elevator
   m_TagString: Untagged
@@ -177,6 +178,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &6099254625637058852
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778397873252697260}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1169824134912284084, guid: df532dbe62c389e45b93cdb31c6547b5, type: 3}
 --- !u!1 &9129713631899026911
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +203,7 @@ GameObject:
   - component: {fileID: 580473831542238375}
   - component: {fileID: 3907645562218613002}
   - component: {fileID: 1609682725885489808}
-  - component: {fileID: 5067320436324997263}
+  - component: {fileID: 7582317093038596435}
   m_Layer: 0
   m_Name: Flood_Pool
   m_TagString: Untagged
@@ -257,8 +272,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &5067320436324997263
-CapsuleCollider:
+--- !u!64 &7582317093038596435
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -267,7 +282,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
