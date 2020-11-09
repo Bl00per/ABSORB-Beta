@@ -39,7 +39,7 @@ public class SickleMovement : AIBehaviour
         brain.GetNavMeshAgent().speed = _initialSpeed;
 
         if (brain.GetLastStateID() == "Attack" && enemyHandler.GetPlayerHandler().GetIsAlive())
-            this.LockDestinationToPlayer(1.0f);
+            this.LockDestinationToPlayer();
     }
 
     public override void OnStateUpdate()

@@ -103,7 +103,7 @@ public class SickleAttack : AIBehaviour
     private void UpdateSpecial()
     {
         // Setting the target destination
-        this.LockDestinationToPlayer(1.0f);
+        this.LockDestinationToPlayer();
 
         // Checking if the player is close enough to start the animation sequence
         if (DetermineAttackFromPlayerVelocity())
@@ -151,7 +151,7 @@ public class SickleAttack : AIBehaviour
             else
             {
                 if(enemyHandler.GetPlayerHandler().GetIsAlive())
-                    this.LockDestinationToPlayer(1.0f);
+                    this.LockDestinationToPlayer();
                 else
                     brain.SetBehaviour("Movement");
             }
