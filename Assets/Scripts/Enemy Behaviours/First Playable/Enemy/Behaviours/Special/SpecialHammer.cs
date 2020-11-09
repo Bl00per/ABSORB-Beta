@@ -6,7 +6,6 @@ public class SpecialHammer : AIBehaviour
 {
     [Header("Properties")]
     public float movementSpeed = 10.0f;
-    public float destinationPadding = 3.0f;
     public float startSwingDistance = 5.0f;
     public float animationSequenceTime = 3.0f;
     public string swingAnimationName = "Attacking";
@@ -31,7 +30,7 @@ public class SpecialHammer : AIBehaviour
         brain.GetNavMeshAgent().speed = movementSpeed;
 
         // Setting the target destination
-        this.OverrideDestination(brain.PlayerTransform.position, destinationPadding);
+        OverrideDestination(brain.PlayerTransform.position);
     }
 
     public override void OnStateUpdate()

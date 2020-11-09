@@ -7,17 +7,15 @@ public class ControllorVibration : MonoBehaviour
 {
     public static PlayerIndex _playerIndex;
     public static bool controllorVibration = true;
-    private Toggle vibrationToggle;
+    public Toggle vibrationToggle;
 
     static private InputManager _inputManager;
 
     void Awake()
     {
         _inputManager = FindObjectOfType<InputManager>();
-        vibrationToggle = FindObjectOfType<Toggle>();
         vibrationToggle.isOn = controllorVibration;
     }
-
 
     public void ControllorVibrationToggle()
     {

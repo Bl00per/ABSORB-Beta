@@ -19,7 +19,7 @@ public class GroupChase : GroupState
         // If the group is too far from the player, enter back into chase state
         if (!playerHandler.GetIsAlive())
         {
-            enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.WANDER);
+            enemyGroupHandler.SetState(EnemyGroupHandler.GroupState.WANDER);
             return;
         }
 
@@ -32,7 +32,7 @@ public class GroupChase : GroupState
 
         // Check the distance from the closet enemy to the player
         if (Vector3.Distance(_unitSlots[0].transform.position, this.enemyGroupHandler.playerTransform.position) < distanceToEnterCombat)
-            this.enemyGroupHandler.SetState(EnemyGroupHandler.E_GroupState.COMBAT);
+            this.enemyGroupHandler.SetState(EnemyGroupHandler.GroupState.COMBAT);
     }
 
     // Adds the active group of enemies into the unit slots

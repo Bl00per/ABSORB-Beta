@@ -31,7 +31,7 @@ public class DefaultIdle : AIBehaviour
         enemyHandler.GetPlayerHandler().GetIsAlive()) // Is the player within the auto detection radius?
         {
             // If the enemy's group handler isn't null, set the state to chase
-            brain.GetHandler().GetEnemyGroupHandler()?.SetState(EnemyGroupHandler.E_GroupState.CHASE);
+            brain.GetHandler().GetEnemyGroupHandler()?.SetState(EnemyGroupHandler.GroupState.CHASE);
 
             // Lock the enemy onto the player
             brain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
