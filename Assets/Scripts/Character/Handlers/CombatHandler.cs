@@ -427,17 +427,9 @@ public class CombatHandler : MonoBehaviour
 
     private void Cooldown()
     {
-        shieldCooldown -= Time.deltaTime;
         _animator.SetBool("Shield", false);
-
-        //StartJustUsedMechanic(shieldAttackWindow);
-        if (shieldCooldown <= 0)
-        {
-            shieldCooldown = _tempShieldCDTimer;
-            shieldState = ShieldState.Default;
-            _canShield = true;
-
-        }
+        _canShield = true;
+        shieldState = ShieldState.Default;
     }
 
     public void StartJustUsedMechanic(float time)
