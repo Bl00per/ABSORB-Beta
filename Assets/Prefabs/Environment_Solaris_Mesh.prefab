@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5265148014027762952}
   - component: {fileID: 9132820297801884333}
   - component: {fileID: 6438666311796364903}
+  - component: {fileID: 7436539319320142487}
   m_Layer: 0
   m_Name: Environment_Solaris_Mesh
   m_TagString: Untagged
@@ -80,6 +81,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &7436539319320142487
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4781204965572622258}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8876831498092461179, guid: 04b569d94343ad94d93d899db4020b40, type: 3}
 --- !u!1 &5664166329712637887
 GameObject:
   m_ObjectHideFlags: 0

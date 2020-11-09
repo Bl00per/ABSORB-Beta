@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5464523848806342977}
   - component: {fileID: 3118576320530701655}
   - component: {fileID: 3639837047015906957}
+  - component: {fileID: 3835805511559921975}
   m_Layer: 0
   m_Name: pCube1
   m_TagString: Untagged
@@ -79,6 +80,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3835805511559921975
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194711698415710911}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4068373912626513877, guid: e6dce24165d93eb43a124cf1816f5cc0, type: 3}
 --- !u!1 &1553499685250050749
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,7 +136,6 @@ GameObject:
   - component: {fileID: 2834658939700717438}
   - component: {fileID: 5171311695025593192}
   - component: {fileID: 6773436619825289394}
-  - component: {fileID: 6375258021605761270}
   m_Layer: 0
   m_Name: Cliff 1
   m_TagString: Untagged
@@ -191,17 +205,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6375258021605761270
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8941668087853085824}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4068373912626513877, guid: 4687da98118dc4948816994ec8f5ed29, type: 3}
