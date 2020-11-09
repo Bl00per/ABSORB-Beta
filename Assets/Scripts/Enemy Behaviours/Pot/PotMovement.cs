@@ -47,6 +47,8 @@ public class PotMovement : AIBehaviour
                 Vector3 retreatPosition = transform.position - (-brain.GetDirectionToPlayer() * GetRetreatDistance());
                 StartCoroutine(Retreat(retreatPosition, retreatFromPlayerTimer, returnToInitialAngularSpeed));
             }
+
+            Debug.Log("Retreating");
         }
         else if (distance <= enterAttackStateDistance && !_startedRetreat && !_projectile.GetCleanUp())
         {
@@ -55,17 +57,21 @@ public class PotMovement : AIBehaviour
 
             if (enemyHandler.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
                 enemyHandler.GetEnemyGroupHandler()?.ForceAllEnemiesToRetreat(enemyHandler);
+
+            Debug.Log("Attacking");
         }
         else if (_hasAttacked && !_startedRetreat)
         {
-            if (enemyHandler.GetPlayerHandler().GetIsAlive())
+            if (enemyHandler.GetPlayerHandler().GetIsAlive() && distance > enterAttackStateDistance)
             {
                 this.LockDestinationToPlayer(1.0f);
+                Debug.Log("Moving towards player");
             }
             else
             {
                 _hasAttacked = false;
             }
+
         }
     }
 
