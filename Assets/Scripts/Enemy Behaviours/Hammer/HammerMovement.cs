@@ -62,7 +62,7 @@ public class HammerMovement : AIBehaviour
         {
             if (enemyHandler.GetPlayerHandler().GetIsAlive())
             {
-                this.LockDestinationToPlayer(1.0f);
+                this.LockDestinationToPlayer();
             }
             else
             {

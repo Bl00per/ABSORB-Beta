@@ -34,7 +34,7 @@ public class DefaultIdle : AIBehaviour
             brain.GetHandler().GetEnemyGroupHandler()?.SetState(EnemyGroupHandler.GroupState.CHASE);
 
             // Lock the enemy onto the player
-            brain.GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+            brain.GetAIBehaviour("Movement").LockDestinationToPlayer();
 
             // Setting the enemy into their movement state
             brain.SetBehaviour("Movement");
