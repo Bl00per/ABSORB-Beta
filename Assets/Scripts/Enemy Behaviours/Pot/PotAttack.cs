@@ -24,6 +24,7 @@ public class PotAttack : AIBehaviour
     private PotMovement _potMovement;
     private EliteProjectile _projectile;
     private bool _startedRetreatTimer = false;
+    private float _initSpeed = 0.0f;
 
     public void Awake()
     {
@@ -35,10 +36,13 @@ public class PotAttack : AIBehaviour
     {
         _animator = enemyHandler.GetAnimator();
         _orbParent = projectilePrefab.transform.parent;
+        _initSpeed = enemyHandler.GetBrain().GetNavMeshAgent().angularSpeed;
     }
 
     public override void OnStateEnter()
     {
+        enemyHandler.GetBrain().GetNavMeshAgent().angularSpeed = 0.0f;
+
         _animator.SetBool("Attacking", true);
         switch (enemyHandler.GetEnemyType())
         {
@@ -54,6 +58,8 @@ public class PotAttack : AIBehaviour
 
     public override void OnStateExit()
     {
+        enemyHandler.GetBrain().GetNavMeshAgent().angularSpeed = _initSpeed;
+
         _animator.SetBool("Attacking", false);
         switch (enemyHandler.GetEnemyType())
         {
@@ -70,6 +76,8 @@ public class PotAttack : AIBehaviour
 
     public override void OnStateUpdate()
     {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), 0.20F);
+
         if (brain.GetDistanceToPlayer() <= _potMovement.enterAttackStateDistance + 1.0f)
         {
             switch (enemyHandler.GetEnemyType())
@@ -85,10 +93,6 @@ public class PotAttack : AIBehaviour
             }
             return;
         }
-
-        // Rotate to face direction
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(brain.GetDirectionToPlayer()), turnSpeed);
-
     }
     public IEnumerator RetreatFromPlayer()
     {
