@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
     public Color sliderColor;
+    public AudioSource buttonPressSound;
     [Header("Sensitivity Sliders")]
     public Slider sensitivityXSlider;
     public Slider sensitivityYSlider;
@@ -327,5 +328,10 @@ public class MainMenu : MonoBehaviour
         // Controller Camera
         _cameraManager.controllerCamera.m_XAxis.m_MaxSpeed = cameraSensX;
         _cameraManager.controllerCamera.m_YAxis.m_MaxSpeed = cameraSensY;
+    }
+
+    public void PlayButtonSoundEffect()
+    {
+        buttonPressSound.Play();
     }
 }
