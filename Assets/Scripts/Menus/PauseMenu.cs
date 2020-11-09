@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject quitPopup;
     public GameObject controllerDisconnectedPopup;
+    public AudioSource buttonPressSound;
     [Header("Settings Menu References")]
     public Slider masterVolumeSlider;
     public Slider musicVolumeSlider;
@@ -242,6 +243,11 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    public void PlayButtonSoundEffect()
+    {
+        buttonPressSound.Play();
     }
 
     #endregion
