@@ -30,7 +30,7 @@ public class GroupRetreat : GroupState
     public override void OnStateUpdate()
     {
         // Checking the distance from the center of mass to the retreat destination
-        if(enemyGroupHandler.GetCOMDistanceFromPlayer() <= distanceFromPosition)
+        if(Vector3.Distance(enemyGroupHandler.GetCenterOfMass(), retreatPosition.position) <= distanceFromPosition)
         {
             enemyGroupHandler.SetState(EnemyGroupHandler.GroupState.WANDER);
             return;
