@@ -294,9 +294,9 @@ public class ObjectPooler : MonoBehaviour
         if(!enemy.GetFunctional())
             enemy.SetFunctional(true);
         
-        // // Locking enemy back onto player if they are alive
-        // if(_playerHandler.GetIsAlive())
-        //     enemy.GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer(1.0f);
+        // Locking enemy back onto player if they are alive and the group is still within the combat state
+        if(_playerHandler.GetIsAlive() && _enemyGroupHandler.GetCurrentState() == EnemyGroupHandler.GroupState.COMBAT)
+            enemy.GetBrain().GetAIBehaviour("Movement").LockDestinationToPlayer();
 
         // Setting the spawning flag to false
         _isSpawning = false;

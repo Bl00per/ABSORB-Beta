@@ -84,6 +84,8 @@ public class EliteProjectile : MonoBehaviour
 
         if (_enemyHandler != null && !_enemyHandler.IsAlive() && !_isActive)
         {
+            StopCoroutine(Cleanup());
+            _cleanup = false;
             Reset();
         }
 
