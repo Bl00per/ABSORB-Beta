@@ -58,14 +58,15 @@ public class PotMovement : AIBehaviour
         }
         else if (_hasAttacked && !_startedRetreat)
         {
-            if (enemyHandler.GetPlayerHandler().GetIsAlive())
+            if (enemyHandler.GetPlayerHandler().GetIsAlive() && distance > enterAttackStateDistance)
             {
-                this.LockDestinationToPlayer(1.0f);
+                this.LockDestinationToPlayer();
             }
             else
             {
                 _hasAttacked = false;
             }
+
         }
     }
 

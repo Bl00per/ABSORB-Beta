@@ -25,7 +25,7 @@ public class EliteMovement : AIBehaviour
 
         // Currently setting the on enter destination to the player; in the future we'll have to set the destination from a "EnemyAI Controller"
         if (enemyHandler.GetPlayerHandler().GetIsAlive())
-            this.LockDestinationToPlayer(destinationPadding);
+            this.LockDestinationToPlayer();
     }
 
     public override void OnStateEnter() { }
