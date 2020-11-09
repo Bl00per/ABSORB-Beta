@@ -504,6 +504,16 @@ public class CombatHandler : MonoBehaviour
         // Is the player is dead
         if (!_playerHandler.GetIsAlive() && !_respawning && _playerHandler.GetCurrentHealth() <= 0)
         {
+            
+            // Disabling all player weapons on death
+            playerWeapon.enabled = false;
+            playerWeaponColl.enabled = false;
+            playerWeapon2.enabled = false;
+            playerWeaponColl3.enabled = false;
+            playerWeapon2.enabled = false;
+            playerWeaponColl3.enabled = false;
+
+
             _respawning = true;
             _inputManager.DisableInput();
             _playerHandler.GetCameraManager().DisableCameraMovement(); // TEMPORARY FOR NOW
