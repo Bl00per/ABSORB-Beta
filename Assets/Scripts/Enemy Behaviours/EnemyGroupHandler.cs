@@ -191,19 +191,31 @@ public class EnemyGroupHandler : MonoBehaviour
     // Returns the groups center of mass
     public Vector3 CalculateCenterOfMass()
     {
-        // Iterate over each enemy and calculate the center of mass
-        Vector3 result = Vector3.zero;
-        float sumOfAllWeights = 0.0f;
-        Rigidbody enemyRigidbody;
-        foreach (EnemyHandler enemy in _activeEnemies)
-        {
-            enemyRigidbody = enemy.GetRigidbody();
-            result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
-            sumOfAllWeights += enemyRigidbody.mass;
-        }
+        // // Iterate over each enemy and calculate the center of mass
+        // Vector3 result = Vector3.zero;
+        // float sumOfAllWeights = 0.0f;
+        // Rigidbody enemyRigidbody;
+        // foreach (EnemyHandler enemy in _activeEnemies)
+        // {
+        //     enemyRigidbody = enemy.GetRigidbody();
+        //     result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
+        //     sumOfAllWeights += enemyRigidbody.mass;
+        // }
 
-        // Returning the center of mass
-        return result /= sumOfAllWeights;
+        // // Returning the center of mass
+        // return result /= sumOfAllWeights;
+
+        // OPTIMIZED FUNCTION
+
+        // Creating a local vector to store the result in
+        Vector3 result = Vector3.zero;
+
+        // Iterating over each enemy and adding the position to the result
+        foreach(EnemyHandler e in _activeEnemies)
+            result += e.transform.position;
+
+        // Returning the result devided by the enemy count, giving us the center of the group
+        return result /= _activeEnemies.Count;
     }
 
     // Forces all active enemies to retreat / not attack
@@ -266,4 +278,7 @@ public class EnemyGroupHandler : MonoBehaviour
 
     // Returns the object pool attached to the same object as this component
     public ObjectPooler GetObjectPooler() => _objectPooler;
+
+    // Returns the current state of the group handler
+    public GroupState GetCurrentState() => _currentState;
 }
