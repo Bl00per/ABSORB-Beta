@@ -10,7 +10,7 @@ public class EnemyGroupWanderTrigger : MonoBehaviour
         {
             foreach(EnemyGroupHandler group in enemyGroups)
             {
-                group.SetState(EnemyGroupHandler.E_GroupState.WANDER);
+                group.SetState(EnemyGroupHandler.GroupState.WANDER);
             }
         }
     }

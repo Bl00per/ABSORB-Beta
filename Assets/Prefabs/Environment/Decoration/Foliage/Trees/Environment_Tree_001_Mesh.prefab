@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 733630409478075448}
   - component: {fileID: 4432029586063260573}
   - component: {fileID: 1902010138848563031}
-  - component: {fileID: 8191924735828563761}
+  - component: {fileID: 475685126720834128}
   m_Layer: 0
   m_Name: Environment_Tree_001_Mesh
   m_TagString: Untagged
@@ -80,16 +80,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &8191924735828563761
-BoxCollider:
+--- !u!64 &475685126720834128
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100680445467635330}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b652c4515c926b74db77d6141f87d1cf, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.111999, y: 8.60644, z: 5.0436044}
-  m_Center: {x: 0.45097375, y: 3.460909, z: -0.0736053}
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2031995282629431829, guid: a85b99bb829bd5a40ad1f4f1fdad83d3, type: 3}

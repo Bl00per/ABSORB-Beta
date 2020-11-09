@@ -10494,7 +10494,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.9
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -10743,6 +10743,7 @@ MonoBehaviour:
   weaponMeshRenderer: {fileID: 3593453364837397834}
   weaponCollider: {fileID: 4399012327263053344}
   attackSFX: {fileID: 7681235080657279104}
+  sickleAttackSFX: {fileID: 0}
   attackPE: {fileID: 5012530999274022523}
   typeOfEnemy: 0
   typeOfAbility: 0
@@ -10855,13 +10856,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04b828d41ae0004c8577a484605a447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookAtPlayer: 1
   turnSpeed: 0.2
-  weaponTrigger: {fileID: 3862423504091585034}
   weaponToEnable: {fileID: 3862423504091585036}
-  transitionTime: 2
-  timeBeforeAttack: 0.2
-  attackForce: 20
 --- !u!82 &3862423504700199463
 AudioSource:
   m_ObjectHideFlags: 0
@@ -83656,6 +83652,31 @@ PrefabInstance:
     - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
         type: 3}
       propertyPath: lengthInSec
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startSizeY.scalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startSizeY.minScalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3716781073600009080, guid: 041620d1d9708cd4e8564fe30753d775,
+        type: 3}
+      propertyPath: InitialModule.startSizeZ.minScalar
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3716781073600009081, guid: 041620d1d9708cd4e8564fe30753d775,

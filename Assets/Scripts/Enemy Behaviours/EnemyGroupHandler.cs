@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyGroupHandler : MonoBehaviour
 {
-    public enum E_GroupState
+    public enum GroupState
     {
         WANDER,     // All enemies wander around a target destination
         CHASE,      // All enemies chase the player to try get into combat range
@@ -27,9 +27,9 @@ public class EnemyGroupHandler : MonoBehaviour
     public bool debugCurrentState = false;
 
     // FSM variables
-    private GroupState[] _groupStates;
+    private global::GroupState[] _groupStates;
     [Header("READ ONLY")]
-    [SerializeField] private E_GroupState _currentState;
+    [SerializeField] private GroupState _currentState;
 
     // List of enemies within group
     private List<EnemyHandler> _activeEnemies = new List<EnemyHandler>();
@@ -51,22 +51,23 @@ public class EnemyGroupHandler : MonoBehaviour
     private bool _startedRetreatSequence = false;
     private int _attackerID = 0;
 
+
     // Called on initialise
     private void Awake()
     {
         // Populate the group states array
-        _groupStates = new GroupState[(int)E_GroupState.COUNT];
-        _groupStates[(int)E_GroupState.WANDER] = this.GetComponent<GroupWander>();
-        _groupStates[(int)E_GroupState.CHASE] = this.GetComponent<GroupChase>();
-        _groupStates[(int)E_GroupState.COMBAT] = this.GetComponent<GroupCombat>();
-        _groupStates[(int)E_GroupState.RETREAT] = this.GetComponent<GroupRetreat>();
+        _groupStates = new global::GroupState[(int)GroupState.COUNT];
+        _groupStates[(int)GroupState.WANDER] = this.GetComponent<GroupWander>();
+        _groupStates[(int)GroupState.CHASE] = this.GetComponent<GroupChase>();
+        _groupStates[(int)GroupState.COMBAT] = this.GetComponent<GroupCombat>();
+        _groupStates[(int)GroupState.RETREAT] = this.GetComponent<GroupRetreat>();
 
         // Getting the references
         _groupCombat = this.GetComponent<GroupCombat>();
         _objectPooler = this.GetComponent<ObjectPooler>();
 
         // Initialise the parent child connection in all the group states
-        foreach (GroupState s in _groupStates)
+        foreach (global::GroupState s in _groupStates)
             s?.Initialise(this);
     }
 
@@ -76,7 +77,7 @@ public class EnemyGroupHandler : MonoBehaviour
         UpdateEnemyList();
 
         // Setting the group state to WANDER on entry
-        SetState(E_GroupState.WANDER);
+        SetState(GroupState.WANDER);
     }
 
     // Called every frame
@@ -99,7 +100,7 @@ public class EnemyGroupHandler : MonoBehaviour
     }
 
     // Set the current state of the handler
-    public void SetState(E_GroupState nextState)
+    public void SetState(GroupState nextState)
     {
         // Setting the current state
         _groupStates[(int)_currentState].OnStateExit();
@@ -147,11 +148,11 @@ public class EnemyGroupHandler : MonoBehaviour
             // Going to update this every frame for now, but might have to delay it on a coroutine if there are perfomace issues!
             _CoM = CalculateCenterOfMass();
             foreach (EnemyHandler enemy in _activeEnemies)
-                enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetFlockDestination(enemy), 1.0f);
+                enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetFlockDestination(enemy));
         }
         else if (_activeEnemies.Count > 0)
         {
-            _activeEnemies[0].GetBrain().GetAIBehaviour("Movement").OverrideDestination(_targetDestination, 1.0f);
+            _activeEnemies[0].GetBrain().GetAIBehaviour("Movement").OverrideDestination(_targetDestination);
         }
     }
 
@@ -190,19 +191,31 @@ public class EnemyGroupHandler : MonoBehaviour
     // Returns the groups center of mass
     public Vector3 CalculateCenterOfMass()
     {
-        // Iterate over each enemy and calculate the center of mass
-        Vector3 result = Vector3.zero;
-        float sumOfAllWeights = 0.0f;
-        Rigidbody enemyRigidbody;
-        foreach (EnemyHandler enemy in _activeEnemies)
-        {
-            enemyRigidbody = enemy.GetRigidbody();
-            result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
-            sumOfAllWeights += enemyRigidbody.mass;
-        }
+        // // Iterate over each enemy and calculate the center of mass
+        // Vector3 result = Vector3.zero;
+        // float sumOfAllWeights = 0.0f;
+        // Rigidbody enemyRigidbody;
+        // foreach (EnemyHandler enemy in _activeEnemies)
+        // {
+        //     enemyRigidbody = enemy.GetRigidbody();
+        //     result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
+        //     sumOfAllWeights += enemyRigidbody.mass;
+        // }
 
-        // Returning the center of mass
-        return result /= sumOfAllWeights;
+        // // Returning the center of mass
+        // return result /= sumOfAllWeights;
+
+        // OPTIMIZED FUNCTION
+
+        // Creating a local vector to store the result in
+        Vector3 result = Vector3.zero;
+
+        // Iterating over each enemy and adding the position to the result
+        foreach(EnemyHandler e in _activeEnemies)
+            result += e.transform.position;
+
+        // Returning the result devided by the enemy count, giving us the center of the group
+        return result /= _activeEnemies.Count;
     }
 
     // Forces all active enemies to retreat / not attack
@@ -235,7 +248,7 @@ public class EnemyGroupHandler : MonoBehaviour
             _positionFix.y = enemy.transform.position.y;
             enemy.transform.forward = (_positionFix - enemy.transform.position).normalized;
 
-            enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(enemy.transform.position - (enemy.GetBrain().GetDirectionToPlayer() * retreatDistance * Time.deltaTime), 1.0f);
+            enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(enemy.transform.position - (enemy.GetBrain().GetDirectionToPlayer() * retreatDistance * Time.deltaTime));
         }
     }
 
@@ -265,4 +278,7 @@ public class EnemyGroupHandler : MonoBehaviour
 
     // Returns the object pool attached to the same object as this component
     public ObjectPooler GetObjectPooler() => _objectPooler;
+
+    // Returns the current state of the group handler
+    public GroupState GetCurrentState() => _currentState;
 }
