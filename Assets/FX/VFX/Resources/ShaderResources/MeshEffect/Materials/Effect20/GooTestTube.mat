@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: GooTestTube
   m_Shader: {fileID: 4800000, guid: 972a05a1fafc1c54d8287892f2a939b6, type: 3}
-  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA USE_FRESNEL USE_HEIGHT
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA USE_FRESNEL USE_HEIGHT USE_REFRACTIVE
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -61,7 +61,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalTex:
         m_Texture: {fileID: 2800000, guid: 2fc8c383258bf494a8b624e6cd53cf83, type: 3}
-        m_Scale: {x: 1, y: 0.1}
+        m_Scale: {x: 1, y: 0.85}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
@@ -85,12 +85,12 @@ Material:
     - _Cutout: 1.042
     - _CutoutThreshold: 0
     - _DetailNormalMapScale: 1
-    - _Distortion: 60
+    - _Distortion: 0
     - _DstBlend: 0
     - _FPOW: 0.3
     - _FresnelDistort: 1500
-    - _FresnelPow: 0.89
-    - _FresnelR0: -0.2
+    - _FresnelPow: 2.92
+    - _FresnelR0: 0
     - _Glossiness: 0.5
     - _Height: 0.05
     - _InvFade: 3
@@ -110,7 +110,7 @@ Material:
     - _UseFresnel: 1
     - _UseHeight: 1
     - _UseMainTex: 0
-    - _UseRefractive: 0
+    - _UseRefractive: 1
     - _UseSoft: 0
     - _ZWrite: 1
     - _ZWriteMode: 0
@@ -119,9 +119,9 @@ Material:
     - _CutoutColor: {r: 1, g: 1, b: 1, a: 1}
     - _DropWavesScale: {r: 1, g: 0.5, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FresnelColor: {r: 20.865906, g: 0, b: 11.36154, a: 1}
+    - _FresnelColor: {r: 3.4669492, g: 0, b: 13.140385, a: 1}
     - _HeightUVScrollDistort: {r: 0, g: -0.1, b: 0, a: 0}
-    - _MainColor: {r: 0.32166424, g: 0, b: 1.0592737, a: 1}
+    - _MainColor: {r: 1.4142135, g: 1.4142135, b: 1.4142135, a: 1}
     - _NoiseScale: {r: 0, g: 0, b: 0, a: 0}
     - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _RimColor: {r: 0.057093438, g: 0.06710122, b: 0.08088237, a: 1}
