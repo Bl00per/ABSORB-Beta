@@ -131,20 +131,15 @@ public class CombatHandler : MonoBehaviour
 
     public void EnemyDetector()
     {
-        enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
+        // If there target enemy is null, or if the enemy isn't contained in the enemy list and ISNT null, then find the closest enemy to the player.
+        if (enemy == null || (enemy != null && !(EnemyDetection.enemies.Contains(enemy))))
+            enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
 
-        if (_attacking) //if the player is attacking
+        if (_attacking && enemy != null)
         {
-            if (enemy != null) //if an enemy is within range
-            {
-                // lockOnGO.transform.position = enemy.position;
-                // lockOnGO.SetActive(true);
-
-                Vector3 direction = enemy.transform.position - _rb.transform.position;
-                direction.y = 0;
-                Quaternion rotation = Quaternion.LookRotation(direction);
-                _rb.transform.rotation = Quaternion.Lerp(_rb.transform.rotation, rotation, attackRotSpeed * Time.deltaTime);
-            }
+            Vector3 direction = enemy.transform.position - _rb.transform.position;
+            direction.y = 0;
+            _rb.transform.rotation = Quaternion.Lerp(_rb.transform.rotation, Quaternion.LookRotation(direction), attackRotSpeed * Time.deltaTime);
         }
     }
 
@@ -274,14 +269,9 @@ public class CombatHandler : MonoBehaviour
             // Get enemy handler out of the enemy weapon
             EnemyHandler enemy = other.gameObject.GetComponent<EnemyWeapon>().GetEnemyHandler();
 
-            // // If shield state default but the components are enabled, then we exit this function
-            // if (shieldState == ShieldState.Default && (shieldSphereCollider.enabled || shieldMeshRenderer.enabled))
-            //     return;
-
             if (shieldState != ShieldState.Shielding || enemy.GetEnemyType() == EnemyHandler.EnemyType.ELITE)
             {
                 _playerHandler.TakeDamage(enemy.GetDamage());
-                //enemy.weaponCollider.enabled = false;
                 StartCoroutine(ControllorVibration.Vibrate(.5f, .5f, .1f));
             }
         }
@@ -488,7 +478,7 @@ public class CombatHandler : MonoBehaviour
         // Is the player is dead
         if (!_playerHandler.GetIsAlive() && !_respawning && _playerHandler.GetCurrentHealth() <= 0)
         {
-            
+
             // Disabling all player weapons on death
             playerWeapon.enabled = false;
             playerWeaponColl.enabled = false;
