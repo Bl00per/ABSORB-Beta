@@ -15,6 +15,7 @@ public class DeathTrigger : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             _player.SetIsAlive(false);
+            _player.SetCurrentHealth(0);
         }
     }
 }

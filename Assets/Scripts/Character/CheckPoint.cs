@@ -25,8 +25,11 @@ public class CheckPoint : MonoBehaviour
 
             foreach(EnemyGroupHandler group in enemyGroupHandler)
             {
-                if(group.GetCurrentState() == EnemyGroupHandler.GroupState.COMBAT|| group.GetCurrentState() == EnemyGroupHandler.GroupState.CHASE)
+                if(group.GetCurrentState() == EnemyGroupHandler.GroupState.COMBAT || group.GetCurrentState() == EnemyGroupHandler.GroupState.CHASE)
+                {
                     group.SetState(EnemyGroupHandler.GroupState.RETREAT);
+                    group.SetAllEnemiesIdle();
+                }
             }
         }
     }

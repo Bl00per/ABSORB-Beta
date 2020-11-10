@@ -94,6 +94,9 @@ public class EnemyGroupHandler : MonoBehaviour
         // Updating the current state
         _groupStates[(int)_currentState].OnStateUpdate();
 
+        // Calculating the center of mass
+        _CoM = CalculateCenterOfMass();
+
         // Printing debug
         if (debugCurrentState)
             Debug.Log(_currentState);
@@ -146,7 +149,6 @@ public class EnemyGroupHandler : MonoBehaviour
         if (_activeEnemies.Count > 1)
         {
             // Going to update this every frame for now, but might have to delay it on a coroutine if there are perfomace issues!
-            _CoM = CalculateCenterOfMass();
             foreach (EnemyHandler enemy in _activeEnemies)
                 enemy.GetBrain().GetAIBehaviour("Movement").OverrideDestination(GetFlockDestination(enemy));
         }
@@ -188,34 +190,41 @@ public class EnemyGroupHandler : MonoBehaviour
         return (_targetDestination - currentPosition).normalized * _groupStates[(int)_currentState].alignmentFactor;
     }
 
+    // Sets all enemies to be in the idle state
+    public void SetAllEnemiesIdle()
+    {
+        foreach(EnemyHandler enemy in _activeEnemies)
+            enemy.GetBrain().SetBehaviour("Idle");
+    }
+
     // Returns the groups center of mass
     public Vector3 CalculateCenterOfMass()
     {
-        // // Iterate over each enemy and calculate the center of mass
-        // Vector3 result = Vector3.zero;
-        // float sumOfAllWeights = 0.0f;
-        // Rigidbody enemyRigidbody;
-        // foreach (EnemyHandler enemy in _activeEnemies)
-        // {
-        //     enemyRigidbody = enemy.GetRigidbody();
-        //     result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
-        //     sumOfAllWeights += enemyRigidbody.mass;
-        // }
+        // Iterate over each enemy and calculate the center of mass
+        Vector3 result = Vector3.zero;
+        float sumOfAllWeights = 0.0f;
+        Rigidbody enemyRigidbody;
+        foreach (EnemyHandler enemy in _activeEnemies)
+        {
+            enemyRigidbody = enemy.GetRigidbody();
+            result += enemyRigidbody.worldCenterOfMass * enemyRigidbody.mass;
+            sumOfAllWeights += enemyRigidbody.mass;
+        }
 
-        // // Returning the center of mass
-        // return result /= sumOfAllWeights;
+        // Returning the center of mass
+        return result /= sumOfAllWeights;
 
         // OPTIMIZED FUNCTION
 
-        // Creating a local vector to store the result in
-        Vector3 result = Vector3.zero;
+        // // Creating a local vector to store the result in
+        // Vector3 result = Vector3.zero;
 
-        // Iterating over each enemy and adding the position to the result
-        foreach(EnemyHandler e in _activeEnemies)
-            result += e.transform.position;
+        // // Iterating over each enemy and adding the position to the result
+        // foreach(EnemyHandler e in _activeEnemies)
+        //     result += e.transform.position;
 
-        // Returning the result devided by the enemy count, giving us the center of the group
-        return result /= _activeEnemies.Count;
+        // // Returning the result devided by the enemy count, giving us the center of the group
+        // return result /= _activeEnemies.Count;
     }
 
     // Forces all active enemies to retreat / not attack
