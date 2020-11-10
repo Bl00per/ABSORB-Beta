@@ -99,7 +99,8 @@ public class CombatHandler : MonoBehaviour
     public float attackRotSpeed = 0.20f;
     private bool _runAttackTimer = false;
     private bool _comboStart = true;
-    private bool _attacking;
+    private bool _attacking = false;
+    private bool _isLockedOn = false;
     private Transform enemy;
     //public GameObject lockOnGO;
 
@@ -133,13 +134,20 @@ public class CombatHandler : MonoBehaviour
     {
         // If there target enemy is null, or if the enemy isn't contained in the enemy list and ISNT null, then find the closest enemy to the player.
         if (enemy == null || (enemy != null && !(EnemyDetection.enemies.Contains(enemy))))
+        {
             enemy = EnemyDetection.GetClosestEnemy(EnemyDetection.enemies, transform);
+        }
 
         if (_attacking && enemy != null)
         {
+            _isLockedOn = true;
             Vector3 direction = enemy.transform.position - _rb.transform.position;
             direction.y = 0;
             _rb.transform.rotation = Quaternion.Lerp(_rb.transform.rotation, Quaternion.LookRotation(direction), attackRotSpeed * Time.deltaTime);
+        }
+        else
+        {
+            _isLockedOn = false;
         }
     }
 
@@ -550,4 +558,5 @@ public class CombatHandler : MonoBehaviour
     }
 
     public bool GetIsAttacking() => _attacking;
+    public bool GetIsLockedOn() => _isLockedOn;
 }
