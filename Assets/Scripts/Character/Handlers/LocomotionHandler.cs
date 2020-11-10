@@ -77,7 +77,7 @@ public class LocomotionHandler : MonoBehaviour
         // Rotate player to face direction
         if (calculatedDirection.magnitude > 0.1F)
         {
-            if(!_playerHandler.GetCombatHandler().GetIsAttacking())
+            if(!_playerHandler.GetCombatHandler().GetIsLockedOn())
                 _transform.rotation = Quaternion.Slerp(_transform.rotation, Quaternion.LookRotation(calculatedDirection), turnSpeed);
             
             _animator.SetBool("Movement", true);
