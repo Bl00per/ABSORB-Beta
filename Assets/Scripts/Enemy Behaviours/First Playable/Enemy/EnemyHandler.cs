@@ -46,6 +46,7 @@ public class EnemyHandler : MonoBehaviour
     public Collider weaponCollider;
     public AudioSource attackSFX;
     public AudioSource sickleAttackSFX;
+    public AudioSource parrySFX;
     public ParticleSystem attackPE;
 
     [Header("Properties")]
@@ -292,6 +293,12 @@ public class EnemyHandler : MonoBehaviour
     {
         if(sickleAttackSFX != null)
         sickleAttackSFX.PlayOneShot(attackSFX.clip);
+
+    }
+    public void key_ParrySFX()
+    {
+        if(parrySFX != null)
+        parrySFX.PlayOneShot(parrySFX.clip);
 
     }
     // Returns the brain of this enemy
