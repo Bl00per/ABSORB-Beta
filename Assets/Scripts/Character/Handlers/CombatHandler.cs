@@ -96,7 +96,7 @@ public class CombatHandler : MonoBehaviour
     public float minTimeBetweenAttack = 0.05f;
     public float maxTimeBetweenAttack = 1.0f;
     private float _attackTimer = 0.0f;
-    public float attackRotSpeed;
+    public float attackRotSpeed = 0.20f;
     private bool _runAttackTimer = false;
     private bool _comboStart = true;
     private bool _attacking;
@@ -145,14 +145,6 @@ public class CombatHandler : MonoBehaviour
                 Quaternion rotation = Quaternion.LookRotation(direction);
                 _rb.transform.rotation = Quaternion.Lerp(_rb.transform.rotation, rotation, attackRotSpeed * Time.deltaTime);
             }
-            else // if an enemy is not in range
-            {
-                // lockOnGO.SetActive(false);
-            }
-        }
-        else // if the player is not attacking
-        {
-            //lockOnGO.SetActive(false);
         }
     }
 
@@ -566,4 +558,6 @@ public class CombatHandler : MonoBehaviour
         yield return new WaitForSeconds(time);
         _justUsedMechanic = false;
     }
+
+    public bool GetIsAttacking() => _attacking;
 }
